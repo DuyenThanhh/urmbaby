@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tin Tức Siêu Cấp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
+        body { background: #f1f5f9; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .news-card { transition: all 0.2s; position: relative; }
+        .news-card:active { transform: scale(0.95); }
+        
+        /* Style cho tin đã đọc */
+        .news-card.is-read {
+            background-color: #f1f5f9 !important; /* Màu xám nhạt */
+            border-color: #e2e8f0 !important;
+            opacity: 0.75;
+        }
+        .news-card.is-read img {
+            filter: grayscale(0.5);
+        }
+    </style>
+</head>
+<body class="p-4 pb-32">
+
+    <div class="max-w-md mx-auto">
+        <!-- HEADER -->
+        <div class="flex justify-between items-center mb-8 mt-4 bg-white p-5 rounded-[25px] shadow-sm">
+            <div>
+                <h1 class="text-xl font-extrabold text-slate-800 tracking-tight">TIN TỨC MỚI</h1>
+                <p id="status" class="text-[10px] font-bold text-teal-600 uppercase">Đang cập nhật...</p>
+            </div>
+            <button onclick="window.location.href='main.html'" class="w-12 h-12 bg-slate-900 text-white rounded-2xl flex items-center justify-center shadow-lg">
+                <i class="fas fa-calendar-day"></i>
+            </button>
+        </div>
+
+        <!-- DANH SÁCH TIN TỨC -->
+        <div id="news-list" class="space-y-4">
+            <!-- Loading skeleton -->
+            <div class="bg-white p-4 rounded-[30px] shadow-sm animate-pulse">
+                <div class="flex gap-4">
+                    <div class="w-20 h-20 bg-slate-100 rounded-2xl"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 bg-slate-100 rounded w-3/4"></div>
+                        <div class="h-3 bg-slate-100 rounded w-full"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NÚT ĐIỀU HƯỚNG CỐ ĐỊNH -->
+    <div class="fixed bottom-6 left-0 right-0 px-6 z-50">
+        <div class="max-w-md mx-auto bg-white border border-slate-100 p-4 rounded-[30px] shadow-2xl flex justify-between items-center">
+            <button onclick="window.location.href='main.html'" class="flex items-center gap-3 bg-slate-900 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest">
+                <i class="fas fa-arrow-left"></i> Quay lại Lịch
+            </button>
+            <div class="flex gap-2">
+                <button onclick="clearHistory()" class="w-12 h-12 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center" title="Xóa lịch sử xem">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+                <button onclick="fetchNews()" class="w-12 h-12 bg-teal-50 text-teal-600 rounded-2xl flex items-center justify-center">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'read_news_history';
+
+        // Lấy danh sách tin đã đọc từ localStorage
+        function getReadHistory() {
+            const history = localStorage.getItem(STORAGE_KEY);
+            return history ? JSON.parse(history) : [];
+        }
+
+        // Đánh dấu đã đọc và mở link
+        function markAsReadAndOpen(link) {
+            let history = getReadHistory();
+            if (!history.includes(link)) {
+                history.push(link);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+            }
+            // Render lại để cập nhật màu sắc ngay lập tức trước khi chuyển trang
+            fetchNews(); 
+            window.open(link, '_blank');
+        }
+
+        // Xóa lịch sử (nếu muốn làm mới)
+        function clearHistory() {
+            if(confirm("Xóa đánh dấu tất cả các tin đã xem?")) {
+                localStorage.removeItem(STORAGE_KEY);
+                fetchNews();
+            }
+        }
+
+        async function fetchNews() {
+            const statusText = document.getElementById('status');
+            const rssUrl = 'https://vnexpress.net/rss/tin-moi-nhat.rss';
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.status === 'ok' && data.items.length > 0) {
+                    renderNews(data.items);
+                    statusText.innerText = "Cập nhật lúc: " + new Date().toLocaleTimeString();
+                }
+            } catch (error) {
+                console.error("Lỗi:", error);
+                statusText.innerText = "Chế độ ngoại tuyến";
+            }
+        }
+
+        function renderNews(items) {
+            const listContainer = document.getElementById('news-list');
+            const history = getReadHistory();
+            let html = '';
+
+            items.forEach(item => {
+                const isRead = history.includes(item.link);
+                
+                // Xử lý thumbnail
+                let thumb = item.thumbnail || (item.enclosure ? item.enclosure.link : '');
+                if(!thumb && item.description.includes('src=')) {
+                    const match = item.description.match(/src="([^"]+)"/);
+                    thumb = match ? match[1] : '';
+                }
+                if(!thumb) thumb = 'https://via.placeholder.com/150/f1f5f9/64748b?text=News';
+
+                const desc = item.description.replace(/<[^>]*>?/gm, '').substring(0, 70) + '...';
+
+                html += `
+                    <div onclick="markAsReadAndOpen('${item.link}')" 
+                         class="news-card bg-white p-4 rounded-[30px] shadow-sm border border-transparent flex gap-4 cursor-pointer ${isRead ? 'is-read' : ''}">
+                        
+                        <!-- Thumbnail -->
+                        <div class="relative min-w-[80px]">
+                            <img src="${thumb}" class="w-20 h-20 rounded-2xl object-cover bg-slate-50 border border-slate-100">
+                            
+                            <!-- Icon đánh dấu (Giống hình bạn gửi) -->
+                            <div class="absolute -top-1 -left-1 w-6 h-6 rounded-lg flex items-center justify-center shadow-sm 
+                                ${isRead ? 'bg-teal-500 text-white' : 'bg-slate-800 text-slate-400'}">
+                                <i class="fas ${isRead ? 'fa-check' : 'fa-bookmark'} text-[10px]"></i>
+                            </div>
+                        </div>
+
+                        <div class="flex-1">
+                            <h3 class="font-extrabold text-slate-800 text-[13px] leading-tight mb-1 line-clamp-2">${item.title}</h3>
+                            <p class="text-[11px] text-slate-400 font-medium line-clamp-2">${desc}</p>
+                            <div class="mt-2 flex items-center justify-between">
+                                <span class="text-[9px] font-black ${isRead ? 'text-slate-400' : 'text-teal-600'} uppercase">
+                                    ${isRead ? 'Đã xem' : 'Xem tin ngay'}
+                                </span>
+                                <span class="text-[8px] text-slate-300 font-bold uppercase">${item.pubDate.split(' ')[1] || ''}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            listContainer.innerHTML = html;
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchNews);
+    </script>
+</body>
+</html>

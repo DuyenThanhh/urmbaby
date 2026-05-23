@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLD Edge Tracker - Rubik Theme</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2b2b2b; /* Nền tối giống nhựa Rubik */
+            color: #f1f1f1;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            text-align: center;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+
+        /* Giao diện lưới bảng chữ cái */
+        .alphabet-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+            background: #111;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.5);
+            border: 2px solid #444;
+        }
+
+        .letter-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 45px;
+            font-weight: 900;
+            font-size: 20px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            transition: all 0.2s ease-in-out;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            border: 2px solid #000;
+        }
+
+        /* Màu sắc chuẩn Rubik (Speffz) */
+        .face-U { background-color: #ffffff; color: #000; text-shadow: none; } /* Trắng */
+        .face-L { background-color: #009b48 ; color: #fff; } /* Xanh lá */
+        .face-F { background-color:#b71234 ; color: #fff; } /* Đỏ */
+        .face-R { background-color: #0046ad; color: #fff; } /* Xanh dương */
+        .face-B { background-color: #ff5900 ; color: #fff; } /* Cam */
+        .face-D { background-color: #ffd500; color: #000; text-shadow: none; } /* Vàng */
+
+        /* Hiệu ứng chọn: Phát sáng viền neon xanh lá */
+        .letter-box.active {
+            transform: scale(1.15);
+            z-index: 10;
+            border: 3px solid #00ff00;
+            box-shadow: 0 0 15px #00ff00;
+        }
+
+        #inputs-container {
+            background: #222;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            border: 1px solid #444;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+
+        .input-row input {
+            width: 45px;
+            height: 45px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            border: 2px solid #555;
+            border-radius: 8px;
+            background-color: #333;
+            color: #fff;
+            text-transform: lowercase;
+            transition: 0.2s;
+        }
+
+        .input-row input:focus {
+            outline: none;
+            border-color: #00ff00;
+            background-color: #444;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+
+        .input-row input.special-red {
+            color: #ff4444;
+            border-color: #ff4444;
+            box-shadow: 0 0 10px rgba(255, 68, 68, 0.3);
+        }
+
+        .note {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        /* Màu chú thích */
+        .note.m-swap { color: #ff4444; font-style: italic; } /* Đỏ cho lớp M */
+        .note.buffer-warn { color: #d400ff; text-shadow: 0 0 5px rgba(212,0,255,0.5); } /* Tím cho Buffer */
+        .note.parity { color: #ff9800; } /* Cam cho Parity */
+
+        .instructions {
+            margin-top: 25px;
+            font-size: 15px;
+            color: #bbb;
+            line-height: 1.8;
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #009b48;
+        }
+        b { color: #fff; }
+        .unikey-warning { color: #ff9800; font-weight: bold; display: block; margin-bottom: 5px;}
+    </style>
+</head>
+<body>
+
+    <h2>🧩 BLD Edge Tracker</h2>
+    
+    <div class="alphabet-grid" id="alphabet-grid"></div>
+
+    <div id="inputs-container">
+        <div class="input-row">
+            <input type="text" maxlength="1" class="box1" autocomplete="off">
+            <input type="text" maxlength="1" class="box2" autocomplete="off">
+            <span class="note"></span>
+        </div>
+    </div>
+
+    <div class="instructions">
+        <span class="unikey-warning">⚠️ Khuyến nghị: Hãy TẮT Unikey (chuyển sang E) để tránh lỗi dính chữ khi nhập liệu nhanh!</span>
+        <strong>🎮 Hướng dẫn điều khiển:</strong><br>
+        - <b>Phím Mũi tên (⬆ ⬇ ⬅ ➡):</b> Di chuyển tự do giữa các ô (như Excel).<br>
+        - <b>Phím Tab:</b> Chuyển qua ô tiếp theo.<br>
+        - <b>Phím Enter:</b> Tạo dòng mới. (Chỉ tạo khi đã nhập ít nhất 1 chữ).<br>
+        - <b>Phím Backspace:</b> Đè để lùi lại và xóa lần lượt từng ô cực nhanh.<br>
+        - Gõ <b>u</b> hoặc <b>k</b>: Hệ thống sẽ báo <i>"Đây là viên cạnh cơ sở, bắt đầu vòng mới!"</i>.
+    </div>
+
+    <script>
+        const letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x'];
+
+        // Map mặt Rubik cho màu sắc
+        const faceColors = {
+            'a':'U', 'b':'U', 'c':'U', 'd':'U',
+            'e':'L', 'f':'L', 'g':'L', 'h':'L',
+            'i':'F', 'j':'F', 'k':'F', 'l':'F',
+            'm':'R', 'n':'R', 'o':'R', 'p':'R',
+            'q':'B', 'r':'B', 's':'B', 't':'B',
+            'u':'D', 'v':'D', 'w':'D', 'x':'D'
+        };
+
+        const pairs = {
+            'a':'q', 'q':'a', 'b':'m', 'm':'b', 'c':'i', 'i':'c', 'd':'e', 'e':'d',
+            'f':'l', 'l':'f', 'g':'x', 'x':'g', 'h':'r', 'r':'h', 'j':'p', 'p':'j',
+            'k':'u', 'u':'k', 'n':'t', 't':'n', 'o':'v', 'v':'o', 's':'w', 'w':'s'
+        };
+
+        const specialSwaps = { 'i': 's', 's': 'i', 'c': 'w', 'w': 'c' };
+
+        const grid = document.getElementById('alphabet-grid');
+        letters.forEach(letter => {
+            const div = document.createElement('div');
+            // Gắn class tương ứng với mặt Rubik
+            div.className = 'letter-box face-' + faceColors[letter]; 
+            div.id = 'letter-' + letter;
+            div.textContent = letter;
+            grid.appendChild(div);
+        });
+
+        const inputsContainer = document.getElementById('inputs-container');
+
+        function updateHighlights() {
+            document.querySelectorAll('.letter-box').forEach(box => box.classList.remove('active'));
+            const allInputs = document.querySelectorAll('#inputs-container input');
+            allInputs.forEach(input => {
+                const val = input.value.toLowerCase();
+                if (val && pairs[val]) {
+                    const box1 = document.getElementById('letter-' + val);
+                    if (box1) box1.classList.add('active');
+                    const box2 = document.getElementById('letter-' + pairs[val]);
+                    if (box2) box2.classList.add('active');
+                }
+            });
+        }
+
+        // Xử lý logic hiển thị thông báo
+        function updateRowNote(row) {
+            const box1Input = row.querySelector('.box1');
+            const box2Input = row.querySelector('.box2');
+            const noteSpan = row.querySelector('.note');
+            
+            const v1 = box1Input.value.toLowerCase();
+            const v2 = box2Input.value.toLowerCase();
+            
+            let notes = [];
+            let mainClass = "note";
+
+            // 1. Kiểm tra lớp M ở ô 2
+            if (box2Input.classList.contains('special-red')) {
+                notes.push("(Cặp đối chẵn lẻ lớp M)");
+                mainClass = "note m-swap";
+            }
+
+            // 2. Kiểm tra viên cơ sở (Buffer) ở bất kỳ ô nào
+            if (v1 === 'u' || v1 === 'k' || v2 === 'u' || v2 === 'k') {
+                notes.push("Đây là viên cạnh cơ sở, vui lòng bắt đầu vòng mới!");
+                mainClass = "note buffer-warn"; // Ưu tiên màu của buffer
+            }
+
+            // 3. Nếu có parity do vừa bấm enter để lại
+            if (noteSpan.dataset.parity === "true" && ((v1 && !v2) || (!v1 && v2))) {
+                notes.push("Trường hợp Parity lẻ");
+                if(!notes.includes("Đây là viên cạnh cơ sở, vui lòng bắt đầu vòng mới!")) {
+                    mainClass = "note parity";
+                }
+            }
+
+            noteSpan.textContent = notes.join(" | ");
+            noteSpan.className = mainClass;
+        }
+
+        inputsContainer.addEventListener('input', function(e) {
+            if (e.target.tagName.toLowerCase() === 'input') {
+                
+                // Lọc bỏ dấu tiếng Việt hoặc ký tự lạ, CHỈ nhận từ a đến x
+                let val = e.target.value.toLowerCase().replace(/[^a-x]/g, '');
+                e.target.value = val; 
+                
+                const row = e.target.closest('.input-row');
+                const noteSpan = row.querySelector('.note');
+                noteSpan.dataset.parity = "false"; // Xóa dấu vết parity nếu nhập tiếp
+
+                // Logic đổi chữ cho ô thứ 2
+                if (e.target.classList.contains('box2')) {
+                    if (specialSwaps[val]) {
+                        e.target.value = specialSwaps[val];
+                        e.target.classList.add('special-red');
+                    } else {
+                        e.target.classList.remove('special-red');
+                    }
+                }
+
+                updateRowNote(row);
+                updateHighlights();
+            }
+        });
+
+        // Xử lý bàn phím
+        inputsContainer.addEventListener('keydown', function(e) {
+            if (e.target.tagName.toLowerCase() === 'input') {
+                
+                // Tránh lỗi khi đang gõ tiếng Việt (Unikey đang giữ phím)
+                if (e.isComposing || e.keyCode === 229) {
+                    return;
+                }
+
+                const row = e.target.closest('.input-row');
+                
+                // --- XỬ LÝ PHÍM ENTER ---
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    
+                    const box1Val = row.querySelector('.box1').value;
+                    const box2Val = row.querySelector('.box2').value;
+                    const noteSpan = row.querySelector('.note');
+
+                    // NẾU CẢ 2 Ô ĐỀU TRỐNG THÌ KHÔNG LÀM GÌ CẢ (Không tạo dòng mới)
+                    if (!box1Val && !box2Val) {
+                        return;
+                    }
+
+                    // Gắn cờ parity nếu chỉ có 1 ô có giá trị
+                    if ((box1Val && !box2Val) || (!box1Val && box2Val)) {
+                        noteSpan.dataset.parity = "true";
+                        updateRowNote(row);
+                    }
+
+                    // TẠO DÒNG MỚI (vì đã vượt qua cửa ải 2 ô trống ở trên)
+                    const newRow = document.createElement('div');
+                    newRow.className = 'input-row';
+                    newRow.innerHTML = `
+                        <input type="text" maxlength="1" class="box1" autocomplete="off">
+                        <input type="text" maxlength="1" class="box2" autocomplete="off">
+                        <span class="note"></span>
+                    `;
+                    inputsContainer.appendChild(newRow);
+                    newRow.querySelector('.box1').focus();
+                }
+
+                const allInputs = Array.from(document.querySelectorAll('#inputs-container input'));
+                const currentIndex = allInputs.indexOf(e.target);
+
+                // --- XỬ LÝ PHÍM BACKSPACE ---
+                if (e.key === 'Backspace' && e.target.value === '') {
+                    e.preventDefault();
+                    if (currentIndex > 0) {
+                        const prevInput = allInputs[currentIndex - 1];
+                        prevInput.focus(); 
+                        prevInput.value = ''; 
+                        
+                        prevInput.classList.remove('special-red');
+                        const prevRow = prevInput.closest('.input-row');
+                        if(prevRow) {
+                            prevRow.querySelector('.note').dataset.parity = "false";
+                            updateRowNote(prevRow);
+                        }
+                        updateHighlights(); 
+                    }
+                }
+
+                // --- ĐIỀU HƯỚNG MŨI TÊN ---
+                if (e.key === 'ArrowLeft') { e.preventDefault(); if (currentIndex > 0) allInputs[currentIndex - 1].focus(); }
+                if (e.key === 'ArrowRight') { e.preventDefault(); if (currentIndex < allInputs.length - 1) allInputs[currentIndex + 1].focus(); }
+                if (e.key === 'ArrowUp') { e.preventDefault(); if (currentIndex >= 2) allInputs[currentIndex - 2].focus(); }
+                if (e.key === 'ArrowDown') { e.preventDefault(); if (currentIndex + 2 < allInputs.length) allInputs[currentIndex + 2].focus(); }
+            }
+        });
+
+        document.querySelector('.box1').focus();
+    </script>
+</body>
+</html>
