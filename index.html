@@ -3,216 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bí Mật Của Em 😈✨</title>
+    <title>Cấm Vào - Của Riêng Anh 🔞</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Quicksand', sans-serif;
-            background: radial-gradient(circle at center, #2d1b4d 0%, #1a0b2e 100%);
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            background: #000;
+            background-image: radial-gradient(circle at center, #4b0000 0%, #000 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            margin: 0;
         }
 
-        /* Thẻ login bạo bạo */
-        .naughty-card {
-            background: rgba(45, 27, 77, 0.8);
-            backdrop-filter: blur(15px);
-            border: 2px solid #ff00ff;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3), inset 0 0 15px rgba(255, 0, 255, 0.2);
-            border-radius: 30px;
+        /* Khung login phong cách "Phòng kín" */
+        .forbidden-card {
+            background: rgba(20, 0, 0, 0.9);
+            border: 3px solid #ff0040;
+            box-shadow: 0 0 50px #ff0040, inset 0 0 20px #ff0040;
+            border-radius: 40px;
             position: relative;
             z-index: 10;
         }
 
-        /* Chàng trai đang nhìn (Góc trên phải) */
-        .boy-observer {
+        /* Đôi mắt theo dõi (Eye Tracking) */
+        .boy-watcher {
             position: absolute;
-            top: -50px;
-            right: -20px;
-            font-size: 60px;
-            transition: all 0.2s;
-            filter: drop-shadow(0 0 10px #00ffff);
+            top: -60px;
+            right: -30px;
+            width: 120px;
+            height: 80px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+        }
+        .eye {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 50%;
+            position: relative;
+            border: 3px solid #000;
+            overflow: hidden;
+        }
+        .pupil {
+            width: 20px;
+            height: 20px;
+            background: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
         }
 
-        /* Cô gái đang nhập (Góc dưới) */
-        .girl-inputter {
+        /* Cô gái râm râm */
+        .girl-status {
             position: absolute;
-            bottom: -40px;
+            bottom: -50px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 70px;
-            transition: all 0.3s;
+            font-size: 80px;
+            text-shadow: 0 0 20px #ff00fb;
+            transition: all 0.2s;
         }
 
-        /* Mồ hôi của cô gái */
-        .sweat {
+        /* Hiệu ứng đỏ mặt */
+        .blush {
             position: absolute;
-            color: #00ffff;
-            font-size: 20px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        /* Hiệu ứng rung khi bị phạt */
-        @keyframes spank {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            100% { transform: translate(1px, 1px) rotate(0deg); }
-        }
-
-        .punish-active {
-            animation: spank 0.1s infinite;
-            border-color: #ff0000 !important;
-            box-shadow: 0 0 50px #ff0000 !important;
-        }
-
-        .input-naughty {
-            background: rgba(0, 0, 0, 0.4);
-            border: 2px solid #ff00ff;
-            color: #fff;
-            text-shadow: 0 0 10px #ff00ff;
-        }
-
-        .btn-naughty {
-            background: linear-gradient(45deg, #ff00ff, #7000ff);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 5px 15px rgba(255, 0, 255, 0.4);
-        }
-
-        /* Overlay khi bị tét đít */
-        #punish-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(255, 0, 0, 0.3);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,0,100,0.4) 0%, transparent 70%);
             display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
             pointer-events: none;
+        }
+
+        /* Trừng phạt cực nặng */
+        @keyframes hardcore-spank {
+            0% { transform: scale(1); filter: brightness(1); }
+            20% { transform: scale(1.1) translate(10px, -10px); filter: brightness(2) sepia(1) hue-rotate(-50deg); }
+            40% { transform: scale(0.9) translate(-15px, 15px); }
+            100% { transform: scale(1); }
+        }
+        .punish-shake {
+            animation: hardcore-spank 0.05s infinite !important;
+        }
+
+        .heart-pulse {
+            animation: pulse 0.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        input:focus {
+            box-shadow: 0 0 20px #ff0040;
         }
     </style>
 </head>
 <body>
 
-    <div id="punish-overlay">
-        <h1 class="text-white text-6xl font-black italic">CHÁT! CHÁT! 🍑👋</h1>
-        <p class="text-white text-2xl mt-4">Hư nè! Phạt tét đít!</p>
+    <!-- Lớp phủ trừng phạt -->
+    <div id="spank-layer" class="fixed inset-0 bg-red-900/80 z-[100] hidden flex-col items-center justify-center">
+        <h1 class="text-white text-8xl font-black italic mb-4 drop-shadow-[0_0_20px_rgba(255,255,255,1)]">AHHH! ~❤️</h1>
+        <div class="text-white text-4xl font-bold bg-black/50 px-6 py-2 rounded-full">BỊ TÉT ĐÍT RỒI! 🍑👋</div>
     </div>
 
-    <div id="login-section" class="naughty-card w-full max-w-[350px] p-10 mx-4">
-        
-        <!-- Chàng trai 2D (Dùng Emoji mô phỏng) -->
-        <div id="boy" class="boy-observer">👁️‍🗨️👁️‍🗨️</div>
+    <div id="login-section" class="forbidden-card w-full max-w-[380px] p-10 mx-4 transition-all">
+        <div class="blush" id="blush-bg"></div>
 
-        <div class="text-center mb-8">
-            <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-600">
-                LỐI VÀO CẤM 🔞
-            </h1>
-            <p class="text-pink-300 text-[10px] mt-2 uppercase tracking-widest">Đừng để anh ấy bắt quả tang...</p>
+        <!-- Chàng trai đang rình mò -->
+        <div class="boy-watcher">
+            <div class="eye"><div class="pupil" id="pupil-l"></div></div>
+            <div class="eye"><div class="pupil" id="pupil-r"></div></div>
         </div>
 
-        <form id="loginForm" class="space-y-6">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-black text-white tracking-tighter italic">
+                SECRET <span class="text-pink-500">ACCESS</span>
+            </h1>
+            <p class="text-gray-400 text-[10px] uppercase tracking-[0.3em] mt-1">Dành cho chủ nhân của em...</p>
+        </div>
+
+        <form id="loginForm" class="space-y-6 relative z-10">
             <div class="relative">
                 <input
                     type="password"
                     id="password"
                     inputmode="numeric"
-                    placeholder="Mật mã bí mật..."
-                    class="w-full px-4 py-4 rounded-2xl input-naughty text-center font-bold text-2xl outline-none"
-                    oninput="updateState(this)"
+                    placeholder="Nhập mã vào đây..."
+                    class="w-full px-4 py-5 rounded-3xl bg-black border-4 border-pink-600 text-pink-400 text-center text-3xl font-black placeholder:text-pink-900 focus:outline-none transition-all"
+                    oninput="handleNaughtyInput(this)"
                 >
             </div>
 
             <button
                 type="submit"
-                class="w-full btn-naughty py-4 rounded-2xl font-black text-white hover:scale-105 transition"
+                class="w-full bg-gradient-to-r from-pink-600 to-red-600 py-5 rounded-3xl font-black text-white text-xl shadow-[0_0_20px_rgba(219,39,119,0.5)] active:scale-95 transition"
             >
-                Khám phá bên trong 😈
+                MỞ RA ĐI ANH... 🔥
             </button>
         </form>
 
-        <!-- Cô gái 2D (Dùng Emoji mô phỏng) -->
-        <div id="girl" class="girl-inputter">
-            <span id="sweat-1" class="sweat" style="top: 10px; left: -10px;">💦</span>
-            <span id="sweat-2" class="sweat" style="top: 20px; right: -10px;">💦</span>
-            😳
-        </div>
+        <!-- Cô gái 2D -->
+        <div id="girl" class="girl-status">😳</div>
     </div>
 
     <script>
-        const boy = document.getElementById('boy');
+        const pupils = document.querySelectorAll('.pupil');
         const girl = document.getElementById('girl');
-        const sweats = [document.getElementById('sweat-1'), document.getElementById('sweat-2')];
+        const blush = document.getElementById('blush-bg');
+        const section = document.getElementById('login-section');
+        const spankLayer = document.getElementById('spank-layer');
 
-        // Cập nhật trạng thái khi gõ mật khẩu
-        function updateState(input) {
+        // Logic Eye Tracking: Đồng tử to ra và nhìn theo
+        function handleNaughtyInput(input) {
             const len = input.value.length;
             
-            // Mắt chàng trai to dần (scale)
-            const eyeSize = 1 + (len * 0.2);
-            boy.style.transform = `scale(${eyeSize})`;
+            // 1. Đồng tử (Pupil) to ra khi gõ nhiều
+            const size = 20 + (len * 5);
+            const pupilColor = len > 3 ? '#ff0000' : '#000';
             
-            // Cô gái đổ mồ hôi (opacity)
-            const sweatOpacity = len * 0.2;
-            sweats.forEach(s => s.style.opacity = sweatOpacity);
+            pupils.forEach(p => {
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.background = pupilColor;
+                
+                // Nhìn theo input (đơn giản hóa bằng cách dịch chuyển nhẹ)
+                const moveX = (len * 2) - 10;
+                p.style.transform = `translate(calc(-50% + ${moveX}px), -50%)`;
+            });
 
-            // Cô gái run rẩy nhẹ
-            if (len > 3) {
-                girl.style.animation = "spank 0.5s infinite";
-                girl.innerHTML = `
-                    <span id="sweat-1" class="sweat" style="top: 10px; left: -10px; opacity:${sweatOpacity}">💦</span>
-                    <span id="sweat-2" class="sweat" style="top: 20px; right: -10px; opacity:${sweatOpacity}">💦</span>
-                    😰`;
+            // 2. Cô gái biến đổi
+            if (len === 0) {
+                girl.innerHTML = "😳";
+                blush.style.display = 'none';
+                section.classList.remove('heart-pulse');
+            } else if (len < 3) {
+                girl.innerHTML = "🥵";
+                blush.style.display = 'block';
+                blush.style.opacity = '0.3';
             } else {
-                girl.style.animation = "none";
-                girl.innerHTML = `
-                    <span id="sweat-1" class="sweat" style="top: 10px; left: -10px; opacity:${sweatOpacity}">💦</span>
-                    <span id="sweat-2" class="sweat" style="top: 20px; right: -10px; opacity:${sweatOpacity}">💦</span>
-                    😳`;
+                girl.innerHTML = "🤤"; // Râm hơn
+                blush.style.opacity = '0.8';
+                section.classList.add('heart-pulse'); // Rung nhẹ theo nhịp tim
             }
         }
 
-        // Xử lý đăng nhập
+        // Xử lý trừng phạt
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const pass = document.getElementById('password').value;
-            const card = document.getElementById('login-section');
-            const overlay = document.getElementById('punish-overlay');
 
-            if (pass === "123456") {
-                // Thành công: Biến mất vào hư không
-                card.style.transform = "scale(2) rotate(10deg)";
-                card.style.opacity = "0";
+            if (pass === "123") {
+                // Thành công: Tan chảy
+                section.style.transform = "scale(0) rotate(720deg)";
+                section.style.opacity = "0";
                 setTimeout(() => {
                     sessionStorage.setItem('portal_authenticated', 'true');
                     window.location.href = 'up.html';
-                }, 500);
+                }, 600);
             } else {
-                // Thất bại: PHẠT TÉT ĐÍT
-                card.classList.add('punish-active');
-                overlay.style.display = 'flex';
-                girl.innerHTML = "😭";
-                boy.innerHTML = "😡";
+                // PHẠT NẶNG (Tét đít Hardcore)
+                section.classList.add('punish-shake');
+                spankLayer.classList.remove('hidden');
+                spankLayer.classList.add('flex');
+                girl.innerHTML = "😫💦";
                 
-                // Rung màn hình và hiện thông báo phạt
+                // Hiệu ứng nhấp nháy đỏ
+                let flashes = 0;
+                const interval = setInterval(() => {
+                    document.body.style.backgroundColor = flashes % 2 === 0 ? '#ff0000' : '#000';
+                    flashes++;
+                    if (flashes > 10) clearInterval(interval);
+                }, 50);
+
                 setTimeout(() => {
-                    card.classList.remove('punish-active');
-                    overlay.style.display = 'none';
+                    section.classList.remove('punish-shake');
+                    spankLayer.classList.add('hidden');
+                    document.body.style.backgroundColor = '#000';
                     document.getElementById('password').value = "";
-                    updateState(document.getElementById('password'));
-                }, 1500);
+                    handleNaughtyInput(document.getElementById('password'));
+                }, 2000);
             }
         });
     </script>
