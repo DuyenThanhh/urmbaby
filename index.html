@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nhật Ký Của Chúng Mình 🌸</title>
+    <title>Bí Mật Của Em 😈✨</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Sử dụng Font chữ đáng yêu hơn -->
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Quicksand', sans-serif;
-            /* Gradient màu hồng tím mộng mơ */
-            background: linear-gradient(135deg, #fce7f3 0%, #fae8ff 50%, #e0e7ff 100%);
+            background: radial-gradient(circle at center, #2d1b4d 0%, #1a0b2e 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -21,96 +19,108 @@
             margin: 0;
         }
 
-        /* Hiệu ứng lấp lánh phía sau */
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.5;
-            animation: twinkle var(--duration) infinite;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        /* Thẻ nhật ký phong cách Glassmorphism mềm mại */
-        .diary-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 182, 193, 0.5);
-            border-radius: 40px;
-            box-shadow: 0 20px 40px rgba(255, 105, 180, 0.15);
+        /* Thẻ login bạo bạo */
+        .naughty-card {
+            background: rgba(45, 27, 77, 0.8);
+            backdrop-filter: blur(15px);
+            border: 2px solid #ff00ff;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3), inset 0 0 15px rgba(255, 0, 255, 0.2);
+            border-radius: 30px;
             position: relative;
             z-index: 10;
-            transition: all 0.5s ease;
         }
 
-        /* Nút bấm kẹo ngọt */
-        .btn-cute {
-            background: linear-gradient(90deg, #ff9a9e 0%, #fad0c4 100%);
-            color: white;
+        /* Chàng trai đang nhìn (Góc trên phải) */
+        .boy-observer {
+            position: absolute;
+            top: -50px;
+            right: -20px;
+            font-size: 60px;
+            transition: all 0.2s;
+            filter: drop-shadow(0 0 10px #00ffff);
+        }
+
+        /* Cô gái đang nhập (Góc dưới) */
+        .girl-inputter {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 70px;
             transition: all 0.3s;
-            box-shadow: 0 10px 20px rgba(255, 154, 158, 0.4);
         }
 
-        .btn-cute:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 25px rgba(255, 154, 158, 0.6);
+        /* Mồ hôi của cô gái */
+        .sweat {
+            position: absolute;
+            color: #00ffff;
+            font-size: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
-        /* Input mềm mại */
-        .cute-input {
-            background: rgba(255, 255, 255, 0.8);
-            border: 2px solid #f9a8d4;
-            color: #db2777;
-            text-align: center;
-            letter-spacing: 0.2em;
+        /* Hiệu ứng rung khi bị phạt */
+        @keyframes spank {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            100% { transform: translate(1px, 1px) rotate(0deg); }
         }
 
-        .cute-input:focus {
-            border-color: #f472b6;
-            box-shadow: 0 0 15px rgba(244, 114, 182, 0.3);
-            outline: none;
+        .punish-active {
+            animation: spank 0.1s infinite;
+            border-color: #ff0000 !important;
+            box-shadow: 0 0 50px #ff0000 !important;
         }
 
-        /* Icon bay bổng */
-        .floating-heart {
-            animation: floating 3s ease-in-out infinite;
+        .input-naughty {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid #ff00ff;
+            color: #fff;
+            text-shadow: 0 0 10px #ff00ff;
         }
 
-        @keyframes floating {
-            0%, 100% { transform: translateY(0) rotate(0); }
-            50% { transform: translateY(-10px) rotate(5deg); }
+        .btn-naughty {
+            background: linear-gradient(45deg, #ff00ff, #7000ff);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 5px 15px rgba(255, 0, 255, 0.4);
+        }
+
+        /* Overlay khi bị tét đít */
+        #punish-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 0, 0, 0.3);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
-    <!-- Lớp nền lấp lánh -->
-    <div class="stars" id="starContainer"></div>
 
-    <div id="login-section" class="diary-card w-full max-w-[90%] sm:max-w-md p-10 mx-4">
-        <!-- Icon trang trí -->
-        <div class="text-center mb-6">
-            <div class="w-20 h-20 bg-pink-100 rounded-full mx-auto mb-4 flex items-center justify-center shadow-inner floating-heart">
-                <i class="fas fa-heart text-3xl text-pink-500"></i>
-            </div>
-            <h1 class="text-2xl font-bold text-pink-600 tracking-tight">
-                Secret Diary ✨
+    <div id="punish-overlay">
+        <h1 class="text-white text-6xl font-black italic">CHÁT! CHÁT! 🍑👋</h1>
+        <p class="text-white text-2xl mt-4">Hư nè! Phạt tét đít!</p>
+    </div>
+
+    <div id="login-section" class="naughty-card w-full max-w-[350px] p-10 mx-4">
+        
+        <!-- Chàng trai 2D (Dùng Emoji mô phỏng) -->
+        <div id="boy" class="boy-observer">👁️‍🗨️👁️‍🗨️</div>
+
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-600">
+                LỐI VÀO CẤM 🔞
             </h1>
-            <p class="text-pink-400 text-sm mt-2 italic font-medium">Gõ cửa trái tim để vào xem nhé!</p>
+            <p class="text-pink-300 text-[10px] mt-2 uppercase tracking-widest">Đừng để anh ấy bắt quả tang...</p>
         </div>
 
         <form id="loginForm" class="space-y-6">
@@ -119,69 +129,90 @@
                     type="password"
                     id="password"
                     inputmode="numeric"
-                    placeholder="Mật mã nè..."
-                    class="w-full px-4 py-4 rounded-3xl cute-input font-bold text-xl placeholder:text-pink-200 placeholder:tracking-normal"
+                    placeholder="Mật mã bí mật..."
+                    class="w-full px-4 py-4 rounded-2xl input-naughty text-center font-bold text-2xl outline-none"
+                    oninput="updateState(this)"
                 >
-                <div class="absolute right-4 top-4 text-pink-300">
-                    <i class="fas fa-magic"></i>
-                </div>
             </div>
 
             <button
                 type="submit"
-                class="w-full btn-cute py-4 rounded-3xl font-bold text-lg flex items-center justify-center gap-2"
+                class="w-full btn-naughty py-4 rounded-2xl font-black text-white hover:scale-105 transition"
             >
-                <span>Mở Nhật Ký</span>
-                <i class="fas fa-book-open"></i>
+                Khám phá bên trong 😈
             </button>
         </form>
 
-        <!-- Link trang trí phía dưới -->
-        <div class="mt-8 flex justify-center gap-4 text-pink-300 text-sm">
-            <span><i class="fas fa-camera-retro"></i> Ảnh đẹp</span>
-            <span><i class="fas fa-video"></i> Video</span>
-            <span><i class="fas fa-pen-nib"></i> Tâm sự</span>
+        <!-- Cô gái 2D (Dùng Emoji mô phỏng) -->
+        <div id="girl" class="girl-inputter">
+            <span id="sweat-1" class="sweat" style="top: 10px; left: -10px;">💦</span>
+            <span id="sweat-2" class="sweat" style="top: 20px; right: -10px;">💦</span>
+            😳
         </div>
     </div>
 
     <script>
-        // Tạo các ngôi sao lấp lánh ngẫu nhiên
-        const starContainer = document.getElementById('starContainer');
-        for (let i = 0; i < 30; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            const size = Math.random() * 4 + 2 + 'px';
-            star.style.width = size;
-            star.style.height = size;
-            star.style.top = Math.random() * 100 + '%';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.setProperty('--duration', Math.random() * 3 + 2 + 's');
-            starContainer.appendChild(star);
+        const boy = document.getElementById('boy');
+        const girl = document.getElementById('girl');
+        const sweats = [document.getElementById('sweat-1'), document.getElementById('sweat-2')];
+
+        // Cập nhật trạng thái khi gõ mật khẩu
+        function updateState(input) {
+            const len = input.value.length;
+            
+            // Mắt chàng trai to dần (scale)
+            const eyeSize = 1 + (len * 0.2);
+            boy.style.transform = `scale(${eyeSize})`;
+            
+            // Cô gái đổ mồ hôi (opacity)
+            const sweatOpacity = len * 0.2;
+            sweats.forEach(s => s.style.opacity = sweatOpacity);
+
+            // Cô gái run rẩy nhẹ
+            if (len > 3) {
+                girl.style.animation = "spank 0.5s infinite";
+                girl.innerHTML = `
+                    <span id="sweat-1" class="sweat" style="top: 10px; left: -10px; opacity:${sweatOpacity}">💦</span>
+                    <span id="sweat-2" class="sweat" style="top: 20px; right: -10px; opacity:${sweatOpacity}">💦</span>
+                    😰`;
+            } else {
+                girl.style.animation = "none";
+                girl.innerHTML = `
+                    <span id="sweat-1" class="sweat" style="top: 10px; left: -10px; opacity:${sweatOpacity}">💦</span>
+                    <span id="sweat-2" class="sweat" style="top: 20px; right: -10px; opacity:${sweatOpacity}">💦</span>
+                    😳`;
+            }
         }
 
         // Xử lý đăng nhập
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const pass = document.getElementById('password').value;
+            const card = document.getElementById('login-section');
+            const overlay = document.getElementById('punish-overlay');
 
-            if (pass === "123") {
-                const loginSection = document.getElementById('login-section');
-                
-                // Hiệu ứng biến mất nhẹ nhàng
-                loginSection.style.opacity = "0";
-                loginSection.style.transform = "scale(0.9) translateY(20px)";
-
+            if (pass === "123456") {
+                // Thành công: Biến mất vào hư không
+                card.style.transform = "scale(2) rotate(10deg)";
+                card.style.opacity = "0";
                 setTimeout(() => {
                     sessionStorage.setItem('portal_authenticated', 'true');
                     window.location.href = 'up.html';
                 }, 500);
             } else {
-                // Hiệu ứng rung khi sai mật khẩu
-                const card = document.querySelector('.diary-card');
-                card.classList.add('animate-bounce');
-                alert("Hic, sai mật mã rồi bạn ơi! ✨ Thử lại nhé?");
-                setTimeout(() => card.classList.remove('animate-bounce'), 500);
-                document.getElementById('password').value = "";
+                // Thất bại: PHẠT TÉT ĐÍT
+                card.classList.add('punish-active');
+                overlay.style.display = 'flex';
+                girl.innerHTML = "😭";
+                boy.innerHTML = "😡";
+                
+                // Rung màn hình và hiện thông báo phạt
+                setTimeout(() => {
+                    card.classList.remove('punish-active');
+                    overlay.style.display = 'none';
+                    document.getElementById('password').value = "";
+                    updateState(document.getElementById('password'));
+                }, 1500);
             }
         });
     </script>
