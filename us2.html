@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chúng mình - Diary of Us ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --p-pink: #ffafbd;
+            --p-main: #ff758c;
+            --p-bg: #fff1f3;
+            --glass: rgba(255, 255, 255, 0.6);
+            --text-color: #5d4037;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            font-family: 'Quicksand', sans-serif; 
+            background: linear-gradient(180deg, #fff5f6 0%, #ffe4e9 100%);
+            color: var(--text-color); overflow: hidden;
+        }
+
+        .app-container { 
+            width: 100%; height: 100%; max-width: 500px; margin: 0 auto; 
+            display: flex; flex-direction: column; position: relative;
+            background: url('https://www.transparenttextures.com/patterns/pinstriped-suit.png');
+        }
+
+        /* Header Area */
+        .header { 
+            padding: 40px 20px 20px; text-align: center; 
+            background: url('img/6.png') no-repeat center bottom;
+            background-size: cover;
+        }
+        .header h1 { font-size: 20px; font-weight: 700; margin: 0 0 25px; }
+
+        /* Avatars Rabbit & Bear */
+        .avatar-pair { 
+            display: flex; justify-content: center; align-items: center; 
+            position: relative; margin-bottom: 20px;
+        }
+        .avatar {
+            width: 100px; height: 100px; border-radius: 50%;
+            border: 4px solid #fff; box-shadow: 0 8px 20px rgba(255, 175, 189, 0.3);
+            background: #fff; overflow: hidden;
+        }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .rabbit { transform: translateX(15px); z-index: 2; }
+        .bear { transform: translateX(-15px); z-index: 1; }
+
+        /* Day Counter */
+        .day-counter {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #fff; padding: 8px 20px; border-radius: 30px;
+            font-size: 14px; font-weight: 700; color: var(--p-main);
+            box-shadow: 0 5px 15px rgba(255, 117, 140, 0.15);
+            border: 1px solid rgba(255, 117, 140, 0.1);
+        }
+
+        /* Menu List */
+        .menu-container { flex: 1; padding: 20px; overflow-y: auto; padding-bottom: 100px; 
+                 background: url('img/6.png') no-repeat center bottom;
+
+               }
+        
+        .menu-item {
+            background: var(--glass); backdrop-filter: blur(10px);
+            border-radius: 25px; padding: 18px 20px; margin-bottom: 15px;
+            display: flex; align-items: center; gap: 15px;
+            text-decoration: none; color: var(--text-color);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 25px rgba(255, 175, 189, 0.1);
+            transition: 0.3s;
+        }
+        .menu-item:active { transform: scale(0.97); background: #fff; }
+
+        .menu-icon {
+            width: 45px; height: 45px; border-radius: 15px;
+            background: #fff; display: flex; align-items: center; 
+            justify-content: center; font-size: 20px; color: var(--p-main);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .menu-text { flex: 1; font-weight: 700; font-size: 15px; }
+        .menu-arrow { opacity: 0.3; font-size: 14px; }
+        
+        .badge {
+            background: #ff758c; color: #fff; padding: 2px 10px;
+            border-radius: 10px; font-size: 11px; font-weight: 700;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav { 
+            position: absolute; bottom: 0; width: 100%; height: 85px; 
+            background: #fff; display: flex; justify-content: space-around; 
+            align-items: center; padding-bottom: 25px; 
+            border-top: 1px solid #f0f0f0; border-radius: 40px 40px 0 0; z-index: 100;
+        }
+        .nav-item { color: #ccc; font-size: 10px; text-align: center; text-decoration: none; }
+        .nav-item.active { color: var(--p-main); }
+        .nav-item i { font-size: 22px; margin-bottom: 4px; }
+        .center-btn { 
+            width: 55px; height: 55px; background: linear-gradient(45deg, var(--p-main), #ffafbd); 
+            border-radius: 50%; color: white; display: flex; align-items: center; 
+            justify-content: center; font-size: 26px; margin-top: -50px; 
+            box-shadow: 0 10px 20px rgba(255, 117, 140, 0.4); border: 4px solid #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="header">
+        <h1>Của chúng ta 💞</h1>
+        
+<div class="avatar-pair">
+  <div class="avatar rabbit">
+    <img src="img/cun.png" alt="Rabbit">
+  </div>
+  <div class="avatar bear">
+    <img src="img/banh.png" alt="Bear">
+  </div>
+</div>
+
+        <div class="day-counter">
+            <i class="fa-solid fa-heart fa-beat" style="font-size: 12px;"></i>
+            <span id="days-count">...</span> ngày bên nhau
+            <i class="fa-solid fa-cake-candles" style="font-size: 12px; opacity: 0.5;"></i>
+        </div>
+    </div>
+
+ <div class="menu-container">
+    <a href="about.html" class="menu-item">
+        <div class="menu-icon"><i class="fa-solid fa-address-card"></i></div>
+        <div class="menu-text">Thông tin của chúng ta</div>
+        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+    </a>
+
+    <a href="feature.html" class="menu-item">
+        <div class="menu-icon"><i class="fa-solid fa-list-check"></i></div>
+        <div class="menu-text">Những điều muốn làm</div>
+        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+    </a>
+
+    <a href="x.html" class="menu-item">
+        <div class="menu-icon"><i class="fa-solid fa-images"></i></div>
+        <div class="menu-text">Album chung</div>
+        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+    </a>
+
+    <a href="y.html" class="menu-item">
+        <div class="menu-icon"><i class="fa-solid fa-gear"></i></div>
+        <div class="menu-text">Cài đặt</div>
+        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+    </a>
+
+    <a href="index.html" class="menu-item">
+        <div class="menu-icon"><i class="fa-solid fa-jar"></i></div>
+        <div class="menu-text">Thoát</div>
+        <div class="badge">122</div>
+        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+    </a>
+</div>
+
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+        <a href="home.html" class="nav-item"><i class="fa-solid fa-house"></i><br>Trang chủ</a>
+        <a href="kiniem.html" class="nav-item"><i class="fa-solid fa-heart"></i><br>Kỉ niệm</a>
+        <div class="center-btn">+</div>
+        <a href="emotion.html" class="nav-item"><i class="fa-solid fa-face-smile"></i><br>Cảm xúc</a>
+        <a href="us.html" class="nav-item active"><i class="fa-solid fa-users"></i><br>Chúng mình</a>
+    </div>
+</div>
+
+<script>
+    // Hàm tính ngày yêu nhau
+    function calculateDays() {
+        const startDate = new Date('2025-04-25'); // THAY NGÀY YÊU CỦA BẠN VÀO ĐÂY (YYYY-MM-DD)
+        const today = new Date();
+        const diffTime = Math.abs(today - startDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+        document.getElementById('days-count').innerText = diffDays;
+    }
+
+    calculateDays();
+
+    // Hiệu ứng click button center (tùy chọn)
+    document.querySelector('.center-btn').onclick = function() {
+        window.location.href = 'kiniem.html';
+    };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+     <title>Nhật ký của chúng ta - Thế kỷ Kỉ niệm ✨</title>
+     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+     <style>
+          :root {
+               --p-pink: #ffafbd;
+               --p-main: #ff758c;
+               --p-bg: #fff5f6;
+               --text-dark: #5d4037;
+               --glass: rgba(255, 255, 255, 0.8);
+          }
+
+          * {
+               box-sizing: border-box;
+               -webkit-tap-highlight-color: transparent;
+          }
+
+          body,
+          html {
+               margin: 0;
+               padding: 0;
+               width: 100%;
+               height: 100%;
+               font-family: 'Quicksand', sans-serif;
+               background: var(--p-bg);
+               color: var(--text-dark);
+               overflow: hidden;
+          }
+
+          .app-container {
+               width: 100%;
+               height: 100%;
+               max-width: 500px;
+               margin: 0 auto;
+               display: flex;
+               flex-direction: column;
+               position: relative;
+               background: #fff;
+          }
+
+          /* Header phong cách Mockup */
+          .header {
+               padding: 40px 20px 20px;
+               text-align: center;
+               background: url('img/7.png') no-repeat center bottom;
+               background-size: cover;
+          }
+
+         .top-nav-row {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     margin-bottom: 15px;
+}
+.fonth1 {
+     color: #F472B6 !important;
+     font-style: italic;
+     font-size: 2.5rem;
+     text-align: center;
+     text-shadow: 2px 2px 4px #FCE7F3;
+     font-family: 'Comic Sans MS', cursive, sans-serif;
+
+     width: 100%;
+     margin: 0 auto;
+}
+          .btn-circle {
+               width: 40px;
+               height: 40px;
+               border-radius: 50%;
+               background: #fff;
+               display: flex;
+               align-items: center;
+               justify-content: center;
+               box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+               color: var(--p-main);
+               font-size: 14px;
+          }
+
+          .header h1 {
+               font-size: 22px;
+               margin: 0;
+               font-weight: 700;
+               color: var(--text-dark);
+          }
+
+          .header p {
+               margin: 5px 0 0;
+               font-size: 12px;
+               opacity: 0.6;
+               color: #8d6e63;
+          }
+
+          /* Search Bar xịn */
+          .search-area {
+               padding: 0 20px 15px;
+
+               background: url('img/9.png') no-repeat center center;
+
+
+
+
+
+          }
+
+
+          .search-box {
+               background: #fdf0f2;
+               border-radius: 25px;
+               padding: 12px 18px;
+               display: flex;
+               align-items: center;
+               gap: 10px;
+               border: 1px solid rgba(255, 175, 189, 0.2);
+          }
+
+          .search-box input {
+               border: none;
+               background: none;
+               outline: none;
+               width: 100%;
+               font-family: inherit;
+               font-size: 14px;
+               color: var(--text-dark);
+          }
+
+          /* Tabs lọc thời gian */
+          .tabs {
+               display: flex;
+               gap: 10px;
+               padding: 5px 20px 15px;
+               overflow-x: auto;
+               scrollbar-width: none;
+               background: url('img/9.png') no-repeat center center;
+
+
+          }
+
+          .tabs::-webkit-scrollbar {
+               display: none;
+          }
+
+          .tab-item {
+               padding: 10px 20px;
+               background: #fff;
+               border-radius: 18px;
+               font-size: 12px;
+               white-space: nowrap;
+               border: 1px solid #eee;
+               transition: 0.3s;
+               display: flex;
+               align-items: center;
+               gap: 6px;
+               color: #888;
+          }
+
+          .tab-item i {
+               font-size: 14px;
+          }
+
+          .tab-item.active {
+               background: var(--p-main);
+               color: #fff;
+               border-color: var(--p-main);
+               font-weight: 700;
+               box-shadow: 0 5px 15px rgba(255, 117, 140, 0.3);
+          }
+
+          /* Content List */
+          .main-content {
+               flex: 1;
+               overflow-y: auto;
+               padding: 0 20px 100px;
+               scroll-behavior: smooth;
+               background: url('img/9.png') no-repeat center bottom;
+               background-size: cover;
+               opacity: 0.8;
+          }
+
+          .group-title {
+               font-size: 16px;
+               font-weight: 700;
+               margin: 25px 0 15px;
+               color: var(--p-main);
+               display: flex;
+               align-items: center;
+               justify-content: space-between;
+          }
+
+          .group-title span {
+               font-size: 11px;
+               font-weight: 400;
+               color: #bbb;
+          }
+
+          /* Card Kỉ niệm chuẩn Mockup */
+          .m-card {
+               background: #fff;
+               border-radius: 28px;
+               padding: 15px;
+               margin-bottom: 15px;
+               display: flex;
+               gap: 15px;
+               box-shadow: 0 10px 25px rgba(255, 175, 189, 0.15);
+               position: relative;
+               border: 1px solid rgba(255, 175, 189, 0.1);
+               animation: fadeIn 0.4s ease;
+          }
+
+          .m-thumb {
+               width: 95px;
+               height: 95px;
+               border-radius: 22px;
+               object-fit: cover;
+          }
+
+          .m-info {
+               flex: 1;
+               display: flex;
+               flex-direction: column;
+               justify-content: space-between;
+          }
+
+          .m-title {
+               font-size: 15px;
+               font-weight: 700;
+               margin: 0 0 5px;
+               color: #444;
+          }
+
+          .m-desc {
+               font-size: 12px;
+               color: #8d6e63;
+               line-height: 1.5;
+               display: -webkit-box;
+               -webkit-line-clamp: 2;
+               -webkit-box-orient: vertical;
+               overflow: hidden;
+          }
+
+          .m-stats {
+               display: flex;
+               gap: 12px;
+               margin-top: 10px;
+               font-size: 11px;
+               color: #aaa;
+          }
+
+          .m-stats span {
+               display: flex;
+               align-items: center;
+               gap: 4px;
+          }
+
+          .m-badge {
+               position: absolute;
+               bottom: 15px;
+               right: 15px;
+               padding: 5px 10px;
+               background: #fff0f3;
+               border-radius: 12px;
+               font-size: 10px;
+               color: var(--p-main);
+               font-weight: 700;
+               display: flex;
+               align-items: center;
+               gap: 4px;
+          }
+
+          /* Filter Drawer */
+          .drawer-mask {
+               position: fixed;
+               top: 0;
+               left: 0;
+               width: 100%;
+               height: 100%;
+               background: rgba(0, 0, 0, 0.4);
+               z-index: 1000;
+               display: none;
+               backdrop-filter: blur(4px);
+          }
+
+          .drawer {
+               position: fixed;
+               bottom: 0;
+               left: 0;
+               width: 100%;
+               background: #fff;
+               border-radius: 40px 40px 0 0;
+               padding: 35px 25px;
+               z-index: 1001;
+               transform: translateY(100%);
+               transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1);
+          }
+
+          .drawer.show {
+               transform: translateY(0);
+          }
+
+          .drawer-line {
+               width: 50px;
+               height: 5px;
+               background: #f0f0f0;
+               border-radius: 10px;
+               margin: -15px auto 25px;
+          }
+
+          /* Bottom Nav */
+          .bottom-nav {
+               position: absolute;
+               bottom: 0;
+               width: 100%;
+               height: 85px;
+               background: #fff;
+               display: flex;
+               justify-content: space-around;
+               align-items: center;
+               padding-bottom: 25px;
+               border-top: 1px solid #f8f8f8;
+               border-radius: 40px 40px 0 0;
+               z-index: 100;
+               box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.02);
+          }
+
+          .nav-link {
+               color: #ddd;
+               font-size: 10px;
+               text-align: center;
+               text-decoration: none;
+          }
+
+          .nav-link.active {
+               color: var(--p-main);
+          }
+
+          .nav-link i {
+               font-size: 22px;
+               margin-bottom: 5px;
+          }
+
+          .add-btn {
+               width: 58px;
+               height: 58px;
+               background: linear-gradient(45deg, var(--p-main), #ffafbd);
+               border-radius: 50%;
+               color: #fff;
+               display: flex;
+               align-items: center;
+               justify-content: center;
+               font-size: 26px;
+               margin-top: -55px;
+               box-shadow: 0 10px 25px rgba(255, 117, 140, 0.4);
+               border: 4px solid #fff;
+          }
+
+          @keyframes fadeIn {
+               from {
+                    opacity: 0;
+                    transform: translateY(15px);
+               }
+
+               to {
+                    opacity: 1;
+                    transform: translateY(0);
+               }
+          }
+
+          .mascot-img {
+               position: absolute;
+               right: 10px;
+               top: 15px;
+               width: 60px;
+               pointer-events: none;
+          }
+     </style>
+</head>
+
+<body>
+
+     <div class="app-container">
+          <!-- Header -->
+          <div class="header">
+               <img url="img/banh.png" class="mascot-img">
+               <div class="top-nav-row">
+                    <h1 class="fonth1">Nhật kí của em bé</h1>
+               </div>
+               <p>Mỗi khoảnh khắc đều đáng nhớ ❤️</p>
+          </div>
+
+          <!-- Search Area -->
+          <div class="search-area">
+               <div class="search-box">
+                    <i class="fa-solid fa-search" style="color: var(--p-pink);"></i>
+                    <input type="text" id="searchInput" placeholder="Tìm theo từ khóa, cảm xúc..."
+                         oninput="searchMemories()">
+               </div>
+          </div>
+
+          <!-- TABS: Logic Ngày/Tuần/Tháng/Năm/Thế kỷ -->
+          <div class="tabs" id="timeTabs">
+               <div class="tab-item active" data-range="all"><i class="fa-solid fa-heart"></i> Tất cả</div>
+               <div class="tab-item" data-range="today"><i class="fa-solid fa-calendar-day"></i> Ngày</div>
+               <div class="tab-item" data-range="week"><i class="fa-solid fa-calendar-week"></i> Tuần</div>
+               <div class="tab-item" data-range="month"><i class="fa-solid fa-calendar-days"></i> Tháng</div>
+               <div class="tab-item" data-range="year"><i class="fa-solid fa-calendar-check"></i> Năm</div>
+               <div class="tab-item" data-range="century"><i class="fa-solid fa-star"></i> Thế kỷ</div>
+          </div>
+
+          <!-- Content -->
+          <div class="main-content" id="listContent">
+               <div style="text-align:center; margin-top:100px; opacity:0.3;">
+                    <i class="fa-solid fa-wand-magic-sparkles fa-spin fa-2x"></i>
+                    <p>Đang dệt lại kỉ niệm...</p>
+               </div>
+          </div>
+
+          <!-- Filter Drawer -->
+          <div class="drawer-mask" id="mask" onclick="toggleFilter(false)"></div>
+          <div class="drawer" id="filterDrawer">
+               <div class="drawer-line"></div>
+               <h2 style="margin:0 0 25px; font-size:18px;">🌸 Bộ lọc nâng cao</h2>
+               <!-- (Bạn có thể thêm các option cảm xúc vào đây như bản trước) -->
+               <button onclick="toggleFilter(false)"
+                    style="width:100%; padding:18px; background:var(--p-main); color:#fff; border:none; border-radius:25px; font-weight:700; font-family:inherit; box-shadow: 0 10px 20px rgba(255,117,140,0.2);">Xác
+                    nhận bộ lọc</button>
+          </div>
+
+          <!-- Bottom Nav -->
+          <div class="bottom-nav">
+               <a href="6.html" class="nav-link"><i class="fa-solid fa-house"></i><br>Home</a>
+               <a href="kiniem.html" class="nav-link"><i class="fa-solid fa-heart"></i><br>Kỉ niệm</a>
+               <div class="add-btn" onclick="location.href='template.html'">+</div>
+               <a href="emotion.html" class="nav-link active"><i class="fa-solid fa-face-smile"></i><br>Cảm xúc</a>
+               <a href="us.html" class="nav-link"><i class="fa-solid fa-users"></i><br>Chúng mình</a>
+          </div>
+     </div>
+
+     <script type="module">
+          import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+          import { getFirestore, collection, getDocs, query } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+          const firebaseConfig = {
+               apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+               authDomain: "photodiary-3d469.firebaseapp.com",
+               projectId: "photodiary-3d469",
+               storageBucket: "photodiary-3d469.firebasestorage.app",
+               messagingSenderId: "102477469911",
+               appId: "1:102477469911:web:13ed38ab426819fdb43892"
+          };
+
+          const app = initializeApp(firebaseConfig);
+          const db = getFirestore(app);
+
+          let allMemories = []; // Dữ liệu gốc từ Firebase
+          const container = document.getElementById('listContent');
+
+          // 1. Tải dữ liệu từ Firebase
+          async function init() {
+               try {
+                    const snap = await getDocs(collection(db, "daily_memories"));
+                    allMemories = [];
+                    snap.forEach(doc => {
+                         const dayData = doc.data();
+                         if (dayData.moments) {
+                              dayData.moments.forEach(m => {
+                                   allMemories.push({ ...m, date: doc.id });
+                              });
+                         }
+                    });
+                    allMemories.sort((a, b) => b.time.localeCompare(a.time));
+                    renderList(allMemories);
+               } catch (e) { console.error(e); }
+          }
+
+          // 2. Logic Lọc Dữ Liệu theo Tab
+          const tabs = document.querySelectorAll('.tab-item');
+          tabs.forEach(tab => {
+               tab.addEventListener('click', () => {
+                    // Đổi UI Active
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    // Lọc logic
+                    const range = tab.dataset.range;
+                    filterByTimeRange(range);
+               });
+          });
+
+          function filterByTimeRange(range) {
+               const now = new Date();
+               const todayStr = now.toISOString().split('T')[0];
+
+               let filtered = allMemories.filter(m => {
+                    const mDate = new Date(m.date);
+
+                    if (range === 'all') return true;
+
+                    if (range === 'today') return m.date === todayStr;
+
+                    if (range === 'week') {
+                         const diffTime = Math.abs(now - mDate);
+                         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                         return diffDays <= 7;
+                    }
+
+                    if (range === 'month') {
+                         return mDate.getMonth() === now.getMonth() && mDate.getFullYear() === now.getFullYear();
+                    }
+
+                    if (range === 'year') {
+                         return mDate.getFullYear() === now.getFullYear();
+                    }
+
+                    if (range === 'century') {
+                         return mDate.getFullYear() >= 2001 && mDate.getFullYear() <= 2100;
+                    }
+               });
+
+               renderList(filtered);
+          }
+
+          // 3. Hàm Render UI
+          function renderList(data) {
+               if (data.length === 0) {
+                    container.innerHTML = `<div style="text-align:center; padding-top:100px; opacity:0.5;"><i class="fa-solid fa-box-open fa-3x"></i><p>Hông tìm thấy kỉ niệm nào hết...</p></div>`;
+                    return;
+               }
+
+               let html = "";
+               let lastDate = "";
+
+               data.forEach(m => {
+                    if (m.date !== lastDate) {
+                         lastDate = m.date;
+                         html += `<div class="group-title">${formatDateVN(m.date)} <span>${m.date}</span></div>`;
+                    }
+
+                    html += `
+                <div class="m-card" onclick="window.location.href='template.html?date=${m.date}'">
+                    <img src="${m.images?.[0] || 'https://via.placeholder.com/150'}" class="m-thumb">
+                    <div class="m-info">
+                        <h3 class="m-title">${m.activity || 'Hoạt động kỉ niệm'}</h3>
+                        <p class="m-desc">${m.content}</p>
+                        <div class="m-stats">
+                            <span><i class="fa-regular fa-image"></i> ${m.images ? m.images.length : 0}</span>
+                            ${m.audio ? `<span><i class="fa-solid fa-microphone-lines"></i> Voice</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="m-badge">😊 ${m.feeling}</div>
+                </div>
+            `;
+               });
+               container.innerHTML = html;
+          }
+
+          function formatDateVN(dateStr) {
+               const d = new Date(dateStr);
+               if (dateStr === new Date().toISOString().split('T')[0]) return "Hôm nay 🌸";
+               return `Kỉ niệm 🎀`;
+          }
+
+          // 4. Tìm kiếm nội dung
+          window.searchMemories = () => {
+               const key = document.getElementById('searchInput').value.toLowerCase();
+               const filtered = allMemories.filter(m =>
+                    m.content.toLowerCase().includes(key) || m.activity.toLowerCase().includes(key) || m.feeling.toLowerCase().includes(key)
+               );
+               renderList(filtered);
+          };
+
+          // UI Drawer
+          window.toggleFilter = (show) => {
+               const d = document.getElementById('filterDrawer');
+               const m = document.getElementById('mask');
+               if (show) { m.style.display = 'block'; setTimeout(() => d.classList.add('show'), 10); }
+               else { d.classList.remove('show'); setTimeout(() => m.style.display = 'none', 400); }
+          };
+
+          init();
+     </script>
+
+</body>
+
+</html>

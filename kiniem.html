@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Diary of Us - Chung một nhà 🌸</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+    <style>
+        :root { --pink-main: #ff8fab; --pink-soft: #ffb7c5; --pink-bg: #fff5f7; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Quicksand', sans-serif; background: var(--pink-bg); overflow: hidden; }
+        
+.app-container {
+    width: 100%;
+    height: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    /* Xóa background: white; và thay bằng: */
+    background: url('img/4.png') no-repeat center center;
+    background-size: cover; 
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 30px rgba(255, 143, 171, 0.2);
+}        .content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; scrollbar-width: none; }
+        .content::-webkit-scrollbar { display: none; }
+        
+        .header { display: flex; align-items: center; padding: 15px 0; border-bottom: 1px solid #fdf2f4; margin-bottom: 20px; }
+        .header-title { flex: 1; text-align: center; font-weight: 700; color: var(--pink-main); font-size: 20px; }
+        
+        .glass-box { background: #fffafb; border-radius: 25px; padding: 20px; border: 2px solid #fff0f3; margin-bottom: 20px; }
+        textarea { width: 100%; height: 80px; border: none; outline: none; resize: none; font-family: 'Quicksand'; font-size: 15px; color: #666; background: transparent; }
+
+        /* Preview ảnh */
+        .preview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0; cursor: pointer; }
+        .p-slot { aspect-ratio: 1; border-radius: 12px; background: white; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px dashed var(--pink-soft); }
+        .p-slot img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Voice Bubble & Waveform */
+        .voice-bubble {
+            background: #ffeef2; border-radius: 20px; padding: 15px; margin: 15px 0;
+            display: none; align-items: center; gap: 12px; border: 1px solid #ffdde5;
+        }
+        .play-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--pink-main); color: white; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .waveform-visual { flex: 1; display: flex; align-items: center; gap: 3px; height: 30px; }
+        .wf-bar { width: 3px; height: 40%; background: var(--pink-soft); border-radius: 2px; }
+        .wf-bar.active { animation: dance 0.6s infinite alternate; }
+        @keyframes dance { from { height: 20%; } to { height: 95%; } }
+        .audio-timer { font-size: 12px; color: var(--pink-main); font-weight: 700; min-width: 45px; text-align: right; }
+
+        /* Cảm xúc & Tags */
+        .scroll-x { display: flex; gap: 12px; overflow-x: auto; padding: 5px 0; scrollbar-width: none; }
+        .choice-item { min-width: 65px; text-align: center; cursor: pointer; }
+        .choice-icon { width: 45px; height: 45px; background: white; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 5px; border: 2px solid #fff0f3; }
+        .choice-item.active .choice-icon { border-color: var(--pink-main); background: #fff0f3; transform: scale(1.1); }
+        .tag-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; }
+        .tag { padding: 8px 15px; border-radius: 15px; background: #f5f5f5; font-size: 12px; color: #777; cursor: pointer; border: 2px solid transparent; }
+        .tag.active { background: #fff0f3; border-color: var(--pink-soft); color: var(--pink-main); font-weight: 700; }
+
+        /* Info Row */
+        .info-row { display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #fff9fa; }
+        .i-label { font-size: 14px; font-weight: 700; color: #888; display: flex; align-items: center; gap: 8px; }
+        .i-val { font-size: 13px; color: #444; text-align: right; border: none; outline: none; background: none; width: 65%; font-family: 'Quicksand'; }
+
+        .btn-save { width: 100%; padding: 18px; border: none; border-radius: 25px; background: linear-gradient(135deg, #ffafbd, #ff748c); color: white; font-weight: 700; font-size: 16px; cursor: pointer; box-shadow: 0 10px 20px rgba(255, 143, 171, 0.3); margin-top: 20px; }
+
+        /* Rec Trigger */
+        .rec-trigger { width: 50px; height: 50px; border-radius: 50%; background: var(--pink-main); color: white; border: none; font-size: 20px; cursor: pointer; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+        .pulse { animation: pulse-red 1.5s infinite; }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(255, 143, 171, 0.7); } 70% { box-shadow: 0 0 0 12px rgba(255, 143, 171, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 143, 171, 0); } }
+
+        /* Nav */
+        /* --- MENU DƯỚI CÙNG THỐNG NHẤT --- */
+.bottom-nav {
+    position: absolute; 
+    bottom: 0; 
+    left: 0;
+    width: 100%; 
+    height: 75px;
+    background: white; 
+    border-top: 1px solid #fdf2f4;
+    display: flex; 
+    justify-content: space-around; 
+    align-items: center; 
+    padding-bottom: 15px;
+    z-index: 1000;
+}
+
+.nav-item { 
+    flex: 1;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    text-decoration: none; 
+    transition: 0.3s;
+}
+
+/* Icon và chữ mặc định màu xám */
+.nav-item i { font-size: 20px; margin-bottom: 3px; color: #ddd; }
+.nav-item span { font-size: 10px; color: #ccc; font-weight: 500; }
+
+/* Khi trang đang mở (active) thì icon và chữ hiện màu hồng */
+.nav-item.active i, 
+.nav-item.active span { 
+    color: #ff8fab; 
+    font-weight: 700; 
+}
+
+/* Nút cộng màu hồng Gradient siêu cute ở giữa */
+.center-btn {
+    width: 58px; 
+    height: 58px; 
+    background: linear-gradient(45deg, #ffb7c5, #ff8fab);
+    border-radius: 50%; 
+    color: white; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    font-size: 28px; 
+    margin-top: -45px; 
+    box-shadow: 0 6px 15px rgba(255, 143, 171, 0.4);
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+}
+
+.center-btn:active { transform: scale(0.9); }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="content">
+        <div class="header"><div class="header-title">Tạo kỉ niệm mới ❤️</div></div>
+
+        <div class="glass-box">
+            <textarea id="diary-note" placeholder="Bé đang nghĩ gì thế? Viết vào đây nha..."></textarea>
+            
+            <div class="preview-grid" onclick="photoWidget.open()">
+                <div class="p-slot" id="slot-0"><i class="fa-solid fa-camera" style="color:#f9ced6"></i></div>
+                <div class="p-slot" id="slot-1"></div>
+                <div class="p-slot" id="slot-2"></div>
+                <div class="p-slot" id="slot-3"></div>
+            </div>
+
+            <!-- Custom Voice Bubble -->
+            <div class="voice-bubble" id="audio-ui">
+                <button class="play-btn" id="ctrl-play"><i class="fa-solid fa-play"></i></button>
+                <div class="waveform-visual" id="waveform">
+                    <div class="wf-bar"></div><div class="wf-bar"></div><div class="wf-bar"></div><div class="wf-bar"></div><div class="wf-bar"></div><div class="wf-bar"></div><div class="wf-bar"></div><div class="wf-bar"></div><div class="wf-bar"></div><div class="wf-bar"></div>
+                </div>
+                <span class="audio-timer" id="audio-time">00:00</span>
+            </div>
+
+            <div style="text-align: center; margin-top: 15px;">
+                <button class="rec-trigger" id="btn-rec"><i class="fa-solid fa-microphone"></i></button>
+                <div id="rec-msg" style="font-size: 11px; color: #aaa; margin-top: 8px;">Nhấn Mic để bắt đầu nói</div>
+            </div>
+        </div>
+
+        <div style="font-size: 13px; font-weight: 700; color: var(--pink-main);">Cảm xúc của bé</div>
+        <div class="scroll-x" id="feelingGrid"></div>
+
+        <div style="font-size: 13px; font-weight: 700; color: var(--pink-main); margin-top: 20px;">Đi cùng ai nè?</div>
+        <div class="tag-group">
+            <div class="tag active" onclick="selectTag(this)">Một mình</div>
+            <div class="tag" onclick="selectTag(this)">Bạn bè</div>
+            <div class="tag" onclick="selectTag(this)">Gia đình</div>
+            <div class="tag" onclick="selectTag(this)">Người yêu</div>
+        </div>
+
+        <div class="glass-box" style="margin-top: 25px;">
+            <div class="info-row">
+                <div class="i-label"><i class="fa-solid fa-clock"></i> Thời gian</div>
+                <input type="datetime-local" class="i-val" id="diary-time">
+            </div>
+            <div class="info-row">
+                <div class="i-label"><i class="fa-solid fa-location-dot" id="btn-gps" onclick="fetchGPS()" style="color:var(--pink-main); cursor:pointer;"></i> Vị trí</div>
+                <input class="i-val" id="diary-addr" placeholder="Nhấn icon GPS bên trái">
+            </div>
+            <div class="info-row">
+                <div class="i-label"><i class="fa-solid fa-wand-sparkles"></i> Hoạt động</div>
+                <input class="i-val" id="diary-act" placeholder="Bé đang làm gì thế?">
+            </div>
+        </div>
+
+        <button class="btn-save" onclick="saveDiary()">Lưu kỉ niệm ✨</button>
+    </div>
+
+   <div class="bottom-nav">
+    <!-- Trang chủ -->
+    <a href="home.html" class="nav-item">
+        <i class="fa-solid fa-house"></i>
+        <span>Trang chủ</span>
+    </a>
+
+    <!-- Kỉ niệm -->
+    <a href="kiniem.html" class="nav-item active">
+        <i class="fa-solid fa-heart"></i>
+        <span>Kỉ niệm</span>
+    </a>
+
+    <!-- Nút Cộng (Mở bảng tạo kỉ niệm hoặc hành động khác) -->
+    <div class="center-btn">+</div>
+
+    <!-- Cảm xúc -->
+    <a href="emotion.html" class="nav-item">
+        <i class="fa-solid fa-face-smile"></i>
+        <span>Cảm xúc</span>
+    </a>
+
+    <!-- Chúng mình -->
+    <a href="us.html" class="nav-item">
+        <i class="fa-solid fa-users"></i>
+        <span>Chúng mình</span>
+    </a>
+</div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+    // --- Cấu hình Đường dẫn Folder Duy nhất ---
+    const now = new Date();
+    const dateStr = now.toISOString().split('T')[0];
+    const timeStr = now.getHours().toString().padStart(2,'0') + "-" + 
+                    now.getMinutes().toString().padStart(2,'0') + "-" + 
+                    now.getSeconds().toString().padStart(2,'0');
+    // Folder này sẽ dùng cho cả ẢNH và AUDIO
+    const fullFolderPath = `diary/${dateStr}/${timeStr}`;
+
+    const CONFIG = {
+        cloudName: "djjinlx7t", uploadPreset: "cunlun",
+        firebase: {
+            apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI", authDomain: "photodiary-3d469.firebaseapp.com",
+            projectId: "photodiary-3d469", storageBucket: "photodiary-3d469.firebasestorage.app",
+            messagingSenderId: "102477469911", appId: "1:102477469911:web:13ed38ab426819fdb43892"
+        }
+    };
+
+    const app = initializeApp(CONFIG.firebase);
+    const db = getFirestore(app);
+
+    document.getElementById('diary-time').value = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+
+    // 1. GPS
+    window.fetchGPS = async () => {
+        const inp = document.getElementById('diary-addr'); inp.placeholder = "Đang tìm...";
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                try {
+                    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`);
+                    const data = await res.json();
+                    inp.value = data.address.suburb || data.address.city || "Vị trí bí mật";
+                } catch (e) { inp.value = "Không tìm thấy địa chỉ"; }
+            }, () => { inp.placeholder = "Bé tự gõ nha"; });
+        }
+    };
+
+    // 2. THU ÂM & FIX TIMER
+    let mediaRecorder, audioChunks = [], audioBlob, audioUrl = "";
+    let timerVal = 0, timerInterval;
+    const btnRec = document.getElementById('btn-rec'), msg = document.getElementById('rec-msg'), 
+          audioUI = document.getElementById('audio-ui'), playBtn = document.getElementById('ctrl-play'),
+          timerDisplay = document.getElementById('audio-time');
+    const localPlayer = new Audio();
+
+    function formatTime(s) {
+        const m = Math.floor(s / 60);
+        const sec = Math.floor(s % 60);
+        return `${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+    }
+
+    btnRec.onclick = async () => {
+        if (!mediaRecorder || mediaRecorder.state === "inactive") {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+            timerVal = 0;
+            timerDisplay.innerText = "00:00";
+            
+            mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+            mediaRecorder.onstart = () => {
+                timerInterval = setInterval(() => {
+                    timerVal++;
+                    timerDisplay.innerText = formatTime(timerVal);
+                }, 1000);
+            };
+            mediaRecorder.onstop = () => {
+                clearInterval(timerInterval);
+                audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                localPlayer.src = URL.createObjectURL(audioBlob);
+                audioUI.style.display = "flex";
+                btnRec.classList.remove('pulse'); 
+                msg.innerText = "Nhấn để thu âm lại";
+                localPlayer.onloadedmetadata = () => timerDisplay.innerText = formatTime(localPlayer.duration);
+            };
+            mediaRecorder.start(); btnRec.classList.add('pulse'); msg.innerText = "🔴 Đang lắng nghe bé...";
+        } else { mediaRecorder.stop(); }
+    };
+
+    // Update timer khi nghe lại
+    localPlayer.ontimeupdate = () => {
+        if (!localPlayer.paused) timerDisplay.innerText = formatTime(localPlayer.currentTime);
+    };
+
+    playBtn.onclick = () => {
+        if (localPlayer.paused) {
+            localPlayer.play(); playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+            document.querySelectorAll('.wf-bar').forEach(b => b.classList.add('active'));
+        } else {
+            localPlayer.pause(); playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            document.querySelectorAll('.wf-bar').forEach(b => b.classList.remove('active'));
+        }
+    };
+    localPlayer.onended = () => {
+        playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+        document.querySelectorAll('.wf-bar').forEach(b => b.classList.remove('active'));
+        timerDisplay.innerText = formatTime(localPlayer.duration);
+    };
+
+    // 3. ẢNH (Chung Folder với Audio)
+    let images = [];
+    window.photoWidget = window.cloudinary.createUploadWidget({
+        cloudName: CONFIG.cloudName, uploadPreset: CONFIG.uploadPreset,
+        maxFiles: 4, 
+        folder: fullFolderPath // Dùng chung folder thời gian
+    }, (error, result) => {
+        if (!error && result.event === "success") {
+            images.push(result.info.secure_url);
+            images.forEach((url, i) => { if(i<4) document.getElementById(`slot-${i}`).innerHTML = `<img src="${url}">`; });
+        }
+    });
+
+    // 4. CẢM XÚC
+    const feelings = [{n:'Vui', i:'😊'}, {n:'Yêu', i:'🥰'}, {n:'Ngọt', i:'🍭'}, {n:'Nhớ', i:'☁️'}, {n:'Dỗi', i:'😤'}];
+    let selectedFeel = "Vui";
+    const fg = document.getElementById('feelingGrid');
+    feelings.forEach(f => {
+        const item = document.createElement('div');
+        item.className = `choice-item ${f.n === selectedFeel ? 'active' : ''}`;
+        item.innerHTML = `<div class="choice-icon">${f.i}</div><div class="choice-name">${f.n}</div>`;
+        item.onclick = () => { document.querySelectorAll('.choice-item').forEach(e => e.classList.remove('active')); item.classList.add('active'); selectedFeel = f.n; };
+        fg.appendChild(item);
+    });
+    window.selectTag = (el) => { document.querySelectorAll('.tag').forEach(t => t.classList.remove('active')); el.classList.add('active'); };
+
+    // 5. LƯU (Firebase + Cloudinary cho Audio chung folder)
+    window.saveDiary = async () => {
+        const note = document.getElementById('diary-note').value;
+        const addr = document.getElementById('diary-addr').value;
+        const act = document.getElementById('diary-act').value;
+        const time = document.getElementById('diary-time').value;
+        const companion = document.querySelector('.tag.active').innerText;
+        const docId = dateStr;
+
+        if (!note && images.length === 0 && !audioBlob) return alert("Bé chưa có gì để lưu hết á! 🥺");
+
+        if (audioBlob) {
+            const fd = new FormData(); 
+            fd.append("file", audioBlob); 
+            fd.append("upload_preset", CONFIG.uploadPreset);
+            // AUDIO BAY VÀO CÙNG FOLDER VỚI ẢNH
+            fd.append("folder", fullFolderPath); 
+
+            const res = await fetch(`https://api.cloudinary.com/v1_1/${CONFIG.cloudName}/upload`, { method: "POST", body: fd });
+            const data = await res.json(); audioUrl = data.secure_url;
+        }
+
+        const newMoment = {
+            id: Date.now(), content: note, feeling: selectedFeel, companion,
+            address: addr, activity: act, images, audio: audioUrl, time: time,
+            assetFolder: fullFolderPath
+        };
+
+        try {
+            const docRef = doc(db, "daily_memories", docId);
+            const snap = await getDoc(docRef);
+            if (snap.exists()) { await updateDoc(docRef, { moments: arrayUnion(newMoment) }); }
+            else { await setDoc(docRef, { date: docId, moments: [newMoment] }); }
+            alert("Kỉ niệm hôm nay đã được cất giữ! 💖");
+            location.reload();
+        } catch (e) { alert("Lỗi lưu rồi!"); }
+    };
+</script>
+</body>
+</html>

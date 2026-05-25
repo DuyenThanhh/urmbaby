@@ -2,266 +2,104 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <!-- Khóa thu phóng để giữ giao diện chuẩn -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cổng Không Gian Kỷ Niệm ✨</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+    <title>Welcome - Diary of Us</title>
     <style>
-        :root {
-            --bg-color: #f8fafc;
-            --accent: #6366f1;
-            --card-shadow: rgba(31, 38, 135, 0.15);
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        body {
-            font-family: 'Quicksand', sans-serif;
-            background-color: var(--bg-color);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Hình nền động */
-        .bg-elements {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .floating-icon {
-            position: absolute;
-            opacity: 0.2;
-            animation: float 6s infinite ease-in-out;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(20deg); }
-        }
-
-        /* Thẻ Login Glassmorphism */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 40px;
-            box-shadow: 0 8px 32px 0 var(--card-shadow);
-            width: 90%;
-            max-width: 400px;
-            padding: 40px;
-            text-align: center;
-            position: relative;
-            transition: all 0.6s ease;
-        }
-
-        /* Đôi mắt Guardian */
-        .guardian-eyes {
-            width: 100px;
-            height: 40px;
-            margin: 0 auto 20px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-        .eye {
-            width: 35px;
-            height: 35px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .pupil {
-            width: 15px;
-            height: 15px;
-            background: #1e293b;
-            border-radius: 50%;
-            transition: all 0.1s ease-out;
-        }
-
-        /* Kiểu chữ thanh cao */
-        .title-elegant {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-size: 1.8rem;
-            color: #1e293b;
-            margin-bottom: 5px;
-        }
-
-        input {
-            background: rgba(255, 255, 255, 0.8) !important;
-            border: 2px solid transparent !important;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            transition: all 0.4s ease;
-        }
-
-        input:focus {
-            border-color: var(--accent) !important;
-            transform: translateY(-2px);
-        }
-
-        .btn-main {
-            background: var(--accent);
-            color: white;
-            padding: 15px;
-            border-radius: 20px;
-            font-weight: 700;
+        body, html {
+            margin: 0;
+            padding: 0;
             width: 100%;
-            box-shadow: 0 10px 20px -5px var(--accent);
-            transition: all 0.3s ease;
+            height: 100%;
+            overflow: hidden;
+            background-color: #fce1e4; /* Màu nền dự phòng */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
         }
 
-        .btn-main:hover {
-            transform: scale(1.02);
-            filter: brightness(1.1);
+        /* Lớp chứa ảnh nền */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* ĐƯỜNG DẪN ẢNH NỀN CỦA BẠN */
+            background: url('img/1.png') no-repeat center center;
+            background-size: cover; /* Để lấp đầy màn hình điện thoại */
+            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
+            z-index: 1;
         }
 
-        /* Themes */
-        .theme-banh {
-            --bg-color: #eff6ff;
-            --accent: #0d9488;
-            --card-shadow: rgba(13, 148, 136, 0.2);
-        }
-        .theme-duyen {
-            --bg-color: #fff1f2;
-            --accent: #fb7185;
-            --card-shadow: rgba(251, 113, 133, 0.2);
+        /* Hiệu ứng mờ dần và thu nhỏ nhẹ khi click */
+        .fade-out {
+            opacity: 0;
+            transform: scale(1.1);
         }
 
-        .character-icon {
-            font-size: 60px;
-            margin-top: 20px;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* Dòng chữ gợi ý nhỏ (tùy chọn, nếu bạn muốn nhắc người dùng chạm) */
+        .hint-text {
+            position: absolute;
+            bottom: 10%;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-family: sans-serif;
+            font-size: 14px;
+            text-shadow: 0 0 10px rgba(0,0,0,0.3);
+            z-index: 2;
+            animation: breathe 2s infinite;
+            pointer-events: none; /* Để không cản trở cú click vào body */
+            opacity: 0.8;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
         }
     </style>
 </head>
-<body>
+<body onclick="enterSite()">
 
-    <div class="bg-elements" id="bg-elements"></div>
+    <!-- Chỉ hiển thị background ban đầu -->
+    <div class="background-container" id="bg"></div>
 
-    <div class="glass-card" id="login-card">
-        <!-- Guardian Eyes -->
-        <div class="guardian-eyes">
-            <div class="eye"><div class="pupil" id="pupil-l"></div></div>
-            <div class="eye"><div class="pupil" id="pupil-r"></div></div>
-        </div>
-
-        <h1 class="title-elegant" id="title">Welcome Home</h1>
-        <p class="text-slate-400 text-sm mb-8" id="subtitle">Ký ức đang chờ bạn mở cửa...</p>
-
-        <form id="loginForm" class="space-y-6">
-            <input
-                type="password"
-                id="password"
-                inputmode="numeric"
-                placeholder="Nhập mật mã..."
-                class="w-full px-6 py-4 rounded-2xl text-center text-2xl font-bold focus:outline-none"
-                oninput="handleInteraction(this)"
-            >
-            <button type="submit" class="btn-main">Mở Cánh Cửa Kỷ Niệm</button>
-        </form>
-
-        <div id="character" class="character-icon">✨</div>
-    </div>
+    <!-- Dòng chữ gợi ý mờ mờ -->
+    <div class="hint-text">Chạm vào màn hình để bắt đầu ✨</div>
 
     <script>
-        const pupils = document.querySelectorAll('.pupil');
-        const body = document.body;
-        const card = document.getElementById('login-card');
-        const title = document.getElementById('title');
-        const subtitle = document.getElementById('subtitle');
-        const character = document.getElementById('character');
-        const bgElements = document.getElementById('bg-elements');
+        let clicked = false;
 
-        function handleInteraction(input) {
-            const val = input.value;
-            const len = val.length;
+        function enterSite() {
+            if (clicked) return; // Tránh click nhiều lần
+            clicked = true;
 
-            // Eye Tracking
-            pupils.forEach(p => {
-                const moveX = (len * 3) - 10;
-                p.style.transform = `translateX(${Math.min(Math.max(moveX, -10), 10)}px)`;
-            });
+            const bg = document.getElementById('bg');
+            
+            // Bắt đầu hiệu ứng dần dần biến mất
+            bg.classList.add('fade-out');
 
-            // Nhận diện Theme GIAO DIỆN
-            if (val === "050803") {
-                applyTheme('banh');
-            } else if (val === "171006") {
-                applyTheme('duyen');
-            } else {
-                if (len === 0) {
-                    applyTheme('default');
-                }
-            }
+            // Sau 1.2 giây (khi hiệu ứng mờ gần xong) thì chuyển sang trang login
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1200);
         }
 
-        function applyTheme(user) {
-            if (user === 'banh') {
-                body.className = 'theme-banh';
-                title.innerText = "Kính chào Chủ Nhân";
-                subtitle.innerText = "Trí tuệ và Thanh liêm là khí chất của anh.";
-                character.innerText = "🖋️";
-                character.style.transform = "scale(1.2)";
-                createBackgroundIcons('fa-feather-alt');
-            } else if (user === 'duyen') {
-                body.className = 'theme-duyen';
-                title.innerText = "Chào Nha Đầu Ngốc";
-                subtitle.innerText = "Thế giới rực rỡ hơn khi em mỉm cười.";
-                character.innerText = "🌸";
-                character.style.transform = "scale(1.2)";
-                createBackgroundIcons('fa-heart');
-            } else {
-                body.className = '';
-                title.innerText = "Welcome Home";
-                subtitle.innerText = "Ký ức đang chờ bạn mở cửa...";
-                character.innerText = "✨";
-                character.style.transform = "scale(1)";
-                bgElements.innerHTML = '';
-            }
-        }
+        // Chặn zoom trên Laptop (Ctrl + cuộn chuột)
+        document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) e.preventDefault();
+        }, { passive: false });
 
-        function createBackgroundIcons(iconClass) {
-            bgElements.innerHTML = '';
-            for (let i = 0; i < 15; i++) {
-                const icon = document.createElement('i');
-                icon.className = `fas ${iconClass} floating-icon`;
-                icon.style.left = Math.random() * 100 + 'vw';
-                icon.style.top = Math.random() * 100 + 'vh';
-                icon.style.fontSize = (Math.random() * 20 + 10) + 'px';
-                icon.style.animationDelay = Math.random() * 5 + 's';
-                bgElements.appendChild(icon);
-            }
-        }
-
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const pass = document.getElementById('password').value;
-
-            if (pass === "050803" || pass === "171006") {
-                const user = pass === "050803" ? "Chủ Nhân" : "Nha Đầu";
-                
-                // Hiệu ứng thành công cực đẹp
-                card.style.transform = "scale(0.9) translateY(-20px)";
-                card.style.opacity = "0";
-                body.style.filter = "brightness(1.5) blur(10px)";
-                
-                setTimeout(() => {
-                    sessionStorage.setItem('portal_user', user);
-                    window.location.href = 'up.html';
-                }, 800);
-            } else {
-                // Hiệu ứng báo sai "Thanh cao" (Rung nhẹ và chuyển đỏ rồi về cũ)
-                card.classList.add('animate-bounce');
-                setTimeout(() => card.classList.remove('animate-bounce'), 500);
-                alert("Mật mã chưa đúng, xin hãy thử lại bằng cả trái tim.");
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0')) {
+                e.preventDefault();
             }
         });
     </script>

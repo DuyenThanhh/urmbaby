@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login - Diary of Us</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Icon FontAwesome để làm icon user/lock -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --pink-main: #ff748c;
+            --pink-soft: #ffb7c5;
+            --text-color: #555;
+            --input-bg: #f9f9f9;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            font-family: 'Quicksand', sans-serif;
+            background: url('img/2.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden; user-select: none;
+        }
+
+        /* Khung điện thoại cố định */
+        .phone-container {
+            width: 360px; height: 520px;
+            background-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(8px);
+            border-radius: 45px; padding: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            position: relative; transform-origin: center;
+        }
+
+        .main-card {
+            background-color: #fffdf9;
+            width: 100%; height: 100%;
+            border-radius: 35px;
+            border: 2px dashed var(--pink-soft);
+            padding: 50px 25px;
+            display: flex; flex-direction: column; align-items: center;
+            position: relative;
+        }
+
+        h2 {
+            font-size: 26px; color: #333; margin-bottom: 50px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        /* Input Styles */
+        .input-group {
+            width: 100%; position: relative; margin-bottom: 20px;
+        }
+
+        .input-group i.left-icon {
+            position: absolute; left: 15px; top: 50%;
+            transform: translateY(-50%); color: #aaa; font-size: 18px;
+        }
+
+        .input-group input {
+            width: 100%; padding: 15px 15px 15px 45px;
+            border-radius: 25px; border: 1px solid #eee;
+            background: var(--input-bg); outline: none;
+            font-family: 'Quicksand', sans-serif; font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus { border-color: var(--pink-soft); background: #fff; }
+
+        .toggle-password {
+            position: absolute; right: 15px; top: 50%;
+            transform: translateY(-50%); color: var(--pink-main);
+            cursor: pointer; font-size: 16px;
+        }
+
+        /* Options */
+        .options {
+            width: 100%; display: flex; justify-content: space-between;
+            align-items: center; font-size: 12px; color: #888;
+            margin-bottom: 40px; padding: 0 5px;
+        }
+
+        .remember-me { display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        .remember-me input { accent-color: var(--pink-main); }
+        .forgot-pass { text-decoration: none; color: #888; }
+
+        /* Login Button */
+        .login-btn {
+            width: 100%; padding: 15px; border: none;
+            border-radius: 30px; background: linear-gradient(to right, #ffb7c5, #ff748c);
+            color: white; font-weight: 700; font-size: 16px;
+            cursor: pointer; box-shadow: 0 5px 15px rgba(255, 116, 140, 0.3);
+            transition: 0.3s;
+        }
+
+        .login-btn:active { transform: scale(0.96); }
+
+        /* Bottom Decoration */
+        .bottom-decor {
+            margin-top: auto; display: flex; align-items: flex-end; gap: 5px;
+        }
+
+        .bottom-decor img { width: 100px; object-fit: contain; }
+
+        /* Error message */
+        #error-msg {
+            color: #ff4d4d; font-size: 12px; margin-top: 10px;
+            height: 15px; opacity: 0; transition: 0.3s;
+        }
+
+        @media (max-height: 750px) { .phone-container { transform: scale(0.85); } }
+    </style>
+</head>
+<body>
+
+    <div class="phone-container">
+        <div class="main-card">
+            <h2>Đăng Nhập 💖</h2>
+
+            <div class="input-group">
+                <i class="fa-regular fa-user left-icon"></i>
+                <input type="text" id="username" placeholder="Tên (Banh hoặc Duyen)">
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-lock left-icon"></i>
+                <input type="password" id="password" placeholder="Mật khẩu">
+                <i class="fa-regular fa-eye toggle-password" onclick="togglePass()"></i>
+            </div>
+
+            <div class="options">
+                <label class="remember-me">
+                    <input type="checkbox"> Ghi nhớ đăng nhập
+                </label>
+                <a href="#" class="forgot-pass">Quên mật khẩu?</a>
+            </div>
+
+            <button class="login-btn" id="btnLogin">Đăng nhập</button>
+            <div id="error-msg"></div>
+
+            <div class="bottom-decor">
+                <!-- Bạn có thể thay bằng img/cun.png và img/banh.png nếu có file -->
+                <span>🐰</span>
+                <span>🐻</span>
+                <p style="font-size: 10px; color: #eee; position: absolute; bottom: 10px;">ʚ♡ɞ</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+        // Cấu hình Firebase của bạn
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+            authDomain: "photodiary-3d469.firebaseapp.com",
+            projectId: "photodiary-3d469",
+            storageBucket: "photodiary-3d469.firebasestorage.app",
+            messagingSenderId: "102477469911",
+            appId: "1:102477469911:web:13ed38ab426819fdb43892"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const btnLogin = document.getElementById('btnLogin');
+        const errorMsg = document.getElementById('error-msg');
+
+        btnLogin.addEventListener('click', async () => {
+            const nameInput = document.getElementById('username').value.trim();
+            const passInput = document.getElementById('password').value.trim();
+
+            if (!nameInput || !passInput) {
+                showError("Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+
+            btnLogin.innerText = "Đang kiểm tra...";
+            btnLogin.disabled = true;
+
+            try {
+                // Lấy document từ collection 'user' với ID là tên nhập vào (Banh hoặc Duyen)
+                const docRef = doc(db, "user", nameInput);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const userData = docSnap.data();
+                    
+                    // Kiểm tra mật khẩu
+                    if (userData.password === passInput) {
+                        // Chuyển trang theo yêu cầu
+                        if (nameInput === "Banh") {
+                            window.location.href = "5.html";
+                        } else if (nameInput === "Duyen") {
+                            window.location.href = "home.html";
+                        } else {
+                            showError("Tên không hợp lệ!");
+                        }
+                    } else {
+                        showError("Sai mật khẩu rồi bé ơi! ❌");
+                    }
+                } else {
+                    showError("Tên đăng nhập không tồn tại! ❌");
+                }
+            } catch (error) {
+                console.error(error);
+                showError("Lỗi kết nối database!");
+            } finally {
+                btnLogin.innerText = "Đăng nhập";
+                btnLogin.disabled = false;
+            }
+        });
+
+        function showError(text) {
+            errorMsg.innerText = text;
+            errorMsg.style.opacity = "1";
+            setTimeout(() => { errorMsg.style.opacity = "0"; }, 3000);
+        }
+    </script>
+
+    <script>
+        // Hàm ẩn hiện mật khẩu
+        function togglePass() {
+            const passField = document.getElementById('password');
+            const icon = document.querySelector('.toggle-password');
+            if (passField.type === "password") {
+                passField.type = "text";
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passField.type = "password";
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // Chặn Zoom trên Laptop
+        document.addEventListener('wheel', e => e.ctrlKey && e.preventDefault(), { passive: false });
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0')) e.preventDefault();
+        });
+    </script>
+</body>
+</html>

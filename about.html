@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Thông tin của chúng ta 💖</title>
+    
+    <!-- Font chữ -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-pink: #ffedf2;
+            --card-bg: #ffffff;
+            --text-dark: #5c4b41;
+            --text-light: #8c7a70;
+            --girl-color: #ff6b81;
+            --girl-bg: #ffedf2;
+            --boy-color: #5b63b7;
+            --boy-bg: #f1f0ff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #fce7f3; /* Màu nền cho màn hình to */
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+        }
+
+        /* KHUNG ỨNG DỤNG MOBILE */
+        .app-container {
+            width: 100%; max-width: 414px; height: 100vh;
+            background: linear-gradient(180deg, #ffd3e0 0%, #ffedf2 20%, #fff 40%, #fff 100%);
+            position: relative; overflow-y: auto; overflow-x: hidden;
+            display: flex; flex-direction: column;
+        }
+        @media (min-width: 450px) {
+            .app-container { height: 90vh; border-radius: 35px; border: 8px solid #fff; box-shadow: 0 20px 50px rgba(255, 182, 193, 0.3); }
+        }
+        .app-container::-webkit-scrollbar { display: none; }
+
+        /* HEADER */
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 25px 20px 10px; position: relative; z-index: 10;
+        }
+        .btn-circle {
+            width: 40px; height: 40px; border-radius: 50%; background: #fff;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(255, 175, 189, 0.3); color: var(--girl-color);
+            font-size: 16px; cursor: pointer;
+        }
+        .header h1 { font-family: 'Nunito', sans-serif; font-size: 18px; font-weight: 800; color: var(--text-dark); }
+
+        /* HERO IMAGE (Gấu thỏ đầu trang) */
+        .hero-section {
+            width: 100%; display: flex; justify-content: center;
+            margin-top: -10px; position: relative; z-index: 5;
+        }
+        .hero-img { width: 65%; height: auto; object-fit: contain; filter: drop-shadow(0 10px 10px rgba(255, 182, 193, 0.4)); }
+
+        /* PHẦN CHÍNH (NỀN TRẮNG UỐN CONG CẮT NỀN HỒNG) */
+        .main-content {
+            background: var(--card-bg);
+            border-radius: 40px 40px 0 0;
+            padding: 30px 20px 50px;
+            margin-top: -30px; /* Kéo lên đè vào hình ảnh */
+            position: relative; z-index: 10;
+            flex: 1; display: flex; flex-direction: column; gap: 20px;
+        }
+
+        /* 1. KHU VỰC HỒ SƠ ĐÔI (COUPLE PROFILE) */
+        .profile-section {
+            display: flex; position: relative; justify-content: space-between;
+            background: #fff; padding-bottom: 20px;
+        }
+
+        /* Đường kẻ dọc chia đôi ở giữa */
+        .divider {
+            position: absolute; left: 50%; top: 10%; bottom: 10%;
+            width: 1px; background: rgba(255, 182, 193, 0.4); border-right: 1px dashed #ffc0cb;
+        }
+        /* Trái tim nằm giữa đường kẻ */
+        .divider-heart {
+            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
+            color: var(--girl-color); font-size: 16px; background: #fff; padding: 5px;
+        }
+
+        .profile-card { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 10px; z-index: 2; }
+        
+        .avatar-wrap {
+            width: 85px; height: 85px; border-radius: 50%;
+            padding: 3px; margin-bottom: 15px;
+        }
+        .girl-avatar { background: linear-gradient(135deg, #ffc0cb, #ffedf2); }
+        .boy-avatar { background: linear-gradient(135deg, #c4c2ff, #f1f0ff); }
+        
+        .avatar-wrap img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid #fff; object-fit: cover; }
+
+        .name-role { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; margin-bottom: 12px; }
+        .girl-text { color: var(--girl-color); }
+        .boy-text { color: var(--boy-color); }
+
+        .info-pill {
+            font-size: 11px; font-weight: 700; color: var(--text-light);
+            background: #fdf5f6; padding: 5px 12px; border-radius: 15px; margin-bottom: 8px;
+        }
+        .boy-pill { background: #f8f8fc; }
+
+        .likes-box {
+            margin-top: 5px; padding: 12px 10px; border-radius: 15px;
+            font-size: 10px; font-weight: 600; line-height: 1.5; width: 100%;
+        }
+        .girl-likes { background: var(--girl-bg); color: #d85c70; }
+        .boy-likes { background: var(--boy-bg); color: #4e559e; }
+
+
+        /* 2. THẺ NGÀY KỶ NIỆM */
+        .info-card {
+            background: #fff; border-radius: 25px; padding: 20px;
+            box-shadow: 0 10px 25px rgba(255, 175, 189, 0.15);
+            border: 1px solid rgba(255, 237, 242, 0.8);
+            position: relative; overflow: hidden;
+        }
+        .card-title {
+            font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
+            color: var(--text-dark); display: flex; align-items: center; gap: 8px; margin-bottom: 15px;
+        }
+        .anniversary-date {
+            font-family: 'Nunito', sans-serif; font-size: 24px; font-weight: 900;
+            color: var(--girl-color); margin-bottom: 5px;
+        }
+        .days-counter { font-size: 12px; font-weight: 700; color: var(--text-light); display: flex; align-items: center; gap: 5px;}
+        .days-counter i { color: var(--girl-color); font-size: 14px; }
+        
+        .calendar-graphic {
+            position: absolute; right: 15px; bottom: 15px;
+            width: 80px; opacity: 0.9;
+        }
+
+        /* 3. THẺ MỘT VÀI ĐIỀU VỀ CHÚNG TA */
+        .about-list { list-style: none; padding-top: 5px; }
+        .about-list li {
+            font-size: 12px; font-weight: 600; color: var(--text-light);
+            margin-bottom: 12px; line-height: 1.6; display: flex; gap: 8px;
+        }
+        .about-list li::before { content: "•"; color: var(--text-light); font-weight: 900; }
+        
+        .bottom-mascot {
+            position: absolute; right: 10px; bottom: 10px;
+            width: 85px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.05));
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="btn-circle" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></div>
+        <h1>Thông tin của chúng ta 💖</h1>
+        <div class="btn-circle"><i class="fa-solid fa-ellipsis"></i></div>
+    </div>
+
+    <!-- Hình ảnh Gấu & Thỏ (Background Hồng) -->
+    <div class="hero-section">
+        <!-- Chỗ này có thể thay bằng ảnh chibi thiết kế của bạn -->
+        <img src="https://cdn-icons-png.flaticon.com/512/7903/7903522.png" alt="Couple" class="hero-img">
+    </div>
+
+    <!-- Nội dung chính (Nền Trắng bo góc uốn lượn) -->
+    <div class="main-content">
+        
+        <!-- 1. HỒ SƠ 2 NGƯỜI (Trái - Phải) -->
+        <div class="profile-section">
+            <div class="divider"></div>
+            <i class="fa-solid fa-heart divider-heart"></i>
+
+            <!-- Hồ sơ Nữ (Người viết) -->
+            <div class="profile-card">
+                <div class="avatar-wrap girl-avatar">
+                    <img src="img/viet.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4140/4140047.png'" alt="Girl">
+                </div>
+                <div class="name-role girl-text">Bạn (Người viết)</div>
+                <div class="info-pill">20/05/2004</div>
+                <div class="info-pill">Kim Ngưu ♉</div>
+                <div class="likes-box girl-likes">
+                    Thích: Gấu bông, trà sữa<br>nghe nhạc, màu hồng
+                </div>
+            </div>
+
+            <!-- Hồ sơ Nam (Người xem) -->
+            <div class="profile-card">
+                <div class="avatar-wrap boy-avatar">
+                    <img src="img/xem.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4140/4140048.png'" alt="Boy">
+                </div>
+                <div class="name-role boy-text">Người ấy (Người xem)</div>
+                <div class="info-pill boy-pill">18/02/2004</div>
+                <div class="info-pill boy-pill">Bảo Bình ♒</div>
+                <div class="likes-box boy-likes">
+                    Thích: Thể thao, cà phê<br>chụp ảnh, màu xanh
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. THẺ NGÀY KỶ NIỆM -->
+        <div class="info-card">
+            <div class="card-title"><i class="fa-regular fa-calendar"></i> Ngày đầu tiên của chúng ta</div>
+            <!-- Thay đổi ngày bắt đầu yêu nhau ở đây -->
+            <div class="anniversary-date" id="startDate">15/08/2023</div>
+            <div class="days-counter">
+                <i class="fa-solid fa-heart"></i> <span id="daysCount">Đang tính...</span> ngày bên nhau ✨
+            </div>
+            
+            <img src="https://cdn-icons-png.flaticon.com/512/3656/3656828.png" alt="Calendar" class="calendar-graphic">
+        </div>
+
+        <!-- 3. THẺ MỘT VÀI ĐIỀU VỀ CHÚNG TA -->
+        <div class="info-card" style="padding-bottom: 60px;">
+            <div class="card-title" style="color: #ff9fae;"><i class="fa-solid fa-seedling"></i> Một vài điều về chúng ta</div>
+            <ul class="about-list">
+                <li>Cặp đôi thích du lịch và khám phá những nơi mới ✈️</li>
+                <li>Cùng nhau nghe nhạc mỗi tối trước khi ngủ 🎧</li>
+                <li>Thích lưu giữ những khoảnh khắc nhỏ bé mỗi ngày 📸</li>
+            </ul>
+
+            <img src="https://cdn-icons-png.flaticon.com/512/5707/5707328.png" alt="Mascot" class="bottom-mascot">
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // SCRIPT TỰ ĐỘNG ĐẾM SỐ NGÀY YÊU NHAU
+    function calculateLoveDays() {
+        // 1. Nhập ngày bắt đầu của bạn theo định dạng "YYYY-MM-DD"
+        // (Ví dụ: 15/08/2023 thì nhập là "2023-08-15")
+        const dateStartStr = "2023-08-15"; 
+        
+        // 2. Chuyển đổi định dạng để hiển thị ra UI (15/08/2023)
+        const parts = dateStartStr.split('-');
+        document.getElementById('startDate').innerText = `${parts[2]}/${parts[1]}/${parts[0]}`;
+
+        // 3. Tính toán số ngày
+        const startDate = new Date(dateStartStr);
+        const currentDate = new Date();
+        
+        // Tính khoảng cách thời gian bằng mili-giây
+        const timeDifference = currentDate.getTime() - startDate.getTime();
+        
+        // Chuyển mili-giây thành số ngày
+        const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
+        
+        // Cập nhật lên màn hình
+        document.getElementById('daysCount').innerText = daysDifference;
+    }
+
+    // Chạy hàm khi trang vừa load xong
+    window.onload = calculateLoveDays;
+</script>
+
+</body>
+</html>

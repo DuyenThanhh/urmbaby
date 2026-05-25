@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Us - Bucket List ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --p-main: #ff8fab; --p-soft: #ffe4e9; --text: #5d4037; --bg: #fff5f6; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Quicksand', sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
+
+.app-container { 
+    width: 100%; 
+    height: 100%; 
+    max-width: 500px; 
+    margin: 0 auto; 
+    display: flex; 
+    flex-direction: column; 
+    position: relative; 
+    
+    /* THAY ĐỔI Ở ĐÂY */
+    background-image: url('img/2.png'); 
+    background-size: cover;      /* Ảnh phủ kín màn hình */
+    background-position: center; /* Căn giữa ảnh */
+    background-repeat: no-repeat;
+}
+        /* HEADER BOX */
+        .header-box { padding: 30px 20px 10px; text-align: center; }
+        /* NÚT QUAY LẠI GÓC TRÁI */
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            width: 40px; 
+            height: 40px;
+            background: rgba(255, 255, 255, 0.85); /* Nền trắng hơi trong suốt */
+            backdrop-filter: blur(5px);
+            border-radius: 50%;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            color: var(--p-main);
+            font-size: 18px;
+            box-shadow: 0 4px 10px rgba(255, 143, 171, 0.2);
+            cursor: pointer;
+            z-index: 10;
+        }
+        /* HERO PROGRESS - FIXED */
+        .hero-progress { 
+            margin: 10px 20px; 
+            background-image: url('img/3.png'); 
+            background-size: cover;
+            background-position: center;
+            border-radius: 35px; 
+            padding: 25px; 
+            box-shadow: 0 10px 30px rgba(255, 175, 189, 0.3); 
+            border: 2px solid #fff; 
+            position: relative;
+        }
+        .p-info { display: flex; justify-content: space-between; font-size: 14px; font-weight: 800; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.4); margin-bottom: 12px; }
+        
+        .p-bar-bg { width: 100%; height: 14px; background: rgba(255,255,255,0.4); border-radius: 10px; overflow: hidden; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.3); }
+        
+        /* ĐỔI MÀU THANH FILL SANG HỒNG ĐỂ THẤY RÕ */
+        .p-bar-fill { height: 100%; background: var(--p-main); width: 0%; transition: 1.5s cubic-bezier(0.1, 0.5, 0.1, 1); box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+
+        /* TABS */
+        .tabs { display: flex; gap: 8px; padding: 15px 20px; overflow-x: auto; scrollbar-width: none; }
+        .tab-item { padding: 10px 18px; background: #f5f5f5; border-radius: 15px; font-size: 12px; color: #888; font-weight: 700; white-space: nowrap; cursor: pointer; }
+        .tab-item.active { background: var(--p-main); color: #fff; box-shadow: 0 5px 15px rgba(255,143,171,0.3); }
+
+        /* CONTENT */
+        .content { flex: 1; overflow-y: auto; padding: 0 20px 160px; }
+        .card { background: #fff; border-radius: 30px; padding: 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 15px; border: 1px solid #f9f9f9; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
+        .card-icon { width: 60px; height: 60px; border-radius: 20px; background: var(--p-soft); display: flex; align-items: center; justify-content: center; font-size: 26px; color: var(--p-main); flex-shrink: 0; }
+        .card-info { flex: 1; }
+        .card-title { font-size: 14px; font-weight: 700; color: #444; margin-bottom: 4px; }
+        .card-deadline { font-size: 10px; color: #9d8df1; font-weight: 700; }
+
+        /* VÒNG TRÒN TIẾN ĐỘ SVG */
+        .status-circle { width: 50px; height: 50px; position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .status-circle svg { width: 50px; height: 50px; transform: rotate(-90deg); position: absolute; top: 0; left: 0; }
+        .status-circle circle { fill: none; stroke-width: 4; stroke-linecap: round; }
+        .circle-bg { stroke: #f0f0f0; }
+        .circle-fg { 
+            stroke: var(--p-main); 
+            stroke-dasharray: 126; 
+            stroke-dashoffset: 126; 
+            transition: stroke-dashoffset 0.8s ease; 
+        }
+        .circle-text { font-size: 10px; font-weight: 800; color: var(--p-main); position: relative; z-index: 2; }
+        .status-circle.done-check { background: var(--p-main); border-radius: 50%; border: none; color: #fff; font-size: 18px; }
+
+        /* BOTTOM NAV */
+        .bottom-nav { position: absolute; bottom: 0; width: 100%; height: 85px; background: #fff; display: flex; justify-content: space-around; align-items: center; padding-bottom: 25px; border-radius: 40px 40px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.03); z-index: 100; }
+        .nav-link { color: #ddd; font-size: 10px; text-align: center; text-decoration: none; font-weight: 700; }
+        .nav-link.active { color: var(--p-main); }
+        .nav-link i { font-size: 22px; margin-bottom: 4px; }
+        .center-btn { width: 60px; height: 60px; background: var(--p-main); border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 26px; margin-top: -50px; border: 5px solid #fff; box-shadow: 0 8px 20px rgba(255,117,140,0.4); }
+
+        /* MODALS */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 1000; display: none; align-items: flex-end; }
+        .drawer { width: 100%; background: #fff; border-radius: 40px 40px 0 0; padding: 30px 25px; animation: slideUp 0.4s ease; max-height: 90vh; overflow-y: auto; }
+        @keyframes slideUp { from {transform: translateY(100%);} to {transform: translateY(0);} }
+        .inp { width: 100%; padding: 15px; background: #fff8f9; border: 1.5px solid #eee; border-radius: 20px; outline: none; margin-bottom: 15px; font-family: inherit; }
+        .icon-list { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; }
+        .icon-item { width: 50px; height: 50px; border-radius: 12px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+        .icon-item.selected { background: var(--p-main); color: #fff; }
+        .proof-zone { width: 100%; height: 160px; border: 2.5px dashed var(--p-main); border-radius: 25px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-bottom: 20px; }
+        .proof-zone img { width: 100%; height: 100%; object-fit: cover; position: absolute; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+<div class="header-box" style="position: relative; display: flex; justify-content: center; align-items: center;">
+        <!-- Nút quay lại (dùng hàm history.back() của trình duyệt) -->
+        <div class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></div>
+        
+        <h1 style="margin:0; font-size:20px; color:var(--p-main)">Bản đồ kỉ niệm 💞</h1>
+    </div>
+    <div class="hero-progress">
+        <div class="p-info"><span>Hành trình chung</span><span id="pText">0/0</span></div>
+        <div class="p-bar-bg"><div class="p-bar-fill" id="pBar"></div></div>
+    </div>
+
+    <div class="tabs">
+        <div class="tab-item active" onclick="filterData('chualam', this)">Chưa làm</div>
+        <div class="tab-item" onclick="filterData('danglam', this)">Đang làm</div>
+        <div class="tab-item" onclick="filterData('dalam', this)">Đã làm</div>
+        <div class="tab-item" onclick="filterData('all', this)">Tất cả</div>
+    </div>
+
+    <div class="content" id="list"></div>
+
+    <div class="bottom-nav">
+        <a href="6.html" class="nav-link"><i class="fa-solid fa-house"></i><br>Home</a>
+        <a href="kiniem.html" class="nav-link"><i class="fa-solid fa-heart"></i><br>Kỉ niệm</a>
+        <div class="center-btn" onclick="openAddModal()"><i class="fa-solid fa-plus"></i></div>
+        <a href="emotion.html" class="nav-link"><i class="fa-solid fa-face-smile"></i><br>Cảm xúc</a>
+        <a href="us.html" class="nav-link active"><i class="fa-solid fa-users"></i><br>Chúng mình</a>
+    </div>
+
+    <!-- MODALS -->
+    <div class="overlay" id="addOverlay" onclick="closeAddModal()">
+        <div class="drawer" onclick="event.stopPropagation()">
+            <h2 style="text-align:center; color:var(--p-main);">Thêm dự định ✨</h2>
+            <div class="icon-list" id="icons"></div>
+            <input type="text" id="addTitle" class="inp" placeholder="Tên dự định (VD: Xem phim 50 lần)">
+            <label style="font-size:12px; font-weight:700; color:#888;">Thời gian dự kiến:</label>
+            <input type="date" id="addDeadline" class="inp">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <span style="font-size:14px; font-weight:700;">Nhiều lần?</span>
+                <input type="checkbox" id="addIsRepeat" style="transform: scale(1.3);" onchange="document.getElementById('addCountBox').style.display = this.checked ? 'block':'none'">
+            </div>
+            <div id="addCountBox" style="display:none;"><input type="number" id="addTarget" class="inp" placeholder="Số lần (VD: 50)"></div>
+            <button id="addSaveBtn" onclick="saveNew()" style="width:100%; padding:18px; background:var(--p-main); color:#fff; border:none; border-radius:25px; font-weight:800;">Lưu hành trình</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="proofOverlay" onclick="closeProof()">
+        <div class="drawer" onclick="event.stopPropagation()">
+            <h2 style="text-align:center; color:var(--p-main);">Xác nhận kỉ niệm 📸</h2>
+            <div class="proof-zone" onclick="document.getElementById('proofInp').click()">
+                <img id="pPreview">
+                <div id="pTxt"><i class="fa-solid fa-camera-retro" style="font-size:30px; color:var(--p-main)"></i><p style="font-size:12px; margin-top:10px">Up ảnh minh chứng</p></div>
+                <input type="file" id="proofInp" hidden onchange="previewProof(this)">
+            </div>
+            <textarea id="pNote" class="inp" rows="3" placeholder="Hôm nay có gì vui?"></textarea>
+            <button id="pBtn" onclick="submitProof()" style="width:100%; padding:18px; background:var(--p-main); color:#fff; border:none; border-radius:25px; font-weight:800;">Duyệt ngay!</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getFirestore, collection, doc, setDoc, getDocs, updateDoc, query, orderBy, arrayUnion } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+        authDomain: "photodiary-3d469.firebaseapp.com",
+        projectId: "photodiary-3d469",
+        storageBucket: "photodiary-3d469.firebasestorage.app",
+        messagingSenderId: "102477469911",
+        appId: "1:102477469911:web:13ed38ab426819fdb43892"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const colRef = collection(db, "bucket_list");
+
+    let all = []; let active = null; let selIcon = "fa-heart";
+
+    const iconList = ["fa-heart", "fa-film", "fa-utensils", "fa-plane", "fa-camera", "fa-music", "fa-mug-hot", "fa-star", "fa-gift", "fa-cat"];
+    document.getElementById('icons').innerHTML = iconList.map(i => `<div class="icon-item" onclick="selectIcon('${i}', this)"><i class="fa-solid ${i}"></i></div>`).join('');
+    window.selectIcon = (i, el) => { document.querySelectorAll('.icon-item').forEach(o => o.classList.remove('selected')); el.classList.add('selected'); selIcon = i; }
+
+    async function load() {
+        const snap = await getDocs(query(colRef, orderBy("createdAt", "desc")));
+        all = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        filterData('chualam', document.querySelector('.tab-item.active'));
+        updateBar();
+    }
+
+    window.filterData = (range, el) => {
+        document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        let filtered = [];
+        if (range === 'chualam') filtered = all.filter(m => (m.currentCount || 0) < (m.targetCount || 1));
+        else if (range === 'danglam') filtered = all.filter(m => m.isRepeat && (m.currentCount > 0 && m.currentCount < m.targetCount));
+        else if (range === 'dalam') filtered = all.filter(m => (m.currentCount || 0) >= (m.targetCount || 1));
+        else filtered = all;
+        render(filtered);
+    }
+
+    function render(data) {
+        document.getElementById('list').innerHTML = data.map(m => {
+            const current = m.currentCount || 0;
+            const target = m.targetCount || 1;
+            const done = current >= target;
+            
+            const percent = Math.min(Math.round((current / target) * 100), 100);
+            const offset = 126 - (126 * percent) / 100;
+
+            let actionHtml = '';
+            if (done) {
+                actionHtml = `<div class="status-circle done-check"><i class="fa-solid fa-check"></i></div>`;
+            } else {
+                actionHtml = `
+                    <div class="status-circle">
+                        <svg><circle class="circle-bg" cx="25" cy="25" r="20"/><circle class="circle-fg" cx="25" cy="25" r="20" style="stroke-dashoffset: ${offset}"/></svg>
+                        <span class="circle-text">${current}/${target}</span>
+                    </div>`;
+            }
+
+            return `
+                <div class="card" onclick="onCardClick('${m.id}')">
+                    <div class="card-icon"><i class="fa-solid ${m.icon || 'fa-heart'}"></i></div>
+                    <div class="card-info">
+                        <div class="card-title">${m.title}</div>
+                        <div class="card-deadline"><i class="fa-solid fa-clock"></i> ${m.deadline || 'Chưa định ngày'}</div>
+                    </div>
+                    ${actionHtml}
+                </div>
+            `;
+        }).join('');
+    }
+
+    window.onCardClick = (id) => {
+        active = all.find(t => t.id === id);
+        if ((active.currentCount || 0) >= (active.targetCount || 1)) {
+            window.location.href = `${active.isRepeat ? 'actionmore.html' : 'action1.html'}?id=${id}`;
+        } else {
+            document.getElementById('proofOverlay').style.display = 'flex';
+        }
+    }
+
+    window.saveNew = async () => {
+        const title = document.getElementById('addTitle').value;
+        const deadline = document.getElementById('addDeadline').value;
+        const isRepeat = document.getElementById('addIsRepeat').checked;
+        const target = parseInt(document.getElementById('addTarget').value) || 1;
+        if (!title) return alert("Nhập tên hành động!");
+        const docId = title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^\w]/g, '');
+        try {
+            await setDoc(doc(db, "bucket_list", docId), { title, deadline, icon: selIcon, isRepeat, targetCount: target, currentCount: 0, logs: [], createdAt: Date.now() });
+            location.reload();
+        } catch (e) { alert("Lỗi!"); }
+    }
+
+    window.submitProof = async () => {
+        const file = document.getElementById('proofInp').files[0];
+        if (!file) return alert("Up ảnh minh chứng!");
+        const btn = document.getElementById('pBtn'); btn.innerText = "Đang duyệt..."; btn.disabled = true;
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "cunlun");
+        formData.append("folder", `feature/${active.id}`);
+        const res = await fetch(`https://api.cloudinary.com/v1_1/djjinlx7t/image/upload`, { method: "POST", body: formData });
+        const imgUrl = (await res.json()).secure_url;
+        await updateDoc(doc(db, "bucket_list", active.id), { currentCount: (active.currentCount || 0) + 1, logs: arrayUnion({ img: imgUrl, note: document.getElementById('pNote').value, date: new Date().toLocaleDateString('vi-VN') }) });
+        location.reload();
+    }
+
+    function updateBar() {
+        const total = all.length;
+        const done = all.filter(m => (m.currentCount || 0) >= (m.targetCount || 1)).length;
+        const percent = total > 0 ? (done/total)*100 : 0;
+        
+        // CẬP NHẬT CHIỀU RỘNG THANH BAR
+        document.getElementById('pBar').style.width = percent + '%';
+        document.getElementById('pText').innerText = `${done}/${total}`;
+    }
+
+    window.previewProof = (i) => { const r = new FileReader(); r.onload = e => { document.getElementById('pPreview').src = e.target.result; document.getElementById('pPreview').style.display = 'block'; document.getElementById('pTxt').style.display='none'; }; r.readAsDataURL(i.files[0]); }
+    window.openAddModal = () => document.getElementById('addOverlay').style.display = 'flex';
+    window.closeAddModal = () => document.getElementById('addOverlay').style.display = 'none';
+    window.closeProof = () => document.getElementById('proofOverlay').style.display = 'none';
+
+    load();
+</script>
+</body>
+</html>
