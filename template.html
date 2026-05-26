@@ -3,189 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>My Little Memory ✨</title>
+    <title>Chi tiết kỉ niệm ✨</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #fcf1f1;
-            --paper-color: #ffffff;
-            --pink-main: #ffb7c5;
-            --peach: #ffe5d9;
-            --text: #6d4c41;
+            --p-main: #ff8fab;
+            --p-soft: #ffb7c5;
+            --p-bg: #fff5f7;
+            --text: #5d4037;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { 
-            margin: 0; padding: 0; width: 100%; min-height: 100%;
-            font-family: 'Quicksand', sans-serif;
-            background-color: var(--bg-color);
-            background-image: radial-gradient(var(--pink-main) 0.5px, transparent 0.5px);
-            background-size: 24px 24px;
-            color: var(--text);
+        
+       body, html { 
+    margin: 0; padding: 0; width: 100%; min-height: 100%;
+    font-family: 'Quicksand', sans-serif;
+    background-color: #fce4ec; /* Màu nền hồng nhạt trung tính bên ngoài */
+    color: var(--text);
+}
+.app-container { 
+    width: 100%; 
+    max-width: 500px; 
+    margin: 0 auto; 
+    min-height: 100vh; /* Cao bằng màn hình điện thoại */
+    padding: 20px; 
+    padding-bottom: 50px;
+    position: relative;
+    
+    /* ĐƯA HÌNH NỀN VÀO ĐÂY */
+    background: url('img/5.png') no-repeat center center;
+    background-size: cover;
+    background-attachment: scroll; /* Để nền trượt theo nội dung */
+    
+    /* Thêm bóng đổ để trông như một chiếc điện thoại đang đặt trên bàn */
+    box-shadow: 0 0 30px rgba(0,0,0,0.1);
+}
+        /* Top Bar Cute */
+        .top-bar { 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 20px; 
+        }
+        .back-btn { 
+            width: 42px; height: 42px; background: #fff; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); color: var(--p-main); 
+            text-decoration: none; border:none; cursor: pointer;
         }
 
-        .app-container {
-            width: 100%; max-width: 500px; margin: 0 auto;
-            padding: 20px; position: relative;
+        /* Notebook/Scrapbook Page */
+       .notebook-page {
+    background: rgba(255, 255, 255, 0.85); /* Trắng mờ 85% */
+    backdrop-filter: blur(10px); /* Hiệu ứng kính mờ cho sang */
+    border-radius: 25px;
+    padding: 30px 20px;
+    margin-top: 10px;
+    box-shadow: 0 10px 25px rgba(255, 143, 171, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+        /* Hiệu ứng ghim giấy */
+        .tape {
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            width: 100px; height: 30px; background: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        /* Washi Tape Decor */
-        .washi-tape {
-            position: absolute; top: 15px; left: 50%; transform: translateX(-50%) rotate(-2deg);
-            width: 140px; height: 35px; background: rgba(255, 183, 197, 0.4);
-            backdrop-filter: blur(2px); border: 1px dashed rgba(255,255,255,0.8);
-            z-index: 20; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+        .diary-date { 
+            display: inline-block; padding: 5px 15px; background: var(--p-main);
+            color: #fff; border-radius: 20px; font-size: 11px; font-weight: 700;
+            margin-bottom: 15px; box-shadow: 0 4px 10px rgba(255,143,171,0.3);
         }
 
-        /* Top Bar */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .back-btn { width: 45px; height: 45px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); color: var(--pink-main); text-decoration: none; font-size: 18px; }
-
-        /* Binder Paper Container */
-        .notebook-page {
-            background: var(--paper-color);
-            border-radius: 15px;
-            padding: 40px 25px 30px 45px;
-            box-shadow: 10px 10px 30px rgba(0,0,0,0.05);
-            position: relative;
-            min-height: 500px;
-            border: 1px solid #eee;
-            margin-top: 10px;
+        .diary-title { 
+            font-family: 'Dancing Script', cursive; font-size: 32px; 
+            color: var(--p-main); margin-bottom: 15px; display: block;
         }
 
-        /* Hiệu ứng lò xo cạnh trái */
-        .notebook-page::before {
-            content: ''; position: absolute; left: 15px; top: 0; bottom: 0;
-            width: 12px; background-image: radial-gradient(circle, #ddd 4px, transparent 5px);
-            background-size: 12px 30px;
-        }
-
-        /* Line Background */
         .content-area {
-            background-image: linear-gradient(#f1f1f1 1px, transparent 1px);
-            background-size: 100% 32px;
-            line-height: 32px;
-            font-size: 16px;
-            min-height: 300px;
+            line-height: 1.8; font-size: 16px; white-space: pre-wrap;
+            color: #666; margin-bottom: 25px; min-height: 80px;
+            border-left: 3px solid var(--p-soft); padding-left: 15px;
         }
 
-        .diary-title { font-family: 'Dancing Script', cursive; font-size: 32px; color: var(--pink-main); margin-bottom: 15px; display: block; }
-        .diary-date { font-size: 12px; opacity: 0.5; text-align: right; margin-bottom: 10px; font-weight: 700; }
-
-        /* Mood Slider UI */
-        .mood-section {
-            background: #fff; border-radius: 20px; padding: 15px;
-            margin-top: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-            border: 1px solid var(--peach);
+        /* Polaroid Gallery (Ảnh dán ngẫu hứng) */
+        .gallery { 
+            display: flex; flex-wrap: wrap; gap: 15px; margin-top: 25px;
+            justify-content: center;
         }
-        .mood-label { font-size: 12px; font-weight: 700; color: var(--pink-main); margin-bottom: 10px; display: block; }
-        .mood-slider {
-            height: 10px; background: linear-gradient(to right, #a8dadc, #f4a261, #e76f51);
-            border-radius: 10px; position: relative; margin: 15px 0;
-        }
-        .mood-handle {
-            position: absolute; top: 50%; left: 80%; transform: translate(-50%, -50%);
-            width: 24px; height: 24px; background: #fff; border-radius: 50%;
-            border: 3px solid var(--pink-main); box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: flex; align-items: center; justify-content: center; font-size: 12px;
-        }
-
-        /* Polaroid Gallery */
-        .gallery { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 30px; padding-bottom: 20px; }
         .polaroid {
             background: #fff; padding: 10px 10px 25px;
-            width: calc(50% - 8px); box-shadow: 5px 5px 15px rgba(0,0,0,0.05);
-            transform: rotate(var(--r)); transition: 0.3s;
-            border: 1px solid #f0f0f0;
+            width: calc(45% - 5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transform: rotate(var(--r)); border: 1px solid #f0f0f0;
+            transition: 0.3s;
         }
-        .polaroid img { width: 100%; aspect-ratio: 1; object-fit: cover; }
-        .polaroid-text { font-family: 'Dancing Script', cursive; text-align: center; margin-top: 10px; font-size: 14px; opacity: 0.6; }
-
-        /* Voice Note Cloud Style */
-        .voice-cloud {
-            background: #fff; border-radius: 30px; padding: 15px 25px;
-            margin-top: 20px; display: flex; align-items: center; gap: 15px;
-            box-shadow: 0 8px 20px rgba(255,183,197,0.2);
-            border: 2px dashed var(--pink-main);
+        .polaroid:active { transform: scale(1.1) rotate(0deg); z-index: 10; }
+        .polaroid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 2px; }
+        .polaroid-caption { 
+            font-family: 'Dancing Script', cursive; font-size: 14px; 
+            text-align: center; margin-top: 8px; color: #888; 
         }
-        .play-circle { width: 45px; height: 45px; background: var(--pink-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; box-shadow: 0 4px 10px rgba(255,183,197,0.4); }
 
-        /* Sticker Decors */
-        .sticker-bear { position: absolute; bottom: -30px; right: 0; width: 120px; pointer-events: none; }
-        .sticker-rabbit { position: absolute; top: -40px; left: -20px; width: 80px; transform: rotate(-15deg); }
-
-        /* Sticky Note Location */
-        .sticky-note {
-            background: #fff9c4; padding: 15px; transform: rotate(2deg);
-            margin-top: 30px; box-shadow: 5px 5px 10px rgba(0,0,0,0.05);
-            font-size: 12px; border-radius: 2px; position: relative;
+        /* Voice Note UI mới */
+        .voice-section { margin: 25px 0; }
+        .voice-pill {
+            background: linear-gradient(90deg, #ff8fab, #ffb7c5);
+            color: #fff; border-radius: 50px; padding: 15px 25px;
+            display: flex; align-items: center; gap: 15px;
+            cursor: pointer; box-shadow: 0 10px 20px rgba(255, 143, 171, 0.3);
+            border: none; width: 100%;
         }
-        .sticky-note::before { content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 40px; height: 20px; background: rgba(255,255,255,0.4); }
+        .play-circle {
+            width: 35px; height: 35px; background: #fff; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--p-main); font-size: 14px;
+        }
 
-        #loading { position: fixed; top:0; left:0; width:100%; height:100%; background:#fcf1f1; z-index:1000; display:flex; align-items:center; justify-content:center; }
+        /* Info Tags (Stickers) */
+        .info-board {
+            display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px;
+        }
+        .sticker {
+            background: #fff; padding: 8px 15px; border-radius: 12px;
+            font-size: 12px; font-weight: 700; color: #888;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.03);
+            display: flex; align-items: center; gap: 6px;
+            border: 1px dashed var(--p-soft);
+        }
+        .sticker i { color: var(--p-main); }
+        .location-sticker {
+            background: #fff0f3; color: var(--p-main); width: 100%;
+            border: none; margin-top: 5px; cursor: pointer; text-decoration: none;
+        }
+
+        #loading { 
+            position: fixed; inset:0; background: var(--p-bg); 
+            z-index: 100; display: flex; align-items: center; 
+            justify-content: center; flex-direction: column; gap: 15px; 
+        }
     </style>
 </head>
 <body>
 
 <div id="loading">
-    <i class="fa-solid fa-star fa-spin" style="color:var(--pink-main); font-size:40px;"></i>
+    <i class="fa-solid fa-wand-magic-sparkles fa-spin" style="color:var(--p-main); font-size:40px;"></i>
+    <p style="font-weight: 700; color: var(--p-main);">Đang mở rương kỉ niệm...</p>
 </div>
 
 <div class="app-container">
     <div class="top-bar">
-        <a href="emotion.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
-        <div style="font-weight: 700; font-size: 14px; color: var(--pink-main);">Sweet Moment ✨</div>
-        <div class="back-btn" style="color:#ddd"><i class="fa-solid fa-share-nodes"></i></div>
+        <button onclick="history.back()" class="back-btn"><i class="fa-solid fa-chevron-left"></i></button>
+        <div style="
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #fff;
+    background: linear-gradient(45deg, #ff8fab, #ffb7c5);
+    padding: 5px 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(255, 143, 171, 0.4);
+    text-align: center;
+    margin: 0 auto;
+    letter-spacing: 1px;
+">
+    KỈ NIỆM CỦA BÉ ❤️
+</div>
+        <div class="back-btn" style="opacity:0"><i class="fa-solid fa-heart"></i></div>
     </div>
-
-    <div class="washi-tape"></div>
 
     <div class="notebook-page">
-        <img src="https://i.pinimg.com/originals/de/20/8b/de208b0f4889601d3f443b747372332a.gif" class="sticker-rabbit">
-        
+        <div class="tape"></div>
         <div class="diary-date" id="v-date">...</div>
-        <span class="diary-title">Dear Diary, 💖</span>
+        <span class="diary-title" id="v-title">Dear Diary, 💖</span>
         
-        <div class="content-area" id="v-content">
-            Đang mở hộp kỉ niệm...
+        <div class="content-area" id="v-content">Đang hồi tưởng...</div>
+
+        <!-- Voice Section -->
+        <div id="voice-wrap" style="display: none;" class="voice-section">
+            <button class="voice-pill" onclick="playVoice()">
+                <div class="play-circle"><i class="fa-solid fa-play" id="playIcon"></i></div>
+                <div style="text-align: left;">
+                    <div style="font-weight: 800; font-size: 14px;">Lời nhắn gửi</div>
+                    <div style="font-size: 10px; opacity: 0.9;">Nhấn để nghe giọng bé kể</div>
+                </div>
+            </button>
         </div>
 
-        <div class="mood-section">
-            <span class="mood-label">How I felt today:</span>
-            <div class="mood-slider">
-                <div class="mood-handle" id="v-mood-icon">🥰</div>
-            </div>
-            <div style="font-size:11px; text-align:center; opacity:0.6;" id="v-feeling-text">Hôm nay thật tuyệt vời!</div>
-        </div>
-
-        <img src="https://i.pinimg.com/originals/a9/8a/d3/a98ad314da49603056088e029d469bc4.gif" class="sticker-bear">
-    </div>
-
-    <!-- Gallery Section -->
-    <div class="gallery" id="v-gallery">
-        <!-- Render polaroids via JS -->
-    </div>
-
-    <!-- Voice Section -->
-    <div id="voice-wrap" style="display: none;">
-        <div class="voice-cloud" onclick="playVoice()">
-            <div class="play-circle" id="playBtn"><i class="fa-solid fa-play"></i></div>
-            <div style="flex:1">
-                <div style="font-size:13px; font-weight:700;">Lắng nghe lời nhắn...</div>
-                <div style="font-size:10px; opacity:0.5;">Nhấn để phát âm thanh</div>
-            </div>
+        <!-- Info Board (Stickers) -->
+        <div class="info-board">
+            <div class="sticker"><i class="fa-solid fa-face-smile"></i> <span id="v-feeling">...</span></div>
+            <div class="sticker"><i class="fa-solid fa-wand-sparkles"></i> <span id="v-activity">...</span></div>
+            <div class="sticker"><i class="fa-solid fa-user-group"></i> <span id="v-companion">...</span></div>
+            <a id="v-location-link" target="_blank" class="sticker location-sticker">
+                <i class="fa-solid fa-location-dot"></i> <span id="v-location">Vị trí bí mật ✨</span>
+            </a>
         </div>
     </div>
 
-    <!-- Sticky Note Location -->
-    <div class="sticky-note">
-        <i class="fa-solid fa-location-dot"></i> <b>Nơi ghi dấu:</b><br>
-        <span id="v-address">Đang tìm vị trí...</span><br>
-        <div style="margin-top:10px; font-size:11px; opacity:0.7;">
-            <i class="fa-solid fa-user-group"></i> Đi cùng: <span id="v-companion">...</span>
-        </div>
-    </div>
+    <!-- Polaroid Gallery -->
+    <div class="gallery" id="v-gallery"></div>
 </div>
 
 <script type="module">
@@ -206,60 +222,79 @@
 
     const params = new URLSearchParams(window.location.search);
     const dateId = params.get('date');
-    const index = params.get('index') || 0;
+    const index = parseInt(params.get('index') || 0);
 
     async function loadDetail() {
         if(!dateId) return;
         try {
             const snap = await getDoc(doc(db, "daily_memories", dateId));
             if(snap.exists()) {
-                const data = snap.data().moments[index];
-                renderData(data, dateId);
+                const moments = snap.data().moments;
+                if(moments && moments[index]) {
+                    renderData(moments[index], dateId);
+                }
             }
         } catch (e) { console.error(e); }
         document.getElementById('loading').style.display = 'none';
     }
 
     function renderData(m, date) {
-        document.getElementById('v-date').innerText = date + " • " + m.time.split('T')[1]?.substring(0,5);
-        document.getElementById('v-content').innerText = m.content;
-        document.getElementById('v-feeling-text').innerText = m.feeling;
-        document.getElementById('v-companion').innerText = m.companion;
-        document.getElementById('v-address').innerText = m.address || "Địa điểm bí mật ✨";
+        // Render Text & Meta
+        document.getElementById('v-date').innerText = "Ngày " + date.split('-').reverse().join('/') + " • " + (m.time?.split('T')[1]?.substring(0,5) || "--:--");
+        document.getElementById('v-content').innerText = m.content || "(Không có nội dung)";
+        document.getElementById('v-feeling').innerText = m.feeling;
+        document.getElementById('v-activity').innerText = m.activity || "Cùng nhau";
+        document.getElementById('v-companion').innerText = m.companion || "Cùng nhau";
 
-        // Gallery Polaroid
+        // Xử lý Vị trí & Google Maps link (Đã fix logic link)
+        const locText = document.getElementById('v-location');
+        const locLink = document.getElementById('v-location-link');
+        
+        locText.innerText = m.address || "Vị trí bí mật ✨";
+        if(m.addressurl) {
+            locLink.href = m.addressurl;
+            locLink.style.display = 'flex';
+        } else {
+            locLink.style.display = 'none'; // Ẩn link nếu không có tọa độ GPS
+        }
+
+        // Gallery Polaroid với góc nghiêng ngẫu nhiên
         if(m.images && m.images.length > 0) {
             const gallery = document.getElementById('v-gallery');
-            gallery.innerHTML = m.images.map((img, i) => `
-                <div class="polaroid" style="--r: ${(i % 2 === 0 ? '-3deg' : '3deg')}">
+            gallery.innerHTML = m.images.map((img, i) => {
+                const rotation = (Math.random() * 10 - 5).toFixed(1); // Nghiêng từ -5 đến 5 độ
+                return `
+                <div class="polaroid" style="--r: ${rotation}deg">
                     <img src="${img}" onclick="window.open('${img}')">
-                    <div class="polaroid-text">Memories</div>
-                </div>
-            `).join('');
+                    <div class="polaroid-caption">Memory #${i+1}</div>
+                </div>`;
+            }).join('');
         }
 
-        // Voice
-        if(m.audio) {
+        // Audio
+        if(m.audio && m.audio.trim() !== "") {
             document.getElementById('voice-wrap').style.display = 'block';
-            window.audioSrc = m.audio;
+            window.audioUrl = m.audio;
         }
     }
 
-    const player = new Audio();
+    const audioPlayer = new Audio();
     window.playVoice = () => {
-        const btn = document.getElementById('playBtn');
-        if(player.src === window.audioSrc && !player.paused) {
-            player.pause();
-            btn.innerHTML = '<i class="fa-solid fa-play"></i>';
+        const icon = document.getElementById('playIcon');
+        if(audioPlayer.src !== window.audioUrl) audioPlayer.src = window.audioUrl;
+
+        if(audioPlayer.paused) {
+            audioPlayer.play();
+            icon.classList.replace('fa-play', 'fa-pause');
         } else {
-            player.src = window.audioSrc;
-            player.play();
-            btn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-            player.onended = () => btn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            audioPlayer.pause();
+            icon.classList.replace('fa-pause', 'fa-play');
         }
-    }
+        audioPlayer.onended = () => icon.classList.replace('fa-pause', 'fa-play');
+    };
 
     loadDetail();
 </script>
+<script src="bgm.js"></script>
 </body>
 </html>

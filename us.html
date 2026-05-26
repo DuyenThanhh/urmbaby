@@ -23,55 +23,13 @@
             color: var(--text-color); overflow: hidden;
         }
 
-        /* --- PHẦN THÔNG BÁO THU PHÍ --- */
-        #paywall {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #ffafbd 0%, #ff758c 100%);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 30px;
-            color: white;
-        }
-        .paywall-card {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            border-radius: 30px;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            max-width: 350px;
-        }
-        .paywall-icon { font-size: 60px; margin-bottom: 20px; display: block; }
-        .paywall-title { font-size: 22px; font-weight: 700; margin-bottom: 15px; }
-        .paywall-desc { font-size: 16px; line-height: 1.5; margin-bottom: 25px; opacity: 0.9; }
-        .paywall-btn {
-            background: #fff;
-            color: #ff758c;
-            padding: 15px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            display: inline-block;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            transition: 0.3s;
-            border: none;
-            cursor: pointer;
-            font-family: 'Quicksand', sans-serif;
-        }
-        .paywall-btn:active { transform: scale(0.95); }
-        /* ----------------------------- */
-
         .app-container { 
-            width: 100%; height: 100%; max-width: 500px; margin: 0 auto; 
+            width: 100%; height: 100%; max-width: 450px; margin: 0 auto; 
             display: flex; flex-direction: column; position: relative;
             background: url('https://www.transparenttextures.com/patterns/pinstriped-suit.png');
         }
 
+        /* Header Area */
         .header { 
             padding: 40px 20px 20px; text-align: center; 
             background: url('img/6.png') no-repeat center bottom;
@@ -79,6 +37,7 @@
         }
         .header h1 { font-size: 20px; font-weight: 700; margin: 0 0 25px; }
 
+        /* Avatars Rabbit & Bear */
         .avatar-pair { 
             display: flex; justify-content: center; align-items: center; 
             position: relative; margin-bottom: 20px;
@@ -92,6 +51,7 @@
         .rabbit { transform: translateX(15px); z-index: 2; }
         .bear { transform: translateX(-15px); z-index: 1; }
 
+        /* Day Counter */
         .day-counter {
             display: inline-flex; align-items: center; gap: 8px;
             background: #fff; padding: 8px 20px; border-radius: 30px;
@@ -100,7 +60,10 @@
             border: 1px solid rgba(255, 117, 140, 0.1);
         }
 
-        .menu-container { flex: 1; padding: 20px; overflow-y: auto; padding-bottom: 100px; }
+        /* Menu List */
+        .menu-container { flex: 1; padding: 20px; overflow-y: auto; padding-bottom: 100px; 
+                 background: url('img/6.png') no-repeat center bottom;
+               }
         
         .menu-item {
             background: var(--glass); backdrop-filter: blur(10px);
@@ -127,6 +90,7 @@
             border-radius: 10px; font-size: 11px; font-weight: 700;
         }
 
+        /* Bottom Navigation */
         .bottom-nav { 
             position: absolute; bottom: 0; width: 100%; height: 85px; 
             background: #fff; display: flex; justify-content: space-around; 
@@ -146,28 +110,19 @@
 </head>
 <body>
 
-<!-- Màn hình thu phí -->
-<div id="paywall">
-    <div class="paywall-card">
-        <span class="paywall-icon">🥟🥟</span>
-        <div class="paywall-title">Opps! Hết lượt miễn phí</div>
-        <div class="paywall-desc">
-            Cần phải trả phí <b>2 cái bánh bao nóng hổi</b> nhất mới được vào trang này. 
-            <br><br>
-            <i>Nhắn cho Bành ngay đi nè! 💬</i>
-        </div>
-        <!-- Thay link Facebook/Zalo của bạn vào đây -->
-        <a href="https://www.facebook.com/banh.nguyen.35110418?locale=vi_VN" class="paywall-btn" onclick="requestBuns()">Gửi bánh bao ngay!</a>
-    </div>
-</div>
-
 <div class="app-container">
     <div class="header">
         <h1>Của chúng ta 💞</h1>
-        <div class="avatar-pair">
-            <div class="avatar rabbit"><img src="img/cun.png" alt="Rabbit"></div>
-            <div class="avatar bear"><img src="img/banh.png" alt="Bear"></div>
-        </div>
+        
+<div class="avatar-pair">
+  <div class="avatar rabbit">
+    <img src="img/cun.png" alt="Rabbit">
+  </div>
+  <div class="avatar bear">
+    <img src="img/banh.png" alt="Bear">
+  </div>
+</div>
+
         <div class="day-counter">
             <i class="fa-solid fa-heart fa-beat" style="font-size: 12px;"></i>
             <span id="days-count">...</span> ngày bên nhau
@@ -175,35 +130,32 @@
         </div>
     </div>
 
-    <div class="menu-container">
-        <a href="about.html" class="menu-item">
-            <div class="menu-icon"><i class="fa-solid fa-address-card"></i></div>
-            <div class="menu-text">Thông tin của chúng ta</div>
-            <i class="fa-solid fa-chevron-right menu-arrow"></i>
-        </a>
-        <a href="feature.html" class="menu-item">
-            <div class="menu-icon"><i class="fa-solid fa-list-check"></i></div>
-            <div class="menu-text">Những điều muốn làm</div>
-            <i class="fa-solid fa-chevron-right menu-arrow"></i>
-        </a>
-        <a href="x.html" class="menu-item">
-            <div class="menu-icon"><i class="fa-solid fa-images"></i></div>
-            <div class="menu-text">Album chung</div>
-            <i class="fa-solid fa-chevron-right menu-arrow"></i>
-        </a>
-        <a href="y.html" class="menu-item">
-            <div class="menu-icon"><i class="fa-solid fa-gear"></i></div>
-            <div class="menu-text">Cài đặt</div>
-            <i class="fa-solid fa-chevron-right menu-arrow"></i>
-        </a>
-        <a href="index.html" class="menu-item">
-            <div class="menu-icon"><i class="fa-solid fa-jar"></i></div>
-            <div class="menu-text">Thoát</div>
-            <div class="badge">122</div>
-            <i class="fa-solid fa-chevron-right menu-arrow"></i>
-        </a>
-    </div>
+ <div class="menu-container">
+    <a href="about.html" class="menu-item">
+        <div class="menu-icon"><i class="fa-solid fa-address-card"></i></div>
+        <div class="menu-text">Thông tin của chúng ta</div>
+        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+    </a>
 
+    <a href="feature.html" class="menu-item">
+        <div class="menu-icon"><i class="fa-solid fa-list-check"></i></div>
+        <div class="menu-text">Những điều muốn làm</div>
+        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+    </a>
+    <a href="setting.html" class="menu-item">
+    <div class="menu-icon"><i class="fa-solid fa-gear"></i></div>
+    <div class="menu-text">Cài đặt</div>
+    <i class="fa-solid fa-chevron-right menu-arrow"></i>
+</a>
+
+<a href="index.html" class="menu-item">
+    <div class="menu-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
+    <div class="menu-text">Thoát</div>
+    <i class="fa-solid fa-chevron-right menu-arrow"></i>
+</a>
+</div>
+
+    <!-- Bottom Nav -->
     <div class="bottom-nav">
         <a href="home.html" class="nav-item"><i class="fa-solid fa-house"></i><br>Trang chủ</a>
         <a href="kiniem.html" class="nav-item"><i class="fa-solid fa-heart"></i><br>Kỉ niệm</a>
@@ -216,7 +168,7 @@
 <script>
     // Hàm tính ngày yêu nhau
     function calculateDays() {
-        const startDate = new Date('2025-04-25'); 
+        const startDate = new Date('2025-04-25'); // THAY NGÀY YÊU CỦA BẠN VÀO ĐÂY (YYYY-MM-DD)
         const today = new Date();
         const diffTime = Math.abs(today - startDate);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
@@ -225,18 +177,12 @@
 
     calculateDays();
 
-    // Xử lý khi bấm nút gửi bánh bao
-    function requestBuns() {
-        alert("Đang chuyển hướng đến chỗ Bành để đòi bánh bao... Gửi xong mới được vào nha!");
-        // Sau khi họ bấm OK ở alert, trang web sẽ mở link nhắn tin ở tab mới
-        // Trong thực tế, bạn có thể bỏ dòng dưới nếu muốn họ "mắc kẹt" luôn ở đây đến khi bạn cho vào
-        // document.getElementById('paywall').style.display = 'none'; 
-    }
-
+    // Hiệu ứng click button center (tùy chọn)
     document.querySelector('.center-btn').onclick = function() {
         window.location.href = 'kiniem.html';
     };
 </script>
+    <script src="bgm.js"></script>
 
 </body>
 </html>

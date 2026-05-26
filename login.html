@@ -113,6 +113,12 @@
         }
 
         @media (max-height: 750px) { .phone-container { transform: scale(0.85); } }
+        .cute-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  vertical-align: middle;
+}
     </style>
 </head>
 <body>
@@ -144,8 +150,8 @@
 
             <div class="bottom-decor">
                 <!-- Bạn có thể thay bằng img/cun.png và img/banh.png nếu có file -->
-                <span>🐰</span>
-                <span>🐻</span>
+<span><img src="img/cun.png" alt="Cún" class="cute-icon"></span>
+<span><img src="img/banh.png" alt="Bánh" class="cute-icon"></span>
                 <p style="font-size: 10px; color: #eee; position: absolute; bottom: 10px;">ʚ♡ɞ</p>
             </div>
         </div>
@@ -195,7 +201,7 @@
                     if (userData.password === passInput) {
                         // Chuyển trang theo yêu cầu
                         if (nameInput === "Banh") {
-                            window.location.href = "5.html";
+                            window.location.href = "home.html";
                         } else if (nameInput === "Duyen") {
                             window.location.href = "home.html";
                         } else {

@@ -36,7 +36,7 @@
           .app-container {
                width: 100%;
                height: 100%;
-               max-width: 450px;
+               max-width: 500px;
                margin: 0 auto;
                display: flex;
                flex-direction: column;
@@ -52,25 +52,37 @@
                background-size: cover;
           }
 
-          .top-nav-row {
-               display: flex;
-               justify-content: center;
-               align-items: center;
-               margin-bottom: 15px;
-          }
+         .top-nav-row {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     margin-bottom: 15px;
+}
+.fonth1 {
+     color: #F472B6 !important;
+     font-style: italic;
+     font-size: 2.5rem;
+     text-align: center;
+     text-shadow: 2px 2px 4px #FCE7F3;
+     font-family: 'Comic Sans MS', cursive, sans-serif;
 
-          .fonth1 {
-               color: #F472B6 !important;
-               font-style: italic;
-               font-size: 2.5rem;
-               text-align: center;
-               text-shadow: 2px 2px 4px #FCE7F3;
-               font-family: 'Comic Sans MS', cursive, sans-serif;
-
-               width: 100%;
-               margin: 0 auto;
-          }
-
+     width: 100%;
+     margin: 0 auto;
+}
+/* Style này giúp pop-up căn giữa màn hình */
+#todayPopup {
+    display: none; 
+    display: flex; /* Sẽ được điều khiển bằng JS */
+    align-items: center;
+    justify-content: center;
+}
+.today-item-mini {
+    border-bottom: 1px dashed #ffafbd;
+    padding: 10px 0;
+}
+.today-item-mini img {
+    width: 50px; height: 50px; border-radius: 10px; object-fit: cover;
+}
           .btn-circle {
                width: 40px;
                height: 40px;
@@ -379,30 +391,18 @@
                width: 60px;
                pointer-events: none;
           }
-          /* Style cho lớp Thư mục/Nhóm */
-.folder-item {
-    background: #fff;
-    border-radius: 20px;
-    padding: 20px;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    border: 1px solid var(--p-soft);
-    cursor: pointer;
-    transition: 0.3s;
-}
-.folder-item:active { transform: scale(0.98); }
-.folder-info { display: flex; align-items: center; gap: 15px; }
-.folder-icon { width: 45px; height: 45px; border-radius: 12px; background: var(--p-bg); color: var(--p-main); display: flex; align-items: center; justify-content: center; font-size: 20px; }
-.folder-name { font-weight: 700; color: var(--text-dark); }
-.folder-count { font-size: 12px; color: #aaa; }
      </style>
 </head>
 
 <body>
-
+<!-- Pop-up cảnh báo nhật ký hôm nay -->
+<div id="todayPopup" class="drawer-mask" style="display: none; align-items: center; justify-content: center; z-index: 2000;">
+    <div style="background: white; width: 85%; max-height: 70vh; border-radius: 30px; padding: 20px; overflow-y: auto; position: relative;">
+        <h3 style="text-align: center; color: var(--p-main); margin-top: 10px;">✨ Hôm nay bạn đã viết:</h3>
+        <div id="todayList"></div>
+        <button onclick="closeTodayPopup()" style="width: 100%; margin-top: 15px; padding: 12px; background: var(--p-main); color: white; border: none; border-radius: 15px; font-weight: bold;">Đã hiểu, viết tiếp thôi!</button>
+    </div>
+</div>
      <div class="app-container">
           <!-- Header -->
           <div class="header">
@@ -424,7 +424,8 @@
 
           <!-- TABS: Logic Ngày/Tuần/Tháng/Năm/Thế kỷ -->
           <div class="tabs" id="timeTabs">
-               <div class="tab-item" data-range="today"><i class="fa-solid fa-calendar-day"></i> H.Nay</div>
+               <div class="tab-item active" data-range="all"><i class="fa-solid fa-heart"></i> Tất cả</div>
+               <div class="tab-item" data-range="today"><i class="fa-solid fa-calendar-day"></i> Ngày</div>
                <div class="tab-item" data-range="week"><i class="fa-solid fa-calendar-week"></i> Tuần</div>
                <div class="tab-item" data-range="month"><i class="fa-solid fa-calendar-days"></i> Tháng</div>
                <div class="tab-item" data-range="year"><i class="fa-solid fa-calendar-check"></i> Năm</div>
@@ -460,232 +461,188 @@
           </div>
      </div>
 
-   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+     <script type="module">
+          import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+          import { getFirestore, collection, getDocs, query } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
-        authDomain: "photodiary-3d469.firebaseapp.com",
-        projectId: "photodiary-3d469",
-        storageBucket: "photodiary-3d469.firebasestorage.app",
-        messagingSenderId: "102477469911",
-        appId: "1:102477469911:web:13ed38ab426819fdb43892"
-    };
+          const firebaseConfig = {
+               apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+               authDomain: "photodiary-3d469.firebaseapp.com",
+               projectId: "photodiary-3d469",
+               storageBucket: "photodiary-3d469.firebasestorage.app",
+               messagingSenderId: "102477469911",
+               appId: "1:102477469911:web:13ed38ab426819fdb43892"
+          };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+          const app = initializeApp(firebaseConfig);
+          const db = getFirestore(app);
 
-    let allMemories = []; 
-window.currentTab = 'today';
-    const container = document.getElementById('listContent');
+          let allMemories = []; // Dữ liệu gốc từ Firebase
+          const container = document.getElementById('listContent');
 
-    // 1. Khởi tạo dữ liệu
-    async function init() {
-        try {
-            const snap = await getDocs(collection(db, "daily_memories"));
-            allMemories = [];
-            snap.forEach(doc => {
-                const dayData = doc.data();
-                if (dayData.moments) {
-                    dayData.moments.forEach((m, idx) => {
-                        allMemories.push({ ...m, date: doc.id, index: idx });
-                    });
-                }
-            });
-
-            allMemories.sort((a, b) => (b.time || b.date).localeCompare(a.time || a.date));
-            
-            // Mặc định hiện Tab Ngày
-            window.filterByTimeRange('today');
-        } catch (e) {
-            console.error("Lỗi:", e);
-            container.innerHTML = "Không thể tải dữ liệu.";
-        }
-    }
-
-    // 2. Hàm lọc chính (Entry point của các Tab)
-    window.filterByTimeRange = (range) => {
-
-
-    window.currentTab = range; // Lưu lại tab hiện tại vào window
-        const now = new Date();
-        const todayStr = now.toISOString().split('T')[0];
-
-        // Cập nhật UI Tabs
-        document.querySelectorAll('.tab-item').forEach(t => {
-            t.classList.toggle('active', t.dataset.range === range);
+          // 1. Tải dữ liệu từ Firebase
+        async function init() {
+    try {
+        const snap = await getDocs(collection(db, "daily_memories"));
+        allMemories = [];
+        snap.forEach(doc => {
+            const dayData = doc.data();
+            if (dayData.moments) {
+                dayData.moments.forEach(m => {
+                    allMemories.push({ ...m, date: doc.id });
+                });
+            }
         });
+        allMemories.sort((a, b) => b.time.localeCompare(a.time));
+        renderList(allMemories);
+
+        // --- THÊM PHẦN NÀY ĐỂ HIỆN POP-UP ---
+        checkTodayEntries(); 
+    } catch (e) { console.error(e); }
+}
+
+function checkTodayEntries() {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const todayMemories = allMemories.filter(m => m.date === todayStr);
+
+    if (todayMemories.length > 0) {
+        const listDiv = document.getElementById('todayList');
+        let html = "";
+        todayMemories.forEach(m => {
+            html += `
+                <div class="today-item-mini">
+                    <div style="display:flex; gap:10px;">
+                        <img src="${m.images?.[0] || 'https://via.placeholder.com/50'}">
+                        <div>
+                            <div style="font-weight:bold; font-size:14px;">${m.activity}</div>
+                            <div style="font-size:12px; color: #666;">🕒 ${m.time.split('T')[1].substring(0,5)}</div>
+                        </div>
+                    </div>
+                    <p style="font-size:12px; margin: 5px 0;">📝 ${m.content.substring(0, 50)}...</p>
+                    ${m.audio ? '<span style="font-size:10px; color:var(--p-main)"><i class="fa-solid fa-microphone"></i> Có Voice</span>' : ''}
+                </div>
+            `;
+        });
+        listDiv.innerHTML = html;
+        document.getElementById('todayPopup').style.display = 'flex';
+    }
+}
+
+window.closeTodayPopup = () => {
+    document.getElementById('todayPopup').style.display = 'none';
+};
+
+          // 2. Logic Lọc Dữ Liệu theo Tab
+          const tabs = document.querySelectorAll('.tab-item');
+          tabs.forEach(tab => {
+               tab.addEventListener('click', () => {
+                    // Đổi UI Active
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    // Lọc logic
+                    const range = tab.dataset.range;
+                    filterByTimeRange(range);
+               });
+          });
+
+        function filterByTimeRange(range) {
+    const now = new Date();
+    // Tạo mốc 0h:00 của ngày hôm nay để so sánh chính xác
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    let filtered = allMemories.filter(m => {
+        const mDate = new Date(m.date);
+        const mTime = mDate.getTime();
+
+        if (range === 'all') return true;
 
         if (range === 'today') {
-            const filtered = allMemories.filter(m => m.date === todayStr);
-            renderMemories(filtered, "Hôm nay có gì nè? ✨");
-        } 
-        else if (range === 'week') {
-            // Hiện các Ngày trong tuần này
-            const filtered = allMemories.filter(m => isWithinDays(m.date, 7));
-            renderFolders(filtered, 'date', 'Tuần này');
-        } 
-        else if (range === 'month') {
-            // Hiện các Tuần trong tháng này
-            const filtered = allMemories.filter(m => isSameMonth(m.date, now));
-            renderFolders(filtered, 'week', 'Tháng này');
-        }
-        else if (range === 'year') {
-            // Hiện các Tháng trong năm này
-            const filtered = allMemories.filter(m => new Date(m.date).getFullYear() === now.getFullYear());
-            renderFolders(filtered, 'month', `Năm ${now.getFullYear()}`);
-        }
-        else if (range === 'century') {
-            // Hiện các Năm có kỉ niệm
-            renderFolders(allMemories, 'year', 'Thế kỷ Kỉ niệm');
-        }
-    };
-
-    // 3. Hàm Render Folders (Xử lý phân cấp)
-    function renderFolders(data, type, title) {
-        container.innerHTML = "";
-        if (data.length === 0) {
-            container.innerHTML = `<div style="text-align:center; padding-top:50px; opacity:0.5;">Trống trơn à...</div>`;
-            return;
+            return m.date === now.toISOString().split('T')[0];
         }
 
-        // Hiện tiêu đề và nút quay lại (nếu không phải tầng cao nhất của Tab)
-        const header = document.createElement('div');
-        header.className = "group-title";
-        header.innerHTML = `${title} <span onclick="filterByTimeRange(currentTab)" style="cursor:pointer; color:var(--p-main)"><i class="fa-solid fa-rotate-left"></i> Trở lại</span>`;
-        container.appendChild(header);
-
-        const groups = {};
-        data.forEach(m => {
-            const d = new Date(m.date);
-            let key = "";
-            let nextType = "";
-
-            if (type === 'year') {
-                key = d.getFullYear().toString();
-                nextType = 'month';
-            } else if (type === 'month') {
-                key = `Tháng ${d.getMonth() + 1} - ${d.getFullYear()}`;
-                nextType = 'week';
-            } else if (type === 'week') {
-                const weekNo = Math.ceil(d.getDate() / 7);
-                key = `Tuần ${weekNo} - Tháng ${d.getMonth() + 1}`;
-                nextType = 'date';
-            } else if (type === 'date') {
-                key = m.date;
-                nextType = 'memories';
-            }
-
-            if (!groups[key]) groups[key] = [];
-            groups[key].push(m);
-        });
-
-        Object.keys(groups).sort().reverse().forEach(key => {
-            const item = document.createElement('div');
-            item.className = "folder-item";
-            item.innerHTML = `
-                <div class="folder-info">
-                    <div class="folder-icon"><i class="fa-solid ${getIcon(type)}"></i></div>
-                    <div>
-                        <div class="folder-name">${type === 'date' ? formatDateVN(key) : key}</div>
-                        <div class="folder-count">${groups[key].length} kỉ niệm</div>
-                    </div>
-                </div>
-                <i class="fa-solid fa-chevron-right" style="color:#ddd"></i>
-            `;
-            
-            // Logic khi bấm vào Folder: Nếu là date thì hiện kỉ niệm, ngược lại thì đào sâu xuống tiếp
-            item.onclick = () => {
-                const nextLevel = getNextLevel(type);
-                if (nextLevel === 'memories') {
-                    renderMemories(groups[key], key, true);
-                } else {
-                    renderFolders(groups[key], nextLevel, key);
-                }
-            };
-            container.appendChild(item);
-        });
-    }
-
-    // 4. Hàm Render Cards cuối cùng
-    function renderMemories(data, title = "", showBack = false) {
-        let html = `
-            <div class="group-title">
-                ${title} 
-                ${showBack ? `<span onclick="filterByTimeRange(currentTab)" style="cursor:pointer; color:var(--p-main)"> <i class="fa-solid fa-rotate-left"></i> Quay lại</span>` : ""}
-            </div>`;
-        
-        if (data.length === 0) {
-            html += `<div style="text-align:center; padding-top:50px; opacity:0.5;">Hông có gì hết...</div>`;
+        if (range === 'week') {
+            const sevenDaysAgo = startOfToday.getTime() - (7 * 24 * 60 * 60 * 1000);
+            return mTime >= sevenDaysAgo;
         }
 
-        data.forEach(m => {
-            const displayTime = (m.time && m.time.includes('T')) ? m.time.split('T')[1].substring(0, 5) : "--:--";
-            html += `
-                <div class="m-card" onclick="window.location.href='template.html?date=${m.date}&index=${m.index}'">
-                    <img src="${m.images?.[0] || 'img/cun.png'}" class="m-thumb">
+        if (range === 'month') {
+            return mDate.getMonth() === now.getMonth() && mDate.getFullYear() === now.getFullYear();
+        }
+
+        if (range === 'year') {
+            return mDate.getFullYear() === now.getFullYear();
+        }
+
+        if (range === 'century') {
+            // Thế kỷ 21: 2001 - 2100
+            return mDate.getFullYear() >= 2001 && mDate.getFullYear() <= 2100;
+        }
+    });
+
+    renderList(filtered);
+}
+
+          // 3. Hàm Render UI
+          function renderList(data) {
+               if (data.length === 0) {
+                    container.innerHTML = `<div style="text-align:center; padding-top:100px; opacity:0.5;"><i class="fa-solid fa-box-open fa-3x"></i><p>Hông tìm thấy kỉ niệm nào hết...</p></div>`;
+                    return;
+               }
+
+               let html = "";
+               let lastDate = "";
+
+               data.forEach(m => {
+                    if (m.date !== lastDate) {
+                         lastDate = m.date;
+                         html += `<div class="group-title">${formatDateVN(m.date)} <span>${m.date}</span></div>`;
+                    }
+
+                    html += `
+                <div class="m-card" onclick="window.location.href='template.html?date=${m.date}'">
+                    <img src="${m.images?.[0] || 'https://via.placeholder.com/150'}" class="m-thumb">
                     <div class="m-info">
-                        <h3 class="m-title">${m.activity || 'Kỉ niệm'}</h3>
-                        <p class="m-desc">${m.content || ''}</p>
+                        <h3 class="m-title">${m.activity || 'Hoạt động kỉ niệm'}</h3>
+                        <p class="m-desc">${m.content}</p>
                         <div class="m-stats">
-                            <span><i class="fa-regular fa-clock"></i> ${displayTime}</span>
                             <span><i class="fa-regular fa-image"></i> ${m.images ? m.images.length : 0}</span>
+                            ${m.audio ? `<span><i class="fa-solid fa-microphone-lines"></i> Voice</span>` : ''}
                         </div>
                     </div>
                     <div class="m-badge">😊 ${m.feeling}</div>
                 </div>
             `;
-        });
-        container.innerHTML = html;
-        container.scrollTop = 0;
-    }
+               });
+               container.innerHTML = html;
+          }
 
-    // --- Helpers ---
-    function getNextLevel(current) {
-        const levels = { 'year': 'month', 'month': 'week', 'week': 'date', 'date': 'memories' };
-        return levels[current];
-    }
+          function formatDateVN(dateStr) {
+               const d = new Date(dateStr);
+               if (dateStr === new Date().toISOString().split('T')[0]) return "Hôm nay 🌸";
+               return `Kỉ niệm 🎀`;
+          }
 
-    function getIcon(type) {
-        const icons = { 'year': 'fa-calendar', 'month': 'fa-calendar-check', 'week': 'fa-folder-open', 'date': 'fa-calendar-day' };
-        return icons[type] || 'fa-folder';
-    }
+          // 4. Tìm kiếm nội dung
+          window.searchMemories = () => {
+               const key = document.getElementById('searchInput').value.toLowerCase();
+               const filtered = allMemories.filter(m =>
+                    m.content.toLowerCase().includes(key) || m.activity.toLowerCase().includes(key) || m.feeling.toLowerCase().includes(key)
+               );
+               renderList(filtered);
+          };
 
-    function isWithinDays(dateStr, days) {
-        const d = new Date(dateStr);
-        const now = new Date();
-        const diff = (now - d) / (1000 * 60 * 60 * 24);
-        return diff >= 0 && diff <= days;
-    }
+          // UI Drawer
+          window.toggleFilter = (show) => {
+               const d = document.getElementById('filterDrawer');
+               const m = document.getElementById('mask');
+               if (show) { m.style.display = 'block'; setTimeout(() => d.classList.add('show'), 10); }
+               else { d.classList.remove('show'); setTimeout(() => m.style.display = 'none', 400); }
+          };
 
-    function isSameMonth(dateStr, now) {
-        const d = new Date(dateStr);
-        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-    }
-
-    function formatDateVN(dateStr) {
-        const d = new Date(dateStr);
-        return `Ngày ${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
-    }
-
-    window.searchMemories = () => {
-        const key = document.getElementById('searchInput').value.toLowerCase();
-        if(!key) { window.filterByTimeRange(currentTab); return; }
-        const filtered = allMemories.filter(m => 
-            (m.content||"").toLowerCase().includes(key) || (m.activity||"").toLowerCase().includes(key)
-        );
-        renderMemories(filtered, `Kết quả cho: ${key}`, true);
-    };
-
-    // Đảm bảo các tab click được
-    document.querySelectorAll('.tab-item').forEach(tab => {
-        tab.onclick = () => window.filterByTimeRange(tab.dataset.range);
-    });
-
-    init();
-</script>
-     <script src="bgm.js"></script>
+          init();
+     </script>
+    <script src="bgm.js"></script>
 
 </body>
 

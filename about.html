@@ -3,266 +3,339 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Thông tin của chúng ta 💖</title>
-    
-    <!-- Font chữ -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <title>Chúng mình là một đôi 🌸</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <style>
         :root {
-            --bg-pink: #ffedf2;
-            --card-bg: #ffffff;
-            --text-dark: #5c4b41;
-            --text-light: #8c7a70;
-            --girl-color: #ff6b81;
-            --girl-bg: #ffedf2;
-            --boy-color: #5b63b7;
-            --boy-bg: #f1f0ff;
+            --p-main: #ff8fab;
+            --p-soft: #ffe4e9;
+            --text: #5d4037;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-        body {
+        body, html {
+            width: 100%; height: 100%;
             font-family: 'Quicksand', sans-serif;
-            background-color: #fce7f3; /* Màu nền cho màn hình to */
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh;
+            background: #fdf2f4;
+            overflow: hidden;
         }
 
-        /* KHUNG ỨNG DỤNG MOBILE */
+        /* KHUNG ỨNG DỤNG */
         .app-container {
-            width: 100%; max-width: 414px; height: 100vh;
-            background: linear-gradient(180deg, #ffd3e0 0%, #ffedf2 20%, #fff 40%, #fff 100%);
-            position: relative; overflow-y: auto; overflow-x: hidden;
+            width: 100%; height: 100%;
+            max-width: 450px; margin: 0 auto;
+            background: url('img/10.png') no-repeat center center;
+            background-size: cover;
+            position: relative;
             display: flex; flex-direction: column;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
         }
-        @media (min-width: 450px) {
-            .app-container { height: 90vh; border-radius: 35px; border: 8px solid #fff; box-shadow: 0 20px 50px rgba(255, 182, 193, 0.3); }
-        }
-        .app-container::-webkit-scrollbar { display: none; }
 
         /* HEADER */
         .header {
+            padding: 30px 20px 10px;
             display: flex; justify-content: space-between; align-items: center;
-            padding: 25px 20px 10px; position: relative; z-index: 10;
+            z-index: 10;
         }
-        .btn-circle {
-            width: 40px; height: 40px; border-radius: 50%; background: #fff;
+        .back-btn {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(5px);
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 10px rgba(255, 175, 189, 0.3); color: var(--girl-color);
-            font-size: 16px; cursor: pointer;
+            color: var(--p-main); font-size: 18px; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
-        .header h1 { font-family: 'Nunito', sans-serif; font-size: 18px; font-weight: 800; color: var(--text-dark); }
 
-        /* HERO IMAGE (Gấu thỏ đầu trang) */
-        .hero-section {
-            width: 100%; display: flex; justify-content: center;
-            margin-top: -10px; position: relative; z-index: 5;
-        }
-        .hero-img { width: 65%; height: auto; object-fit: contain; filter: drop-shadow(0 10px 10px rgba(255, 182, 193, 0.4)); }
-
-        /* PHẦN CHÍNH (NỀN TRẮNG UỐN CONG CẮT NỀN HỒNG) */
         .main-content {
-            background: var(--card-bg);
-            border-radius: 40px 40px 0 0;
-            padding: 30px 20px 50px;
-            margin-top: -30px; /* Kéo lên đè vào hình ảnh */
-            position: relative; z-index: 10;
-            flex: 1; display: flex; flex-direction: column; gap: 20px;
+            flex: 1; overflow-y: auto;
+            padding: 10px 20px 100px;
+            scrollbar-width: none;
         }
+        .main-content::-webkit-scrollbar { display: none; }
 
-        /* 1. KHU VỰC HỒ SƠ ĐÔI (COUPLE PROFILE) */
-        .profile-section {
-            display: flex; position: relative; justify-content: space-between;
-            background: #fff; padding-bottom: 20px;
+        /* COUPLE BOX */
+        .couple-box {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 40px;
+            padding: 30px 15px;
+            display: flex; justify-content: space-around; align-items: center;
+            position: relative; margin-top: 10px;
+            box-shadow: 0 10px 25px rgba(255, 143, 171, 0.1);
         }
-
-        /* Đường kẻ dọc chia đôi ở giữa */
-        .divider {
-            position: absolute; left: 50%; top: 10%; bottom: 10%;
-            width: 1px; background: rgba(255, 182, 193, 0.4); border-right: 1px dashed #ffc0cb;
+        .profile { text-align: center; width: 45%; }
+        .avatar-wrap { width: 95px; height: 95px; margin: 0 auto 12px; position: relative; }
+        .avatar-wrap img {
+            width: 100%; height: 100%; border-radius: 50%;
+            border: 4px solid #fff; object-fit: cover;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        /* Trái tim nằm giữa đường kẻ */
-        .divider-heart {
-            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
-            color: var(--girl-color); font-size: 16px; background: #fff; padding: 5px;
+        .name { font-weight: 700; color: var(--text); font-size: 15px; margin-bottom: 4px; }
+        .role { font-size: 9px; font-weight: 700; color: var(--p-main); text-transform: uppercase; letter-spacing: 1px; }
+
+        .connect-heart {
+            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+            width: 40px; height: 40px; background: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 5; box-shadow: 0 4px 10px rgba(255, 143, 171, 0.2);
         }
+        .connect-heart i { color: var(--p-main); font-size: 18px; animation: beat 1s infinite; }
+        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
-        .profile-card { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 10px; z-index: 2; }
-        
-        .avatar-wrap {
-            width: 85px; height: 85px; border-radius: 50%;
-            padding: 3px; margin-bottom: 15px;
-        }
-        .girl-avatar { background: linear-gradient(135deg, #ffc0cb, #ffedf2); }
-        .boy-avatar { background: linear-gradient(135deg, #c4c2ff, #f1f0ff); }
-        
-        .avatar-wrap img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid #fff; object-fit: cover; }
-
-        .name-role { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; margin-bottom: 12px; }
-        .girl-text { color: var(--girl-color); }
-        .boy-text { color: var(--boy-color); }
-
-        .info-pill {
-            font-size: 11px; font-weight: 700; color: var(--text-light);
-            background: #fdf5f6; padding: 5px 12px; border-radius: 15px; margin-bottom: 8px;
-        }
-        .boy-pill { background: #f8f8fc; }
-
-        .likes-box {
-            margin-top: 5px; padding: 12px 10px; border-radius: 15px;
-            font-size: 10px; font-weight: 600; line-height: 1.5; width: 100%;
-        }
-        .girl-likes { background: var(--girl-bg); color: #d85c70; }
-        .boy-likes { background: var(--boy-bg); color: #4e559e; }
-
-
-        /* 2. THẺ NGÀY KỶ NIỆM */
-        .info-card {
-            background: #fff; border-radius: 25px; padding: 20px;
-            box-shadow: 0 10px 25px rgba(255, 175, 189, 0.15);
-            border: 1px solid rgba(255, 237, 242, 0.8);
-            position: relative; overflow: hidden;
+        /* INFO CARDS */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 30px; border: 1.5px solid #fff;
+            padding: 20px; margin-top: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
         }
         .card-title {
-            font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
-            color: var(--text-dark); display: flex; align-items: center; gap: 8px; margin-bottom: 15px;
+            font-size: 14px; font-weight: 700; color: var(--text);
+            display: flex; align-items: center; gap: 10px; margin-bottom: 15px;
         }
-        .anniversary-date {
-            font-family: 'Nunito', sans-serif; font-size: 24px; font-weight: 900;
-            color: var(--girl-color); margin-bottom: 5px;
-        }
-        .days-counter { font-size: 12px; font-weight: 700; color: var(--text-light); display: flex; align-items: center; gap: 5px;}
-        .days-counter i { color: var(--girl-color); font-size: 14px; }
-        
-        .calendar-graphic {
-            position: absolute; right: 15px; bottom: 15px;
-            width: 80px; opacity: 0.9;
-        }
+        .card-title i { color: var(--p-main); }
 
-        /* 3. THẺ MỘT VÀI ĐIỀU VỀ CHÚNG TA */
-        .about-list { list-style: none; padding-top: 5px; }
-        .about-list li {
-            font-size: 12px; font-weight: 600; color: var(--text-light);
-            margin-bottom: 12px; line-height: 1.6; display: flex; gap: 8px;
-        }
-        .about-list li::before { content: "•"; color: var(--text-light); font-weight: 900; }
-        
-        .bottom-mascot {
-            position: absolute; right: 10px; bottom: 10px;
-            width: 85px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.05));
-        }
+        /* Anniversary Section */
+        .days-box { text-align: center; padding: 5px 0; }
+        .days-num { font-size: 45px; font-weight: 800; color: var(--p-main); display: block; }
+        .days-text { font-size: 11px; font-weight: 700; color: var(--text); opacity: 0.6; }
 
+        /* About Us List */
+        .details { list-style: none; }
+        .details li {
+            display: flex; align-items: center; justify-content: space-between;
+            font-size: 13px; color: var(--text); margin-bottom: 10px;
+            background: rgba(255,255,255,0.8); padding: 12px 15px; border-radius: 18px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .details li span { display: flex; align-items: center; gap: 10px; flex: 1; }
+
+        /* MODAL */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(5px);
+            z-index: 1000; display: none; align-items: center; justify-content: center;
+        }
+        .modal {
+            background: white; width: 85%; max-width: 350px; padding: 25px;
+            border-radius: 30px; text-align: center; animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .inp-about {
+            width: 100%; padding: 15px; border: 2px solid #fff0f3; background: #fffafa;
+            border-radius: 15px; outline: none; font-family: 'Quicksand'; margin-top: 15px;
+        }
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        .btn { flex: 1; padding: 12px; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; }
+        .btn-save { background: var(--p-main); color: white; }
+        .btn-cancel { background: #f5f5f5; color: #888; }
     </style>
 </head>
+
 <body>
 
-<div class="app-container">
-
-    <!-- Header -->
-    <div class="header">
-        <div class="btn-circle" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></div>
-        <h1>Thông tin của chúng ta 💖</h1>
-        <div class="btn-circle"><i class="fa-solid fa-ellipsis"></i></div>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header" style="
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    padding: 15px 20px;
+    position: relative;
+    z-index: 10;
+">
+    <!-- Nút quay lại -->
+    <div class="back-btn" onclick="history.back()" style="
+        width: 40px; 
+        height: 40px; 
+        background: rgba(255, 255, 255, 0.8); 
+        border-radius: 50%; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        color: #ff8fab;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        cursor: pointer;
+    ">
+        <i class="fa-solid fa-chevron-left"></i>
     </div>
 
-    <!-- Hình ảnh Gấu & Thỏ (Background Hồng) -->
-    <div class="hero-section">
-        <!-- Chỗ này có thể thay bằng ảnh chibi thiết kế của bạn -->
-        <img src="https://cdn-icons-png.flaticon.com/512/7903/7903522.png" alt="Couple" class="hero-img">
+    <!-- Tiêu đề ở giữa -->
+    <div style="
+        font-family: 'Quicksand', sans-serif;
+        font-weight: 800; 
+        color: #fff; 
+        font-size: 1.2rem;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        letter-spacing: 1px;
+    ">
+        Chúng mình ❤️
     </div>
 
-    <!-- Nội dung chính (Nền Trắng bo góc uốn lượn) -->
-    <div class="main-content">
-        
-        <!-- 1. HỒ SƠ 2 NGƯỜI (Trái - Phải) -->
-        <div class="profile-section">
-            <div class="divider"></div>
-            <i class="fa-solid fa-heart divider-heart"></i>
-
-            <!-- Hồ sơ Nữ (Người viết) -->
-            <div class="profile-card">
-                <div class="avatar-wrap girl-avatar">
-                    <img src="img/viet.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4140/4140047.png'" alt="Girl">
-                </div>
-                <div class="name-role girl-text">Bạn (Người viết)</div>
-                <div class="info-pill">20/05/2004</div>
-                <div class="info-pill">Kim Ngưu ♉</div>
-                <div class="likes-box girl-likes">
-                    Thích: Gấu bông, trà sữa<br>nghe nhạc, màu hồng
-                </div>
-            </div>
-
-            <!-- Hồ sơ Nam (Người xem) -->
-            <div class="profile-card">
-                <div class="avatar-wrap boy-avatar">
-                    <img src="img/xem.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4140/4140048.png'" alt="Boy">
-                </div>
-                <div class="name-role boy-text">Người ấy (Người xem)</div>
-                <div class="info-pill boy-pill">18/02/2004</div>
-                <div class="info-pill boy-pill">Bảo Bình ♒</div>
-                <div class="likes-box boy-likes">
-                    Thích: Thể thao, cà phê<br>chụp ảnh, màu xanh
-                </div>
-            </div>
-        </div>
-
-        <!-- 2. THẺ NGÀY KỶ NIỆM -->
-        <div class="info-card">
-            <div class="card-title"><i class="fa-regular fa-calendar"></i> Ngày đầu tiên của chúng ta</div>
-            <!-- Thay đổi ngày bắt đầu yêu nhau ở đây -->
-            <div class="anniversary-date" id="startDate">15/08/2023</div>
-            <div class="days-counter">
-                <i class="fa-solid fa-heart"></i> <span id="daysCount">Đang tính...</span> ngày bên nhau ✨
-            </div>
-            
-            <img src="https://cdn-icons-png.flaticon.com/512/3656/3656828.png" alt="Calendar" class="calendar-graphic">
-        </div>
-
-        <!-- 3. THẺ MỘT VÀI ĐIỀU VỀ CHÚNG TA -->
-        <div class="info-card" style="padding-bottom: 60px;">
-            <div class="card-title" style="color: #ff9fae;"><i class="fa-solid fa-seedling"></i> Một vài điều về chúng ta</div>
-            <ul class="about-list">
-                <li>Cặp đôi thích du lịch và khám phá những nơi mới ✈️</li>
-                <li>Cùng nhau nghe nhạc mỗi tối trước khi ngủ 🎧</li>
-                <li>Thích lưu giữ những khoảnh khắc nhỏ bé mỗi ngày 📸</li>
-            </ul>
-
-            <img src="https://cdn-icons-png.flaticon.com/512/5707/5707328.png" alt="Mascot" class="bottom-mascot">
-        </div>
-
-    </div>
+    <!-- Ảnh Love bên phải -->
+    <img src="img/love.png" style="
+        width: 45px; 
+        height: auto; 
+        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        animation: heartbeat 1.5s ease-in-out infinite;
+    ">
 </div>
 
-<script>
-    // SCRIPT TỰ ĐỘNG ĐẾM SỐ NGÀY YÊU NHAU
-    function calculateLoveDays() {
-        // 1. Nhập ngày bắt đầu của bạn theo định dạng "YYYY-MM-DD"
-        // (Ví dụ: 15/08/2023 thì nhập là "2023-08-15")
-        const dateStartStr = "2023-08-15"; 
-        
-        // 2. Chuyển đổi định dạng để hiển thị ra UI (15/08/2023)
-        const parts = dateStartStr.split('-');
-        document.getElementById('startDate').innerText = `${parts[2]}/${parts[1]}/${parts[0]}`;
+        <div class="main-content">
+            <!-- PROFILE BOX -->
+            <div class="couple-box">
+                <div class="connect-heart"><i class="fa-solid fa-heart"></i></div>
+                <div class="profile">
+                    <div class="avatar-wrap"><img src="img/cun.png" alt="Cún"></div>
+                    <div class="name">Cún</div>
+                    <div class="role">Lùn Lì Lợm</div>
+                </div>
+                <div class="profile">
+                    <div class="avatar-wrap"><img src="img/banh.png" alt="Bánh"></div>
+                    <div class="name">Bành</div>
+                    <div class="role">Chủ Nhân</div>
+                </div>
+            </div>
 
-        // 3. Tính toán số ngày
-        const startDate = new Date(dateStartStr);
-        const currentDate = new Date();
-        
-        // Tính khoảng cách thời gian bằng mili-giây
-        const timeDifference = currentDate.getTime() - startDate.getTime();
-        
-        // Chuyển mili-giây thành số ngày
-        const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
-        
-        // Cập nhật lên màn hình
-        document.getElementById('daysCount').innerText = daysDifference;
-    }
+            <!-- ANNIVERSARY CARD -->
+            <div class="glass-card">
+                <div class="card-title"><i class="fa-solid fa-calendar-heart"></i> Hành trình tình yêu</div>
+                <div class="days-box">
+                    <span class="days-num" id="daysCount">Days</span>
+                    <span class="days-text">Ngày bên nhau từ <b id="startDateText">...</b></span>
+                </div>
+            </div>
 
-    // Chạy hàm khi trang vừa load xong
-    window.onload = calculateLoveDays;
-</script>
+            <!-- ABOUT US CARD -->
+            <div class="glass-card">
+                <div class="card-title" style="justify-content: space-between;">
+                    <span><i class="fa-solid fa-star"></i> Một chút về chúng mình</span>
+                    <i class="fa-solid fa-circle-plus" onclick="openAddAbout()" style="cursor:pointer; font-size: 22px; color: var(--p-main);"></i>
+                </div>
+                <ul class="details" id="aboutList">
+                    <!-- Default Items -->
+                    <li><span><i class="fa-solid fa-wand-sparkles" style="color:#ffd166"></i> Thích skinship nà</span></li>
+                    <li><span><i class="fa-solid fa-mug-hot" style="color:#a58e7c"></i> Thích cafe và nhạc chill 🎧</span></li>
+                    <!-- Firebase items will load here -->
+                </ul>
+            </div>
+            
+            <img src="https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-NrxqD2DZLRKbPEZFzkPKCvkmqkfR5V.png&w=1000&q=75" alt="mascot" style="width:100px; display:block; margin:20px auto 0;">
+        </div>
+    </div>
+
+    <!-- MODAL ADD ABOUT -->
+    <div class="overlay" id="aboutOverlay">
+        <div class="modal">
+            <h3 style="color:var(--p-main);">Thêm sở thích mới ✨</h3>
+            <input type="text" id="newAboutInp" class="inp-about" placeholder="VD: Thích đi dạo phố...">
+            <div class="btn-group">
+                <button class="btn btn-cancel" onclick="closeAddAbout()">Hủy</button>
+                <button class="btn btn-save" onclick="saveAbout()">Lưu lại</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+        // 1. CẤU HÌNH FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+            authDomain: "photodiary-3d469.firebaseapp.com",
+            projectId: "photodiary-3d469",
+            storageBucket: "photodiary-3d469.firebasestorage.app",
+            messagingSenderId: "102477469911",
+            appId: "1:102477469911:web:13ed38ab426819fdb43892"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const docRef = doc(db, "us_metadata", "about_us");
+
+        // 2. ĐẾM NGÀY YÊU NHAU
+        function calculateLoveDays() {
+            const dateStartStr = "2024-04-25"; // Ngày bắt đầu
+            const parts = dateStartStr.split('-');
+            document.getElementById('startDateText').innerText = `${parts[2]}/${parts[1]}/${parts[0]}`;
+
+            const startDate = new Date(dateStartStr);
+            const currentDate = new Date();
+            const daysDiff = Math.floor((currentDate - startDate) / (1000 * 3600 * 24));
+
+            let current = 0;
+            const timer = setInterval(() => {
+                current += Math.ceil(daysDiff / 30);
+                if (current >= daysDiff) {
+                    current = daysDiff;
+                    clearInterval(timer);
+                }
+                document.getElementById('daysCount').innerText = current;
+            }, 30);
+        }
+
+        // 3. XỬ LÝ ABOUT US (Firebase)
+        async function loadAbout() {
+            const snap = await getDoc(docRef);
+            const listEl = document.getElementById('aboutList');
+            const defaultItems = `
+                <li><span><i class="fa-solid fa-wand-sparkles" style="color:#ffd166"></i> Thích skinship nà</span></li>
+                <li><span><i class="fa-solid fa-mug-hot" style="color:#a58e7c"></i> Thích cafe và nhạc chill 🎧</span></li>
+            `;
+
+            if (snap.exists() && snap.data().items) {
+                const dynamicItems = snap.data().items.map(text => `
+                    <li>
+                        <span><i class="fa-solid fa-heart" style="color:var(--p-main); font-size:10px;"></i> ${text}</span>
+                        <i class="fa-solid fa-xmark" onclick="deleteAbout('${text}')" style="color:#ddd; cursor:pointer;"></i>
+                    </li>
+                `).join('');
+                listEl.innerHTML = defaultItems + dynamicItems;
+            } else {
+                listEl.innerHTML = defaultItems;
+            }
+        }
+
+        window.openAddAbout = () => document.getElementById('aboutOverlay').style.display = 'flex';
+        window.closeAddAbout = () => document.getElementById('aboutOverlay').style.display = 'none';
+
+        window.saveAbout = async () => {
+            const val = document.getElementById('newAboutInp').value;
+            if (!val.trim()) return;
+            try {
+                const snap = await getDoc(docRef);
+                if (snap.exists()) {
+                    await updateDoc(docRef, { items: arrayUnion(val) });
+                } else {
+                    await setDoc(docRef, { items: [val] });
+                }
+                document.getElementById('newAboutInp').value = "";
+                window.closeAddAbout();
+                loadAbout();
+            } catch (e) { console.error(e); }
+        };
+
+        window.deleteAbout = async (text) => {
+            if (confirm("Xóa sở thích này nhé?")) {
+                await updateDoc(docRef, { items: arrayRemove(text) });
+                loadAbout();
+            }
+        };
+
+        // Khởi chạy
+        window.onload = () => {
+            calculateLoveDays();
+            loadAbout();
+        };
+    </script>
+        <script src="bgm.js"></script>
 
 </body>
 </html>
