@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ritual of Sacrifice - Dark Majesty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Quicksand:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --blood: #660000;
+            --gold: #b8860b;
+            --obsidian: #050505;
+            --fire: #ff3300;
+            --shadow: rgba(0, 0, 0, 0.9);
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Quicksand', sans-serif;
+            background: #000;
+            color: #888;
+            overflow-x: hidden;
+        }
+
+        /* NỀN TỐI & HIỆU ỨNG VIGNETTE */
+        .app-container {
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../img/5.png');
+            background-size: cover;
+            background-position: center;
+            box-shadow: inset 0 0 150px #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .content {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            z-index: 2;
+        }
+
+        /* HEADER MAN RỢ */
+        .header-ritual {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .header-ritual h1 {
+            font-family: 'Pirata One', cursive;
+            font-size: 45px;
+            color: var(--blood);
+            text-shadow: 2px 2px 0px #000, 0 0 20px rgba(255, 0, 0, 0.4);
+            margin: 0;
+            letter-spacing: 5px;
+            transform: scaleY(1.2);
+        }
+
+        .header-ritual p {
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: var(--gold);
+            margin-top: -5px;
+            text-transform: uppercase;
+        }
+
+        /* THẺ HIẾN TẾ RÁCH NÁT */
+        .sacrifice-altar {
+            background: rgba(10, 10, 10, 0.9);
+            border: 1px solid #222;
+            padding: 20px;
+            position: relative;
+            /* Cắt góc rách nát */
+            clip-path: polygon(2% 0%, 98% 1%, 100% 4%, 99% 96%, 95% 100%, 5% 99%, 0% 95%, 1% 5%);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 1);
+        }
+
+        .sacrifice-altar::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(139, 0, 0, 0.2);
+            pointer-events: none;
+        }
+
+        .label-ritual {
+            font-family: 'Pirata One';
+            font-size: 14px;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .label-ritual::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, var(--gold), transparent);
+        }
+
+        #target-action {
+            font-size: 20px;
+            color: #eee;
+            margin-bottom: 25px;
+            display: block;
+            padding: 10px;
+            background: rgba(139, 0, 0, 0.1);
+            border-left: 2px solid var(--blood);
+        }
+
+        /* KHU VỰC DÂNG VẬT CHỨNG */
+        .upload-zone {
+            width: 100%;
+            height: 200px;
+            background: #000;
+            border: 1px double #333;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--blood);
+            box-shadow: inset 0 0 20px var(--blood);
+        }
+
+        .upload-zone img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+            z-index: 2;
+            opacity: 0.7;
+        }
+
+        .upload-zone i {
+            font-size: 40px;
+            color: #222;
+            z-index: 1;
+            position: absolute;
+        }
+
+        /* TEXTAREA NHƯ VIẾT TRÊN DA THỊT */
+        textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #333;
+            color: #aaa;
+            font-family: 'Quicksand';
+            font-size: 14px;
+            padding: 10px 0;
+            resize: none;
+            outline: none;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        textarea:focus {
+            border-bottom-color: var(--blood);
+            color: #fff;
+        }
+
+        /* NÚT BẤM RỰC LỬA */
+        .btn-sacrifice {
+            width: 100%;
+            padding: 18px;
+            background: var(--blood);
+            color: #fff;
+            border: none;
+            font-family: 'Pirata One';
+            font-size: 24px;
+            letter-spacing: 3px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.5);
+        }
+
+        .btn-sacrifice:active {
+            transform: scale(0.98);
+            filter: brightness(1.5);
+        }
+
+        .btn-sacrifice::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: flameRotate 4s linear infinite;
+        }
+
+        @keyframes flameRotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* VỊ TRÍ (LOCATION STATUS) */
+        .location-tag {
+            font-size: 9px;
+            text-align: center;
+            color: #444;
+            margin-top: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .location-tag span {
+            color: var(--blood);
+            font-weight: bold;
+        }
+
+        /* LOADING GIỮA HẦM NGỤC */
+        #loading {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chains {
+            font-size: 40px;
+            color: var(--blood);
+            animation: shake 0.2s infinite;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(2px);
+            }
+
+            75% {
+                transform: translateX(-2px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loading">
+        <div class="chains"><i class="fa-solid fa-link"></i></div>
+        <p
+            style="font-family: 'Pirata One'; color: var(--blood); margin-top: 20px; font-size: 20px; letter-spacing: 5px;">
+            ĐANG TRUYỀN LINH HỒN...</p>
+    </div>
+
+    <div class="app-container">
+        <div class="content">
+            <div class="header-ritual">
+                <h1>HIẾN TẾ</h1>
+                <p>Sacrifice of Evidence</p>
+            </div>
+
+            <div class="sacrifice-altar">
+                <div class="label-ritual"><i class="fa-solid fa-scroll"></i> Mệnh lệnh</div>
+                <span id="target-action">Đang triệu hồi mệnh lệnh...</span>
+
+                <div class="label-ritual"><i class="fa-solid fa-eye"></i> Vật chứng (Ảnh/Video)</div>
+                <div class="upload-zone" onclick="document.getElementById('file-input').click()">
+                    <i class="fa-solid fa-skull"></i>
+                    <img id="preview">
+                </div>
+                <input type="file" id="file-input" hidden accept="image/*,video/*">
+
+                <div class="label-ritual"><i class="fa-solid fa-pen-nib"></i> Lời tự thú</div>
+                <textarea id="confession" rows="3" placeholder="Viết những lời hối lỗi vào đây..."></textarea>
+
+                <button class="btn-sacrifice" id="submit-btn">DÂNG NỘP NGAY</button>
+
+                <div class="location-tag">
+                    <i class="fa-solid fa-location-crosshairs"></i> Vị trí: <span id="loc-status">Đang khóa mục
+                        tiêu...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        let currentTaskLevel = "NORMAL"; // Mặc định
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, updateDoc, addDoc, collection } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            // ... (Giữ nguyên config của bạn)
+            apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+            authDomain: "photodiary-3d469.firebaseapp.com",
+            projectId: "photodiary-3d469",
+            storageBucket: "photodiary-3d469.firebasestorage.app",
+            messagingSenderId: "102477469911",
+            appId: "1:102477469911:web:13ed38ab426819fdb43892"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const taskId = urlParams.get('id');
+
+        // Biến lưu trữ tọa độ thực
+        let realLocation = null;
+
+        // --- HÀM LẤY TỌA ĐỘ CHÍNH XÁC CAO ---
+        function getPreciseLocation() {
+            const options = {
+                enableHighAccuracy: true, // Bật chế độ GPS chính xác cao nhất
+                timeout: 10000,           // Chờ tối đa 10s
+                maximumAge: 0             // Không lấy dữ liệu cũ trong bộ nhớ đệm
+            };
+
+            const statusTag = document.getElementById('loc-status');
+
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition( // Dùng watch để bám đuổi vị trí liên tục
+                    (pos) => {
+                        realLocation = {
+                            lat: pos.coords.latitude,
+                            lng: pos.coords.longitude,
+                            accuracy: pos.coords.accuracy // Độ sai số (mét)
+                        };
+                        statusTag.innerText = `ĐÃ KHÓA: ${realLocation.lat.toFixed(4)}, ${realLocation.lng.toFixed(4)}`;
+                        statusTag.style.color = "#00ff00";
+                        console.log("GPS Locked:", realLocation);
+                    },
+                    (err) => {
+                        console.error("Lỗi GPS:", err);
+                        statusTag.innerText = "MỤC TIÊU ĐANG LẨN TRỐN (LỖI GPS)";
+                        statusTag.style.color = "red";
+                    },
+                    options
+                );
+            } else {
+                statusTag.innerText = "TRÌNH DUYỆT KHÔNG HỖ TRỢ ĐỊNH VỊ";
+            }
+        }
+
+        // Gọi hàm định vị ngay khi vào trang
+        getPreciseLocation();
+
+        // Load tên nhiệm vụ
+        if (taskId) {
+            getDoc(doc(db, "slave_tasks", taskId)).then(s => {
+                if (s.exists()) {
+                    const data = s.data();
+                    document.getElementById('target-action').innerText = data.action;
+                    currentTaskLevel = (data.level || "low").toUpperCase(); // Lưu cấp độ vào biến
+                }
+            });
+        }
+
+        // Preview ảnh
+        document.getElementById('file-input').onchange = e => {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('preview').src = URL.createObjectURL(file);
+                document.getElementById('preview').style.display = 'block';
+            }
+        };
+
+        // --- XỬ LÝ DÂNG NỘP ---
+        // --- XỬ LÝ DÂNG NỘP ---
+       document.getElementById('submit-btn').onclick = async () => {
+    const file = document.getElementById('file-input').files[0];
+    const confession = document.getElementById('confession').value;
+    const taskName = document.getElementById('target-action').innerText;
+
+    if (!file) return alert("Không có vật chứng, Ngài sẽ nổi giận!");
+    if (!realLocation) return alert("Hệ thống chưa xác định được vị trí!");
+
+    document.getElementById('loading').style.display = 'flex';
+
+    try {
+        // --- BƯỚC 1: TẠO CẤU TRÚC ĐƯỜNG DẪN FOLDER ---
+        const now = new Date();
+        
+        // Định dạng Ngày-Tháng-Năm (VD: 05-06-2024)
+        const dateStr = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
+        
+        // Định dạng Giờ-Phút-Giây (VD: 14-30-05)
+        const timeStr = `${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
+        
+        // Tên folder con: Tên nhiệm vụ_Cấp độ_GiờPhútGiây
+        // (Xử lý xóa dấu cách trong tên nhiệm vụ để đường dẫn đẹp hơn)
+        const cleanTaskName = taskName.replace(/\s+/g, '_');
+        const subFolderName = `${cleanTaskName}_${currentTaskLevel}_${timeStr}`;
+
+        // Đường dẫn cuối cùng: slave_boss/Ngày-Tháng-Năm/TênNhiệmVụ_CấpĐộ_GiờPhútGiây
+        const finalCloudinaryPath = `slave_boss/${dateStr}/${subFolderName}`;
+
+        // --- BƯỚC 2: UPLOAD LÊN CLOUDINARY ---
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'ml_default'); 
+        formData.append('folder', finalCloudinaryPath); // Truyền đường dẫn động vào đây
+
+        const res = await fetch('https://api.cloudinary.com/v1_1/djjinlx7t/image/upload', {
+            method: 'POST', body: formData
+        });
+
+        if (!res.ok) throw new Error("Không thể tải ảnh lên thánh điện Cloudinary");
+        const imgData = await res.json();
+
+        // --- BƯỚC 3: LƯU VÀO FIREBASE ---
+        await addDoc(collection(db, "task_submissions"), {
+            task_id: taskId,
+            action_name: taskName,
+            level: currentTaskLevel,
+            confession: confession,
+            image_evidence: imgData.secure_url,
+            cloudinary_path: finalCloudinaryPath, // Lưu lại đường dẫn để Boss dễ tìm
+            location: {
+                latitude: realLocation.lat,
+                longitude: realLocation.lng,
+                accuracy: realLocation.accuracy,
+                google_map_link: `https://www.google.com/maps?q=${realLocation.lat},${realLocation.lng}`
+            },
+            submitted_at: Date.now(),
+            status: "PENDING"
+        });
+
+        await updateDoc(doc(db, "slave_tasks", taskId), { status: "SUBMITTED" });
+
+        alert("Vật chứng đã được niêm phong vào văn khố.");
+        window.location.href = "s_doilenh.html";
+
+    } catch (err) {
+        console.error(err);
+        alert("Lỗi: " + err.message);
+    } finally {
+        document.getElementById('loading').style.display = 'none';
+    }
+};
+    </script>
+</body>
+
+</html>

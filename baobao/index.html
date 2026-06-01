@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Eternal Pact - Dark Majesty</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --blood: #8b0000;
+            --gold: #d4af37;
+            --obsidian: #0a0a0a;
+            --glass: rgba(10, 10, 10, 0.8);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            font-family: 'Quicksand', sans-serif; background: #000; 
+            display: flex; justify-content: center; align-items: center; 
+            overflow: hidden; 
+        }
+
+        /* KHUNG APP CHÍNH */
+        .app-shell {
+            width: 100%; height: 100%; max-width: 450px; margin: 0 auto;
+            position: relative; background: url('img/5.png') no-repeat center center;
+            background-size: cover; display: flex; flex-direction: column;
+            box-shadow: 0 0 100px rgba(0,0,0,1);
+        }
+
+        /* HIỆU ỨNG SƯƠNG MÙ */
+        .mist {
+            position: absolute; top: 0; left: 0; width: 200%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.03), transparent, rgba(139,0,0,0.03), transparent);
+            z-index: 5; pointer-events: none; animation: mistMove 20s linear infinite;
+        }
+        @keyframes mistMove { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        /* GIAO DIỆN ĐĂNG NHẬP (BLUR & POP-IN) */
+        #login-overlay {
+            position: absolute; inset: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: center;
+            padding: 25px; transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .auth-card {
+            width: 100%; text-align: center; padding: 40px 25px;
+            background: var(--glass); backdrop-filter: blur(15px);
+            border-radius: 40px; border: 1px solid rgba(139, 0, 0, 0.3);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        h1 { 
+            font-family: 'Pirata One', cursive; font-size: 38px; 
+            color: var(--gold); margin: 0; letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+        }
+        .subtitle { 
+            font-size: 10px; text-transform: uppercase; letter-spacing: 4px; 
+            color: var(--blood); margin-bottom: 35px; display: block; font-weight: 800;
+        }
+
+        .input-group { text-align: left; margin-bottom: 20px; }
+        label { font-size: 11px; font-weight: 700; color: var(--gold); margin-left: 15px; margin-bottom: 8px; display: block; text-transform: uppercase; }
+        
+        input {
+            width: 100%; background: rgba(0,0,0,0.4); border: 1px solid #333;
+            border-radius: 20px; padding: 16px; color: #fff; font-family: 'Quicksand';
+            outline: none; transition: 0.3s; font-size: 14px;
+        }
+        input:focus { border-color: var(--blood); background: rgba(0,0,0,0.6); box-shadow: 0 0 15px rgba(139, 0, 0, 0.2); }
+
+        /* ROLE INFO (Dòng chữ hiện vai trò khi nhập tên) */
+        #role-info {
+            font-size: 13px; margin-top: -10px; margin-bottom: 20px;
+            font-weight: 700; color: var(--gold); display: none;
+            font-family: 'Pirata One'; letter-spacing: 1px;
+            animation: fadeIn 0.5s;
+        }
+
+        .btn-login {
+            width: 100%; padding: 18px; background: var(--blood);
+            color: #fff; border: none; border-radius: 20px; font-weight: 800;
+            font-family: 'Pirata One'; font-size: 22px; letter-spacing: 2px;
+            cursor: pointer; box-shadow: 0 10px 25px rgba(139, 0, 0, 0.4);
+            margin-top: 10px; transition: 0.3s;
+        }
+        .btn-login:active { transform: scale(0.95); background: #600; }
+        .btn-login:disabled { opacity: 0.6; cursor: not-allowed; } /* Thêm style khi nút bị disable */
+
+        /* Loading Spinner Style */
+        #loading-spinner {
+            font-size: 14px;
+            margin-top: 15px;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        #loading-spinner .fa-spinner {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* IFRAME CHÍNH */
+        #main-frame { border: none; width: 100%; height: 100%; display: none; z-index: 10; opacity: 0; transition: 1s; }
+
+        @keyframes popIn { from { opacity: 0; transform: scale(0.8) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div class="app-shell">
+        <div class="mist"></div>
+        
+        <!-- Nhạc nền bí ẩn -->
+        <audio id="global-music" src="img/nhac-cute-bao.mp3" loop></audio>
+
+        <!-- Form Đăng nhập phong cách Palace -->
+        <div id="login-overlay">
+            <div class="auth-card">
+                <h1>THE ETERNAL PACT</h1>
+                <span class="subtitle">Khế ước thành thật</span>
+
+                <div class="input-group">
+                    <label><i class="fa-solid fa-user-secret"></i> Danh xưng (Identity)</label>
+                    <input type="text" id="username" placeholder="Ai đang tìm lối vào?..." oninput="checkUser()">
+                </div>
+
+                <div id="role-info"></div>
+
+                <div class="input-group">
+                    <label><i class="fa-solid fa-key"></i> Mật mã riêng tư</label>
+                    <input type="password" id="password" placeholder="Nhập khóa để mở khế ước...">
+                </div>
+
+                <button class="btn-login" id="login-button" onclick="handleAuth()">Xác Nhận Khế Ước ✨</button>
+                <div id="loading-spinner" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i> Đang xác thực...
+                </div>
+                <p id="msg" style="font-size: 9px; margin-top: 20px; opacity: 0.4; letter-spacing: 2px; color: #fff;">DARK MAJESTY SYSTEM v2.0</p>
+            </div>
+        </div>
+
+        <iframe id="main-frame"></iframe>
+    </div>
+
+    <!-- Firebase Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+            authDomain: "photodiary-3d469.firebaseapp.com",
+            projectId: "photodiary-3d469",
+            storageBucket: "photodiary-3d469.firebasestorage.app",
+            messagingSenderId: "102477469911",
+            appId: "1:102477469911:web:13ed38ab426819fdb43892"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const audio = document.getElementById('global-music');
+        const loginButton = document.getElementById('login-button');
+        const loadingSpinner = document.getElementById('loading-spinner');
+
+        // Debouncing cho hàm checkUser
+        let typingTimer;
+        const doneTypingInterval = 500; // milliseconds
+
+        window.checkUser = () => {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(performRoleCheck, doneTypingInterval);
+        };
+
+        const performRoleCheck = () => {
+            const user = document.getElementById('username').value.trim().toLowerCase();
+            const roleInfo = document.getElementById('role-info');
+            
+            if (user === "duyen" || user === "duyên") {
+                roleInfo.innerHTML = `<i class="fa-solid fa-link"></i> Thân phận: Người phục tùng (Slave)`;
+                roleInfo.style.display = "block";
+            } else if (user.length > 0) {
+                roleInfo.innerHTML = `<i class="fa-solid fa-crown"></i> Thân phận: Chủ nhân (Master)`;
+                roleInfo.style.display = "block";
+            } else {
+                roleInfo.style.display = "none";
+            }
+        };
+
+        // Xử lý Đăng nhập / Tạo khế ước
+        window.handleAuth = async () => {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+
+            if (!user || !pass) {
+                alert("Vui lòng nhập đủ thông tin!");
+                return;
+            }
+
+            // Hiển thị spinner và vô hiệu hóa nút
+            loginButton.disabled = true;
+            loadingSpinner.style.display = 'flex'; // Sử dụng flex để căn giữa icon và text
+
+            const role = (user.toLowerCase() === "duyen" || user.toLowerCase() === "duyên") ? "slave" : "boss";
+
+            try {
+                const userRef = doc(db, "bossslave", user.toLowerCase());
+                const snap = await getDoc(userRef);
+
+                if (snap.exists()) {
+                    // Nếu user đã tồn tại, kiểm tra mật khẩu
+                    if (snap.data().password === pass) {
+                        enterPalace(user, snap.data().role); // Truyền cả vai trò
+                    } else {
+                        alert("Mật mã không đúng! Khế ước bị từ chối.");
+                    }
+                } else {
+                    // Nếu chưa có, tự động đăng ký
+                    await setDoc(userRef, {
+                        username: user,
+                        password: pass,
+                        role: role,
+                        created_at: Date.now()
+                    });
+                    alert("Khế ước mới đã được ký kết vĩnh viễn! ✨");
+                    enterPalace(user, role); // Truyền cả vai trò
+                }
+            } catch (e) {
+                console.error("Lỗi kết nối hầm ngục:", e);
+                alert("Lỗi kết nối hầm ngục! Vui lòng thử lại.");
+            } finally {
+                // Ẩn spinner và kích hoạt lại nút
+                loginButton.disabled = false;
+                loadingSpinner.style.display = 'none';
+            }
+        };
+
+        // Nghi thức bước vào Đại sảnh (Mở Main.html hoặc main_role.html)
+        function enterPalace(name, role) { // Nhận thêm tham số role
+            localStorage.setItem('appRole', role);
+            localStorage.setItem('userName', name);
+
+            // Xác định trang chính dựa trên vai trò
+            let mainPage = './boss/main_boss.html'; // Mặc định là boss
+            if (role === 'slave') {
+                mainPage = './slave/main_slave.html';
+            }
+
+            // Bật nhạc
+            audio.play().catch(e => console.log("Không thể tự động phát nhạc, cần tương tác người dùng:", e));
+
+            // Hiệu ứng chuyển trang
+            const loginOverlay = document.getElementById('login-overlay');
+            const mainFrame = document.getElementById('main-frame');
+
+            loginOverlay.style.opacity = '0';
+            loginOverlay.style.transform = 'scale(1.1)'; // Hiệu ứng scale out nhẹ nhàng
+
+            setTimeout(() => {
+                loginOverlay.style.display = 'none';
+                mainFrame.src = mainPage; // Tải trang main phù hợp
+                mainFrame.style.display = 'block';
+                // Đợi iframe tải xong rồi mới hiện ra mượt mà
+                mainFrame.onload = () => {
+                    setTimeout(() => {
+                        mainFrame.style.opacity = '1';
+                    }, 100); // Thêm một chút delay cho hiệu ứng mượt mà hơn
+                };
+            }, 800);
+        }
+    </script>
+</body>
+</html>

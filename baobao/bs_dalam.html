@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Archive of Devotion - Dark Majesty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --obsidian: #050505;
+            --blood: #8b0000;
+            --gold: #d4af37;
+        }
+
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            font-family: 'Quicksand', sans-serif; background: #000; color: #eee;
+        }
+
+        .app-container {
+            width: 100%; min-height: 100vh;
+            background: url('img/9.png') no-repeat center center fixed;
+            background-size: cover; position: relative;
+        }
+
+        .overlay { 
+            position: fixed; inset: 0; 
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.95)); 
+            z-index: 1; 
+        }
+
+        .content { position: relative; z-index: 2; padding: 20px; padding-bottom: 50px; }
+
+        /* Tiêu đề Văn Khố */
+        .gallery-header { text-align: center; margin-bottom: 50px; padding-top: 30px; }
+        .gallery-header h1 {
+            font-family: 'Pirata One', cursive; font-size: 38px;
+            background: linear-gradient(to bottom, #d4af37, #aa771c);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin: 0; letter-spacing: 3px;
+        }
+        .gallery-header span { font-size: 10px; color: var(--blood); letter-spacing: 5px; text-transform: uppercase; font-weight: 800; }
+
+        /* Sợi xích nối các cuộn giấy */
+        .chain-connector {
+            width: 4px; height: 40px; background: #333; margin: 0 auto;
+            border-radius: 2px; position: relative;
+            background-image: linear-gradient(90deg, #111, #444, #111);
+        }
+
+        /* Thẻ hồ sơ (Archive Card) */
+        .archive-card {
+            background: url('img/4.png') no-repeat center center;
+            background-size: cover;
+            margin-bottom: 0;
+            padding: 25px;
+            position: relative;
+            clip-path: polygon(0% 1%, 100% 0%, 99% 98%, 1% 100%);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            border: 1px solid rgba(0,0,0,0.3);
+            color: #1a1a1a; /* Chữ tối trên nền giấy sáng */
+        }
+
+        .archive-title {
+            font-family: 'Pirata One'; font-size: 22px; margin-bottom: 10px;
+            border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 5px;
+            color: #000;
+        }
+
+        /* Media: Ảnh hoặc Video */
+        .archive-media {
+            width: 100%; border: 2px solid #000; margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            background: #000;
+        }
+
+        .archive-confession {
+            font-size: 13px; font-style: italic; line-height: 1.5;
+            padding: 10px; background: rgba(0,0,0,0.05);
+            border-left: 2px solid var(--blood); margin-bottom: 15px;
+        }
+
+        /* Con dấu sáp vàng */
+        .wax-seal {
+            position: absolute; bottom: 15px; right: 15px;
+            width: 60px; height: 60px;
+            background: radial-gradient(circle, #fcf6ba, #bf953f);
+            border-radius: 50%; border: 2px solid #aa771c;
+            display: flex; align-items: center; justify-content: center;
+            transform: rotate(-15deg);
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.4);
+            z-index: 10;
+        }
+        .wax-seal i { font-size: 25px; color: #5c4412; }
+        .wax-seal::after {
+            content: "APPROVED"; font-size: 7px; font-weight: 800;
+            position: absolute; bottom: 10px; color: #5c4412;
+        }
+
+        .date-tag { font-size: 10px; font-weight: bold; text-transform: uppercase; color: #666; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="overlay"></div>
+    <div class="content">
+        
+        <div class="gallery-header">
+            <span>The Sacred Archive</span>
+            <h1>VĂN KHỐ PHỤC TÙNG</h1>
+        </div>
+
+        <div id="archive-list">
+            <!-- Dữ liệu được nạp vào đây -->
+        </div>
+
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getFirestore, collection, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+        authDomain: "photodiary-3d469.firebaseapp.com",
+        projectId: "photodiary-3d469",
+        storageBucket: "photodiary-3d469.firebasestorage.app",
+        messagingSenderId: "102477469911",
+        appId: "1:102477469911:web:13ed38ab426819fdb43892"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Truy vấn: Lấy tất cả các bản nộp đã được Boss duyệt (APPROVED)
+    const q = query(
+        collection(db, "task_submissions"), 
+        where("status", "==", "APPROVED"), 
+        orderBy("submitted_at", "desc")
+    );
+
+    onSnapshot(q, (snap) => {
+        const list = document.getElementById('archive-list');
+        let html = "";
+
+        if (snap.empty) {
+            list.innerHTML = `<div style="text-align:center; padding:50px; font-family:'Pirata One'; color:var(--gold);">CHƯA CÓ KÝ ỨC NÀO ĐƯỢC LƯU GIỮ</div>`;
+            return;
+        }
+
+        snap.forEach((docSnap, index) => {
+            const data = docSnap.data();
+            const date = new Date(data.submitted_at).toLocaleDateString('vi-VN');
+            
+            // Kiểm tra xem là ảnh hay video
+            const isVideo = data.image_evidence.includes(".mp4") || data.image_evidence.includes("video");
+            const mediaHtml = isVideo 
+                ? `<video src="${data.image_evidence}" class="archive-media" controls></video>`
+                : `<img src="${data.image_evidence}" class="archive-media" alt="Evidence">`;
+
+            html += `
+                ${index !== 0 ? '<div class="chain-connector"></div>' : ''}
+                <div class="archive-card">
+                    <div class="date-tag">${date}</div>
+                    <h2 class="archive-title">${data.action_name}</h2>
+                    
+                    ${mediaHtml}
+
+                    <div class="archive-confession">
+                        "${data.confession || 'Sự im lặng tuyệt đối.'}"
+                    </div>
+
+                    <div class="wax-seal">
+                        <i class="fa-solid fa-check-double"></i>
+                    </div>
+                </div>
+            `;
+        });
+        list.innerHTML = html;
+    });
+</script>
+</body>
+</html>

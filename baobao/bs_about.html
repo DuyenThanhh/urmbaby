@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Covenant - Dark Majesty ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --blood: #8b0000;
+            --gold: #d4af37;
+            --obsidian: #050505;
+            --parchment: rgba(20, 20, 20, 0.85);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            font-family: 'Quicksand', sans-serif; 
+            background: #000;
+            color: #eee; overflow: hidden;
+        }
+
+        .app-container { 
+            width: 100%; height: 100%; max-width: 450px; margin: 0 auto; 
+            display: flex; flex-direction: column; position: relative;
+            background: url('img/5.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* Overlay tối */
+        .overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.9));
+            z-index: 1;
+        }
+
+        .content-wrap { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; }
+
+        /* Header Area */
+        .header { 
+            padding: 50px 20px 30px; text-align: center; 
+        }
+        .header h1 { 
+            font-family: 'Pirata One', cursive; font-size: 32px; 
+            color: var(--gold); margin: 0 0 20px; letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        /* Avatars Master & Slave */
+        .avatar-pair { 
+            display: flex; justify-content: center; align-items: center; 
+            position: relative; margin-bottom: 30px;
+        }
+        .avatar {
+            width: 110px; height: 110px; border-radius: 50%;
+            border: 2px solid var(--gold); box-shadow: 0 0 20px rgba(139, 0, 0, 0.6);
+            background: #111; overflow: hidden; position: relative;
+        }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.5) contrast(1.2); }
+        
+        /* Master ở trên/trước, Slave ở dưới/sau */
+        .master-av { transform: translateX(20px); z-index: 5; border-color: var(--gold); }
+        .slave-av { transform: translateX(-20px); z-index: 4; border-color: var(--blood); opacity: 0.8; }
+
+        .role-label {
+            position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+            background: var(--obsidian); border: 1px solid var(--gold);
+            padding: 2px 10px; font-family: 'Pirata One'; font-size: 12px; color: var(--gold);
+            white-space: nowrap; z-index: 10;
+        }
+
+        /* Day Counter Plaque */
+        .day-counter {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: var(--parchment); padding: 10px 25px; 
+            clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
+            font-size: 14px; font-weight: 700; color: #fff;
+            border: 1px solid var(--blood); margin-top: 10px;
+        }
+        .day-counter b { color: var(--gold); font-size: 18px; font-family: 'Pirata One'; }
+
+        /* Menu List (Hồ sơ) */
+        .menu-container { flex: 1; padding: 25px; overflow-y: auto; padding-bottom: 100px; }
+        
+        .menu-item {
+            background: rgba(10, 10, 10, 0.7);
+            border: 1px solid #333;
+            margin-bottom: 20px; padding: 18px;
+            display: flex; align-items: center; gap: 15px;
+            text-decoration: none; color: #ccc;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .menu-item::before {
+            content: ""; position: absolute; left: 0; top: 0; height: 100%; width: 3px;
+            background: var(--blood);
+        }
+        .menu-item:active { background: rgba(139, 0, 0, 0.2); border-color: var(--blood); }
+
+        .menu-icon {
+            font-size: 20px; color: var(--gold); width: 30px; text-align: center;
+        }
+        .menu-text { 
+            flex: 1; font-weight: 600; font-size: 15px; letter-spacing: 1px;
+            font-family: 'Pirata One', cursive; font-size: 18px;
+        }
+        .menu-arrow { opacity: 0.3; font-size: 12px; color: var(--gold); }
+
+        /* Footer/Nav đã được quản lý bởi main.html, 
+           nhưng nếu bạn để file này chạy độc lập thì giữ lại css nav */
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="overlay"></div>
+    
+    <div class="content-wrap">
+        <div class="header">
+            <h1>HÀNH LANG KHẾ ƯỚC</h1>
+            
+            <div class="avatar-pair">
+                <!-- Master -->
+                <div class="avatar master-av">
+                    <img src="img/banh.png" alt="Master">
+                    <div class="role-label">MASTER</div>
+                </div>
+                <!-- Slave -->
+                <div class="avatar slave-av">
+                    <img src="img/cun.png" alt="Slave">
+                    <div class="role-label">SLAVE</div>
+                </div>
+            </div>
+
+            <div class="day-counter">
+                <i class="fa-solid fa-link" style="color: var(--blood);"></i>
+                <span>ĐÃ RÀNG BUỘC <b id="days-count">...</b> NGÀY</span>
+                <i class="fa-solid fa-skull" style="color: var(--blood); font-size: 12px;"></i>
+            </div>
+        </div>
+
+        <div class="menu-container">
+            <a href="javascript:void(0)" onclick="alert('Đang truy xuất văn khố...')" class="menu-item">
+                <div class="menu-icon"><i class="fa-solid fa-scroll"></i></div>
+                <div class="menu-text">HỒ SƠ KHẾ ƯỚC</div>
+                <i class="fa-solid fa-chevron-right menu-arrow"></i>
+            </a>
+            
+            <a href="bs_setting.html" class="menu-item">
+                <div class="menu-icon"><i class="fa-solid fa-wand-sparkles"></i></div>
+                <div class="menu-text">ĐIỀU CHỈNH NGHI THỨC</div>
+                <i class="fa-solid fa-chevron-right menu-arrow"></i>
+            </a>
+
+            <a href="javascript:void(0)" onclick="handleLogout()" class="menu-item">
+                <div class="menu-icon"><i class="fa-solid fa-door-open"></i></div>
+                <div class="menu-text" style="color: var(--blood);">RỜI KHỎI CUNG ĐIỆN</div>
+                <i class="fa-solid fa-chevron-right menu-arrow"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Hàm tính ngày yêu nhau (giữ nguyên logic của bạn)
+    function calculateDays() {
+        const startDate = new Date('2025-04-25'); 
+        const today = new Date();
+        const diffTime = Math.abs(today - startDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+        document.getElementById('days-count').innerText = diffDays;
+    }
+
+    calculateDays();
+
+    // Hàm đăng xuất gửi tín hiệu lên index.html
+    function handleLogout() {
+        if(confirm("Bạn muốn phá vỡ khế ước và thoát ra ngoài?")) {
+            localStorage.removeItem('appRole');
+            window.top.location.reload(); // Load lại index.html
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -26,7 +26,7 @@ window.addEventListener('load', () => {
         player.currentTime = 0;
         localStorage.setItem('musicCurrentTime', 0);
         console.log("Dừng nhạc tại trang chủ");
-    } 
+    }
     // Nếu vào trang nội dung
     else {
         // Nếu trong cài đặt đang chọn TẮT nhạc thì không làm gì cả

@@ -528,6 +528,7 @@
                     </button>
                </div>
           </div>
+    <script src="bgm.js"></script>
 
           <script type="module">
                import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
@@ -588,28 +589,28 @@
                     render(filtered);
                }
 
-             function render(data) {
-    document.getElementById('list').innerHTML = data.map(m => {
-        const current = m.currentCount || 0;
-        const target = m.targetCount || 1;
-        const done = current >= target;
+               function render(data) {
+                    document.getElementById('list').innerHTML = data.map(m => {
+                         const current = m.currentCount || 0;
+                         const target = m.targetCount || 1;
+                         const done = current >= target;
 
-        const percent = Math.min(Math.round((current / target) * 100), 100);
-        const offset = 126 - (126 * percent) / 100;
+                         const percent = Math.min(Math.round((current / target) * 100), 100);
+                         const offset = 126 - (126 * percent) / 100;
 
-        // LOGIC CHO ICON: 
-        // Nếu chưa xong (!done): Hiện dấu + và cho phép bấm mở Modal Proof
-        // Nếu đã xong (done): Ẩn dấu + và khi bấm vào thì xem chi tiết luôn
-        const iconSection = !done 
-            ? `<div class="card-icon" onclick="openProofModal('${m.id}')">
+                         // LOGIC CHO ICON: 
+                         // Nếu chưa xong (!done): Hiện dấu + và cho phép bấm mở Modal Proof
+                         // Nếu đã xong (done): Ẩn dấu + và khi bấm vào thì xem chi tiết luôn
+                         const iconSection = !done
+                              ? `<div class="card-icon" onclick="openProofModal('${m.id}')">
                     <i class="fa-solid ${m.icon || 'fa-heart'}"></i>
                     <div class="plus-badge"><i class="fa-solid fa-plus"></i></div>
                </div>`
-            : `<div class="card-icon" onclick="goToDetail('${m.id}')">
+                              : `<div class="card-icon" onclick="goToDetail('${m.id}')">
                     <i class="fa-solid ${m.icon || 'fa-heart'}"></i>
                </div>`;
 
-        return `
+                         return `
             <div class="card">
                 ${iconSection}
 
@@ -629,8 +630,8 @@
                 </div>
             </div>
         `;
-    }).join('');
-}
+                    }).join('');
+               }
                window.fetchGPS = async () => {
                     const inp = document.getElementById('proof-addr');
                     inp.placeholder = "Đang tìm vị trí...";
@@ -760,7 +761,6 @@
 
                load();
           </script>
-              <script src="bgm.js"></script>
 
 </body>
 

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cài Đặt Khế Ước - Dark Majesty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --blood: #8b0000;
+            --gold: #d4af37;
+            --obsidian: #050505;
+        }
+
+        body {
+            margin: 0; padding: 20px;
+            background: transparent; /* Để hiện nền của main.html */
+            font-family: 'Quicksand', sans-serif;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+        }
+
+        .setting-card {
+            width: 100%;
+            max-width: 350px;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--blood);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        h2 {
+            font-family: 'Pirata One', cursive;
+            color: var(--gold);
+            font-size: 28px;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .label-text {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ccc;
+        }
+
+        /* CUSTOM TOGGLE SWITCH */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute; cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #333;
+            transition: .4s; border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute; content: "";
+            height: 18px; width: 18px;
+            left: 3px; bottom: 3px;
+            background-color: white;
+            transition: .4s; border-radius: 50%;
+        }
+
+        input:checked + .slider { background-color: var(--blood); }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        /* BUTTON XÁC NHẬN */
+        .btn-confirm {
+            width: 100%;
+            padding: 15px;
+            background: var(--gold);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Pirata One';
+            font-size: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-confirm:hover { transform: scale(1.05); background: #fff; }
+        .btn-confirm:active { transform: scale(0.95); }
+
+        .status-tag {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--blood);
+            margin-top: 15px;
+            display: block;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="setting-card">
+        <h2>Cài Đặt Hệ Thống</h2>
+
+        <!-- TẮT/MỞ NHẠC -->
+        <div class="setting-item">
+            <div class="label-text">
+                <i class="fa-solid fa-music"></i> Nhạc Nền (BGM)
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="music-toggle" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <!-- CHẾ ĐỘ CUTE -->
+        <div class="setting-item">
+            <div class="label-text">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Chế Độ Cute
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="cute-toggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <button class="btn-confirm" onclick="applySettings()">Xác Nhận Thay Đổi</button>
+        
+        <span class="status-tag">Dark Majesty v2.0 - Core Protocol</span>
+    </div>
+
+   <script>
+    // Hàm tìm kiếm thẻ audio ở tầng cao nhất (index.html)
+    const getGlobalAudio = () => {
+        return window.top.document.getElementById('global-music');
+    };
+
+    window.onload = () => {
+        const audio = getGlobalAudio();
+        const musicToggle = document.getElementById('music-toggle');
+        
+        if (audio) {
+            // Đồng bộ trạng thái nút với nhạc đang phát
+            musicToggle.checked = !audio.paused;
+            console.log("Đã kết nối với nhạc nền của Ngài.");
+        } else {
+            console.error("Không tìm thấy khế ước nhạc nền ở tầng index.html!");
+        }
+
+        // Xử lý bật/tắt
+        musicToggle.addEventListener('change', () => {
+            const audio = getGlobalAudio();
+            if (audio) {
+                if (musicToggle.checked) {
+                    audio.play().catch(e => console.log("Lỗi phát nhạc:", e));
+                } else {
+                    audio.pause();
+                }
+            }
+        });
+    };
+
+    function applySettings() {
+        const isCuteMode = document.getElementById('cute-toggle').checked;
+
+        if (isCuteMode) {
+            // Hiệu ứng chuyển cảnh
+            document.body.style.transition = "0.5s";
+            document.body.style.filter = "brightness(2) hue-rotate(200deg)";
+            
+            setTimeout(() => {
+                // Chuyển toàn bộ trang web (không chỉ trong iframe) sang hhh.html
+                window.top.location.href = '../cute/index.html';
+            }, 500);
+        } else {
+            alert("Khế ước đã được cập nhật!");
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Throne of Judgment - Dark Majesty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --obsidian: #050505;
+            --blood: #8b0000;
+            --gold: #d4af37;
+            --pure-blood: #ff0000;
+        }
+
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            font-family: 'Quicksand', sans-serif; background: #000; color: #eee;
+        }
+
+        .app-container {
+            width: 100%; min-height: 100vh;
+            background: url('../img/5.png') no-repeat center center fixed;
+            background-size: cover; position: relative;
+        }
+
+        .overlay { 
+            position: fixed; inset: 0; 
+            background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.9) 100%); 
+            z-index: 1; 
+        }
+
+        .content { position: relative; z-index: 2; padding: 20px; padding-bottom: 80px; }
+
+        /* Tiêu đề uy quyền */
+        .header-judgment { text-align: center; margin-bottom: 40px; padding-top: 20px; }
+        .header-judgment h1 {
+            font-family: 'Pirata One', cursive; font-size: 40px;
+            background: linear-gradient(45deg, #bf953f, #fcf6ba, #aa771c);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin: 0; letter-spacing: 5px; filter: drop-shadow(0 0 10px rgba(212,175,55,0.5));
+        }
+        .header-judgment p { font-size: 10px; letter-spacing: 4px; color: var(--blood); text-transform: uppercase; margin-top: 5px; font-weight: 800; }
+
+        /* Thẻ phán xét (Submission Card) */
+        .judgment-card {
+            background: url('../img/4.png') no-repeat center center;
+            background-size: cover;
+            margin-bottom: 50px;
+            padding: 25px;
+            position: relative;
+            clip-path: polygon(0% 2%, 100% 0%, 98% 98%, 2% 100%);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            animation: slideIn 0.6s ease;
+        }
+
+        .task-name {
+            font-family: 'Pirata One'; font-size: 24px; color: #1a1a1a;
+            border-bottom: 1px solid rgba(0,0,0,0.2); margin-bottom: 15px; padding-bottom: 5px;
+        }
+
+        /* Ảnh bằng chứng */
+        .evidence-img {
+            width: 100%; border: 1px solid #000;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            margin-bottom: 15px; border-radius: 2px;
+            filter: sepia(0.3) contrast(1.1);
+        }
+
+        .confession-box {
+            font-style: italic; font-size: 14px; color: #333;
+            background: rgba(255,255,255,0.1); padding: 10px;
+            border-left: 3px solid var(--blood); margin-bottom: 20px;
+        }
+
+        /* Nút phán xét */
+        .judgment-actions { display: flex; gap: 15px; }
+        
+        .btn-judge {
+            flex: 1; padding: 15px; font-family: 'Pirata One'; font-size: 20px;
+            cursor: pointer; border: none; transition: 0.3s; letter-spacing: 1px;
+        }
+
+        /* Nút Ban Phước (Pass) */
+        .btn-bless {
+            background: #000; color: var(--gold);
+            border: 1px solid var(--gold);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+        .btn-bless:active { background: var(--gold); color: #000; }
+
+        /* Nút Trừng Phạt (Fail) */
+        .btn-punish {
+            background: #000; color: var(--pure-blood);
+            border: 1px solid var(--pure-blood);
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+        }
+        .btn-punish:active { background: var(--pure-blood); color: #fff; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .empty-state {
+            text-align: center; padding: 100px 20px;
+            font-family: 'Pirata One'; font-size: 22px; color: #444;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="overlay"></div>
+    <div class="content">
+        
+        <div class="header-judgment">
+            <h1>NGÀI VÀNG PHÁN XÉT</h1>
+            <p>Supreme Authority</p>
+        </div>
+
+        <div id="judgment-list">
+            <!-- Danh sách vật chứng dâng nộp sẽ hiện ở đây -->
+            <div class="empty-state">Đang lắng nghe lời khẩn cầu...</div>
+        </div>
+
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, where, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+        authDomain: "photodiary-3d469.firebaseapp.com",
+        projectId: "photodiary-3d469",
+        storageBucket: "photodiary-3d469.firebasestorage.app",
+        messagingSenderId: "102477469911",
+        appId: "1:102477469911:web:13ed38ab426819fdb43892"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Truy vấn các bản nộp có status là PENDING
+    const q = query(collection(db, "task_submissions"), where("status", "==", "PENDING"));
+
+    onSnapshot(q, (snap) => {
+        const list = document.getElementById('judgment-list');
+        if (snap.empty) {
+            list.innerHTML = `<div class="empty-state">Chưa có kẻ tôi tớ nào dâng nộp vật chứng...</div>`;
+            return;
+        }
+
+        let html = "";
+        snap.forEach(docSnap => {
+            const data = docSnap.data();
+            html += `
+                <div class="judgment-card">
+                    <h2 class="task-name">${data.action_name}</h2>
+                    
+                    <img src="${data.image_evidence}" class="evidence-img" alt="Evidence">
+                    
+                    <div class="confession-box">
+                        " ${data.confession || 'Kẻ tôi tớ không nói nên lời...'} "
+                    </div>
+
+                    <div class="judgment-actions">
+                        <button class="btn-judge btn-bless" onclick="judge('${docSnap.id}', '${data.task_id}', 'APPROVED')">
+                            <i class="fa-solid fa-crown"></i> BAN PHƯỚC
+                        </button>
+                        <button class="btn-judge btn-punish" onclick="judge('${docSnap.id}', '${data.task_id}', 'REJECTED')">
+                            <i class="fa-solid fa-skull"></i> TRỪNG PHẠT
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+        list.innerHTML = html;
+    });
+
+    // Hàm xử lý Phán xét
+    window.judge = async (submissionId, taskId, decision) => {
+        const confirmMsg = decision === 'APPROVED' ? "Bạn chấp nhận sự phục tùng này?" : "Bạn muốn trừng phạt kẻ này?";
+        if(!confirm(confirmMsg)) return;
+
+        try {
+            // 1. Cập nhật trạng thái bản nộp
+            await updateDoc(doc(db, "task_submissions", submissionId), {
+                status: decision,
+                judged_at: new Date().getTime()
+            });
+
+            // 2. Cập nhật trạng thái lệnh gốc trong slave_tasks
+            const finalStatus = decision === 'APPROVED' ? "COMPLETED" : "FAILED";
+            await updateDoc(doc(db, "slave_tasks", taskId), {
+                status: finalStatus,
+                status_req: decision === 'APPROVED' ? "Đã được chấp nhận" : "Bị từ chối - Chờ phạt"
+            });
+
+            alert(decision === 'APPROVED' ? "Đã ban phước lành!" : "Kẻ tôi tớ sẽ phải trả giá!");
+
+        } catch (err) {
+            console.error(err);
+            alert("Lỗi phán xét!");
+        }
+    };
+</script>
+</body>
+</html>

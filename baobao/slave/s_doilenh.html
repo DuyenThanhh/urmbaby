@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hành Lang Phục Tùng - Dark Majesty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Quicksand:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --blood: #8b0000;
+            --gold: #d4af37;
+            --dark: #050505;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Quicksand', sans-serif;
+            background: #000;
+            color: #eee;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            min-height: 100vh;
+            background: url('../img/9.png') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.9) 100%);
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+        }
+
+        /* BOX LỜI THỀ - GIỮ NGUYÊN NỘI DUNG CỦA BẠN */
+        .oath-container {
+            background: rgba(0, 0, 0, 0.85);
+            border: 2px solid var(--blood);
+            padding: 20px;
+            margin: 10px 0 30px 0;
+            border-radius: 5px;
+            box-shadow: inset 0 0 15px var(--blood);
+            position: relative;
+        }
+
+        .oath-container::before {
+            content: "⛓⛓⛓";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--blood);
+            letter-spacing: 5px;
+        }
+
+
+        /* DANH SÁCH LỆNH - NỀN IMG/4.PNG */
+        .decree-card {
+            background: url('../img/4.png') no-repeat center center;
+            background-size: cover;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+            position: relative;
+            /* Hiệu ứng tờ giấy rách rưới */
+            clip-path: polygon(2% 0%, 98% 1%, 100% 4%, 99% 95%, 95% 100%, 5% 99%, 0% 95%, 1% 5%);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.8s ease;
+        }
+
+        /* ĐỒNG HỒ XOAY MAN RỢ */
+        .ghastly-clock {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 55px;
+            height: 55px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--blood);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px var(--blood);
+        }
+
+        .ghastly-clock i {
+            font-size: 28px;
+            color: var(--blood);
+            /* Xoay giật cục như phim kinh dị */
+            animation: clock-spin 2s steps(8) infinite;
+        }
+
+        @keyframes clock-spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .countdown-text {
+            position: absolute;
+            top: 75px;
+            right: 12px;
+            font-family: 'Pirata One', cursive;
+            font-size: 12px;
+            color: var(--blood);
+            text-shadow: 0 0 5px #fff;
+        }
+
+        /* NỘI DUNG */
+        .action-title {
+            font-family: 'Pirata One', cursive;
+            font-size: 26px;
+            color: #1a1a1a;
+            /* Chữ tối trên giấy sáng */
+            margin: 0 0 15px 0;
+            line-height: 1.1;
+            padding-right: 50px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .detail-row {
+            font-size: 13px;
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .detail-row i {
+            color: var(--blood);
+            margin-right: 8px;
+            width: 15px;
+        }
+
+        .punishment-alert {
+            background: rgba(139, 0, 0, 0.9);
+            color: #fff;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-size: 12px;
+            border: 1px solid var(--gold);
+        }
+
+        .punishment-alert b {
+            color: var(--gold);
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        /* NÚT DÂNG NỘP */
+        .btn-obey {
+            width: 100%;
+            background: #000;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 14px;
+            font-family: 'Pirata One', cursive;
+            font-size: 22px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 2px;
+        }
+
+        .oath-box {
+            border: 2px solid #333;
+            padding: 25px;
+            position: relative;
+            background: rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+        }
+
+        /* Hiệu ứng 4 chiếc đinh ở 4 góc */
+        .oath-box {
+            position: relative;
+            padding: 30px;
+            background: #1a1a1a;
+            border: 1px solid var(--gold);
+            /* Tạo hiệu ứng góc rách bằng clip-path */
+            clip-path: polygon(5% 0%, 95% 2%, 100% 5%, 98% 95%, 93% 100%, 5% 98%, 0% 90%, 2% 10%);
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.9);
+            margin: 20px;
+        }
+
+        .oath-text {
+            font-family: 'Quicksand', sans-serif;
+            font-style: italic;
+            color: #ccc;
+            line-height: 1.6;
+            font-size: 14px;
+            text-align: center;
+            border-left: 2px solid var(--blood);
+            padding-left: 15px;
+        }
+
+        .warning-label {
+            display: block;
+            margin-top: 20px;
+            font-family: 'Pirata One', cursive;
+            color: var(--blood);
+            font-size: 18px;
+            letter-spacing: 3px;
+            text-align: center;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.6;
+            }
+        }
+
+        .oath-text {
+            animation: pulse 4s infinite ease-in-out;
+        }
+
+        .btn-obey:active {
+            background: var(--gold);
+            color: #d70d0d;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Style cho Khẩu quyết (Mantra) */
+        .mantra-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid var(--gold);
+            padding: 10px;
+            margin: 10px 0;
+            font-style: italic;
+            font-size: 13px;
+            color: #eee;
+        }
+
+        /* Style cho Hậu quả tàn khốc */
+        .extreme-punish-box {
+            background: #000;
+            border: 2px solid var(--blood);
+            color: #ff4d4d;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 800;
+            animation: pulseRed 2s infinite;
+        }
+
+        /* Style cho Phước lành */
+
+        @keyframes pulseRed {
+            0% {
+                box-shadow: 0 0 5px var(--blood);
+            }
+
+            50% {
+                box-shadow: 0 0 20px var(--blood);
+            }
+
+            100% {
+                box-shadow: 0 0 5px var(--blood);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <div class="overlay"></div>
+        <div class="content">
+
+            <!-- GIỮ NGUYÊN LỜI THỀ CỦA BẠN -->
+            <div class="oath-box">
+                <div class="oath-text">
+                    "Thân phận phục tùng đồng nghĩa với việc đáp ứng mọi mệnh lệnh từ chủ nhân đưa ra. Sự im lặng là lời
+                    đồng ý duy nhất."
+                </div>
+                <span class="warning-label">KHÔNG CÓ QUYỀN KHƯỚC TỪ</span>
+            </div>
+
+            <div id="task-list">
+                <!-- Dữ liệu đổ từ Firebase -->
+                <div style="text-align: center; padding: 50px; font-family: 'Pirata One'; font-size: 20px;">
+                    Đang triệu hồi khế ước...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+            authDomain: "photodiary-3d469.firebaseapp.com",
+            projectId: "photodiary-3d469",
+            storageBucket: "photodiary-3d469.firebasestorage.app",
+            messagingSenderId: "102477469911",
+            appId: "1:102477469911:web:13ed38ab426819fdb43892"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // BỎ WHERE ĐỂ TRÁNH LỖI INDEX, LỌC BẰNG JAVASCRIPT PHÍA DƯỚI
+        const q = query(collection(db, "slave_tasks"), orderBy("created_at", "desc"));
+
+      onSnapshot(q, (snap) => {
+    const list = document.getElementById('task-list');
+    let html = "";
+
+    if (snap.empty) {
+        list.innerHTML = `<div style="text-align:center; padding:50px; font-family:'Pirata One'; color:var(--gold);">KHÔNG CÓ CHỈ THỊ NÀO</div>`;
+        return;
+    }
+
+    snap.forEach(docSnap => {
+        const data = docSnap.data();
+        if(data.status !== "LOCKED") return;
+
+        const action = data.action || "Mệnh lệnh tối mật";
+        const level = (data.level || "low").toUpperCase();
+        const deadline = data.deadline;
+
+        // Render từng phần dựa trên việc có dữ liệu hay không
+        let cardHtml = `
+            <div class="decree-card">
+                <div class="ghastly-clock">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </div>
+                <div class="countdown-text" id="timer-${docSnap.id}">--:--:--</div>
+
+                <h2 class="action-title">${action}</h2>
+
+                <div class="detail-row">
+                    <i class="fa-solid fa-skull"></i> CẤP ĐỘ: ${level}
+                </div>
+
+                <!-- Tư thế & Trạng thái (Hiện nếu có) -->
+                ${data.status_req ? `
+                    <div class="detail-row">
+                        <i class="fa-solid fa-person-praying"></i> TƯ THẾ: ${data.status_req}
+                    </div>
+                ` : ''}
+
+                <div class="detail-row">
+                    <i class="fa-solid fa-camera"></i> MINH CHỨNG: ${data.proof_type || 'Hình ảnh'}
+                </div>
+
+                <!-- Khẩu quyết (Hiện nếu có) -->
+                ${data.mantra ? `
+                    <div class="mantra-box">
+                        <i class="fa-solid fa-comment-dots" style="color:var(--gold)"></i> 
+                        <b>KHẨU QUYẾT:</b> "${data.mantra}"
+                    </div>
+                ` : ''}
+
+                <!-- Hình phạt cơ bản -->
+                <div class="punishment-alert">
+                    <b>HÌNH PHẠT CƠ BẢN:</b>
+                    ${data.punishment || "Tùy chủ nhân quyết định"}
+                </div>
+
+                <!-- HẬU QUẢ TÀN KHỐC (Dành cho cấp XIỀNG XÍCH) -->
+                ${data.extreme_punish ? `
+                    <div class="extreme-punish-box">
+                        <i class="fa-solid fa-biohazard"></i> HẬU QUẢ TÀN KHỐC: <br>
+                        ${data.extreme_punish}
+                    </div>
+                ` : ''}
+
+
+
+                <button class="btn-obey" onclick="window.location.href='s_submission.html?id=${docSnap.id}'">
+                    CHẤP HÀNH & DÂNG NỘP
+                </button>
+            </div>
+        `;
+
+        html += cardHtml;
+        if(deadline) startGhastlyTimer(docSnap.id, deadline);
+    });
+
+    list.innerHTML = html || `<div style="text-align:center; padding:50px; font-family:'Pirata One'; color:var(--gold);">KHÔNG CÓ CHỈ THỊ NÀO</div>`;
+});
+
+        function startGhastlyTimer(id, targetTime) {
+            setInterval(() => {
+                const now = new Date().getTime();
+                const target = new Date(targetTime).getTime();
+                const diff = target - now;
+                const el = document.getElementById(`timer-${id}`);
+                if (!el) return;
+
+                if (diff <= 0) {
+                    el.innerHTML = "HẾT HẠN";
+                    return;
+                }
+
+                const h = Math.floor(diff / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+                el.innerHTML = `${h}H ${m}M ${s}S`;
+            }, 1000);
+        }
+    </script>
+</body>
+
+</html>

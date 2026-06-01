@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Archival of Authority - Dark Majesty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --blood: #8b0000;
+            --obsidian: #050505;
+            --glass: rgba(10, 10, 10, 0.85);
+        }
+
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            font-family: 'Quicksand', sans-serif; background: #000; 
+            color: #ccc; overflow-x: hidden;
+        }
+
+        /* NỀN CÓ CHIỀU SÂU */
+        .app-container {
+            width: 100%; min-height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('../img/3.png');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            position: relative; padding: 20px; box-sizing: border-box;
+        }
+
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { 
+            font-family: 'Pirata One', cursive; font-size: 42px; color: var(--gold);
+            margin: 0; letter-spacing: 4px; text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+        .header p { font-size: 10px; color: var(--blood); letter-spacing: 5px; text-transform: uppercase; margin-top: 5px; font-weight: 800; }
+
+        /* DANH SÁCH LỆNH PHONG CÁCH QUÝ TỘC */
+        #master-list { display: flex; flex-direction: column; gap: 25px; }
+
+        .decree-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 20px;
+            position: relative;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            /* Cắt góc kiểu hầm hố */
+            clip-path: polygon(0% 0%, 95% 0%, 100% 15%, 100% 100%, 5% 100%, 0% 85%);
+        }
+
+        .decree-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        /* TRẠNG THÁI (STATUS LABEL) */
+        .status-badge {
+            position: absolute; top: 15px; right: 20px;
+            font-family: 'Pirata One'; font-size: 14px; letter-spacing: 1px;
+            padding: 2px 12px; border-radius: 20px;
+        }
+        .status-pending { color: var(--gold); text-shadow: 0 0 10px var(--gold); }
+        .status-submitted { color: #00ff00; text-shadow: 0 0 10px #00ff00; animation: blink 1.5s infinite; }
+        .status-completed { color: #555; text-decoration: line-through; }
+
+        @keyframes blink { 50% { opacity: 0.4; } }
+
+        .decree-level {
+            font-size: 11px; font-weight: 800; color: var(--blood);
+            text-transform: uppercase; margin-bottom: 10px; display: block;
+        }
+
+        .decree-action {
+            font-family: 'Pirata One'; font-size: 24px; color: #fff;
+            margin: 10px 0; display: block; line-height: 1.2;
+        }
+
+        /* NÚT XỬ LÝ (JUDGE BUTTON) */
+        .btn-judge {
+            display: inline-flex; align-items: center; gap: 8px;
+            margin-top: 15px; padding: 8px 16px;
+            background: var(--blood); color: #fff;
+            text-decoration: none; font-family: 'Pirata One'; font-size: 16px;
+            border: none; cursor: pointer; transition: 0.3s;
+        }
+        .btn-judge:hover { background: #ff0000; box-shadow: 0 0 15px #ff0000; }
+
+        .decree-footer {
+            margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex; justify-content: space-between; font-size: 11px; color: #666;
+        }
+
+        /* EMPTY STATE */
+        .empty-palace {
+            text-align: center; padding: 100px 20px; color: #333;
+            font-family: 'Pirata One'; font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="header">
+        <h1>VĂN KHỐ MỆNH LỆNH</h1>
+        <p>Command Archive</p>
+    </div>
+
+    <div id="master-list">
+        <!-- Lệnh sẽ hiện ở đây -->
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, where, getDocs } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+        authDomain: "photodiary-3d469.firebaseapp.com",
+        projectId: "photodiary-3d469",
+        storageBucket: "photodiary-3d469.firebasestorage.app",
+        messagingSenderId: "102477469911",
+        appId: "1:102477469911:web:13ed38ab426819fdb43892"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const q = query(collection(db, "slave_tasks"), orderBy("created_at", "desc"));
+
+    onSnapshot(q, async (snap) => {
+        const list = document.getElementById('master-list');
+        list.innerHTML = "";
+
+        if (snap.empty) {
+            list.innerHTML = `<div class="empty-palace">CHƯA CÓ LỆNH NÀO ĐƯỢC BAN XUỐNG...</div>`;
+            return;
+        }
+
+        // Lấy danh sách submission để kiểm tra xem có GPS/Ảnh chưa
+        const subSnap = await getDocs(collection(db, "task_submissions"));
+        const submissions = {};
+        subSnap.forEach(s => submissions[s.data().task_id] = { id: s.id, ...s.data() });
+
+        snap.forEach(d => {
+            const task = d.data();
+            const status = task.status || "LOCKED";
+            let statusText = "ĐANG THỰC HIỆN";
+            let statusClass = "status-pending";
+
+            if(status === "SUBMITTED") {
+                statusText = "CHỜ PHÁN XÉT";
+                statusClass = "status-submitted";
+            } else if (status === "COMPLETED") {
+                statusText = "HOÀN THÀNH";
+                statusClass = "status-completed";
+            }
+
+            // Giao diện thẻ lệnh
+            let cardHtml = `
+                <div class="decree-card">
+                    <span class="status-badge ${statusClass}">${statusText}</span>
+                    <span class="decree-level">Level: ${task.level || 'Normal'}</span>
+                    <span class="decree-action">${task.action}</span>
+            `;
+
+            // Nếu Slave đã nộp (SUBMITTED), Boss có nút "PHÁN XÉT"
+            if(status === "SUBMITTED" && submissions[d.id]) {
+                const subId = submissions[d.id].id;
+                cardHtml += `
+                    <a href="b_accept.html?subId=${subId}&taskId=${d.id}" class="btn-judge">
+                        <i class="fa-solid fa-gavel"></i> PHÁN XÉT NGAY
+                    </a>
+                `;
+            }
+
+            cardHtml += `
+                    <div class="decree-footer">
+                        <span><i class="fa-regular fa-calendar"></i> ${new Date(task.created_at).toLocaleDateString()}</span>
+                        <span>#${d.id.substring(0,6)}</span>
+                    </div>
+                </div>
+            `;
+            list.innerHTML += cardHtml;
+        });
+    });
+</script>
+</body>
+</html>

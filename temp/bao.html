@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Trung tâm Chỉ thị ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --master-red: #b71c1c;
+            --dark-void: #0a0a0a;
+            --glass: rgba(0, 0, 0, 0.75);
+            --gold: #d4af37;
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            font-family: 'Quicksand', sans-serif;
+            background-color: #000; color: #eee;
+            overflow: hidden;
+        }
+
+        .app-container {
+            width: 100%; height: 100%; max-width: 450px; margin: 0 auto;
+            /* NỀN THEO YÊU CẦU */
+            background: url('img/baobao/5.png') no-repeat center center;
+            background-size: cover;
+            position: relative; display: flex; flex-direction: column;
+            box-shadow: 0 0 50px rgba(183, 28, 28, 0.4);
+        }
+
+        /* Lớp phủ tối để nội dung gắt hơn */
+        .overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8));
+            z-index: 1;
+        }
+
+        .content {
+            position: relative; z-index: 2; flex: 1;
+            display: flex; flex-direction: column; padding: 20px;
+            overflow-y: auto; scrollbar-width: none;
+        }
+
+        /* Header Quyền Lực */
+        .header {
+            text-align: center; margin-bottom: 30px; margin-top: 10px;
+        }
+        .header h1 {
+            font-family: 'Dancing Script', cursive; font-size: 32px;
+            color: var(--master-red); margin: 0; text-shadow: 0 0 15px rgba(183, 28, 28, 0.8);
+        }
+        .header p { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.6; }
+
+        /* Form ra lệnh của Boss */
+        .command-form {
+            background: var(--glass); backdrop-filter: blur(10px);
+            border-radius: 20px; padding: 20px; border: 1px solid rgba(183, 28, 28, 0.3);
+            margin-bottom: 30px;
+        }
+        .command-form label { font-size: 11px; font-weight: 700; color: var(--master-red); display: block; margin-bottom: 5px; }
+        
+        input, textarea {
+            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid #333;
+            border-radius: 10px; padding: 10px; color: #fff; font-family: inherit;
+            margin-bottom: 15px; outline: none; box-sizing: border-box;
+        }
+        input:focus { border-color: var(--master-red); }
+
+        .btn-command {
+            width: 100%; padding: 15px; background: var(--master-red);
+            color: #fff; border: none; border-radius: 15px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(183, 28, 28, 0.4); transition: 0.3s;
+        }
+        .btn-command:active { transform: scale(0.95); }
+
+        /* Danh sách chỉ thị */
+        .section-title { font-size: 14px; font-weight: 800; border-left: 4px solid var(--master-red); padding-left: 10px; margin-bottom: 15px; }
+
+        .task-card {
+            background: var(--glass); border-radius: 20px; padding: 15px;
+            margin-bottom: 15px; border-left: 5px solid var(--master-red);
+            position: relative; animation: slideIn 0.4s ease;
+        }
+        .task-title { font-weight: 800; font-size: 16px; margin-bottom: 5px; color: #fff; }
+        .task-desc { font-size: 13px; opacity: 0.7; margin-bottom: 10px; }
+        
+        .task-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 11px; }
+        .meta-box { padding: 8px; border-radius: 8px; background: rgba(255,255,255,0.05); }
+        .meta-box.reward { color: #4caf50; border: 1px solid rgba(76, 175, 80, 0.2); }
+        .meta-box.punish { color: #f44336; border: 1px solid rgba(244, 67, 54, 0.2); }
+
+        .deadline-timer {
+            margin-top: 10px; font-size: 12px; font-weight: 800; color: var(--gold);
+            display: flex; align-items: center; gap: 5px;
+        }
+
+        .status-badge {
+            position: absolute; top: 15px; right: 15px;
+            font-size: 10px; padding: 4px 8px; border-radius: 5px;
+            background: var(--master-red); font-weight: 800;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="overlay"></div>
+    
+    <div class="content">
+        <div class="header">
+            <p>Absolute Authority</p>
+            <h1>Trung Tâm Chỉ Thị</h1>
+        </div>
+
+        <!-- FORM CHO BOSS -->
+        <div class="command-form">
+            <label><i class="fa-solid fa-scroll"></i> Nội dung chỉ thị</label>
+            <input type="text" id="cmd-title" placeholder="Ví dụ: Phải đi ngủ trước 11h">
+            
+            <label><i class="fa-solid fa-clock"></i> Thời hạn cuối cùng</label>
+            <input type="datetime-local" id="cmd-deadline">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div>
+                    <label><i class="fa-solid fa-gift"></i> Phúc lợi (Thưởng)</label>
+                    <input type="text" id="cmd-reward" placeholder="Được khen...">
+                </div>
+                <div>
+                    <label><i class="fa-solid fa-skull"></i> Hình phạt (Consequence)</label>
+                    <input type="text" id="cmd-punish" placeholder="Phải chép phạt...">
+                </div>
+            </div>
+
+            <button class="btn-command" onclick="issueCommand()">Ban hành chỉ thị ✨</button>
+        </div>
+
+        <!-- DANH SÁCH CHO SLAVE PHẢI XEM -->
+        <div class="section-title">CHỈ THỊ ĐANG THỰC THI</div>
+        <div id="command-list">
+            <!-- Data render ở đây -->
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+        authDomain: "photodiary-3d469.firebaseapp.com",
+        projectId: "photodiary-3d469",
+        storageBucket: "photodiary-3d469.firebasestorage.app",
+        messagingSenderId: "102477469911",
+        appId: "1:102477469911:web:13ed38ab426819fdb43892"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // 1. Hàm Boss ra lệnh
+    window.issueCommand = async () => {
+        const title = document.getElementById('cmd-title').value;
+        const deadline = document.getElementById('cmd-deadline').value;
+        const reward = document.getElementById('cmd-reward').value;
+        const punish = document.getElementById('cmd-punish').value;
+
+        if (!title || !deadline) return alert("Boss chưa nhập đủ chỉ thị!");
+
+        try {
+            await addDoc(collection(db, "master_commands"), {
+                title,
+                deadline,
+                reward,
+                punish,
+                status: "EXECUING", // Đang thực thi
+                created_at: new Date().getTime()
+            });
+            alert("Chỉ thị đã được ban hành. Không có đường lui!");
+            // Reset form
+            document.getElementById('cmd-title').value = "";
+        } catch (e) { console.error(e); }
+    };
+
+    // 2. Lắng nghe danh sách lệnh (Realtime)
+    const q = query(collection(db, "master_commands"), orderBy("created_at", "desc"));
+    onSnapshot(q, (snap) => {
+        const list = document.getElementById('command-list');
+        list.innerHTML = "";
+        
+        snap.forEach(docSnap => {
+            const data = docSnap.data();
+            const card = document.createElement('div');
+            card.className = "task-card";
+            
+            // Tính toán thời gian còn lại
+            const timeLeft = new Date(data.deadline) - new Date();
+            const isOverdue = timeLeft < 0;
+
+            card.innerHTML = `
+                <div class="status-badge">${data.status}</div>
+                <div class="task-title">${data.title}</div>
+                <div class="task-meta">
+                    <div class="meta-box reward"><b>Thưởng:</b> ${data.reward}</div>
+                    <div class="meta-box punish"><b>Phạt:</b> ${data.punish}</div>
+                </div>
+                <div class="deadline-timer" style="color: ${isOverdue ? '#ff4d4d' : 'var(--gold)'}">
+                    <i class="fa-solid fa-hourglass-half"></i> 
+                    ${isOverdue ? "ĐÃ TRỄ HẠN - CHỜ PHẠT" : "Thời hạn: " + formatDeadline(data.deadline)}
+                </div>
+                ${data.status === 'EXECUING' ? `<button onclick="completeTask('${docSnap.id}')" style="margin-top:10px; width:100%; padding:5px; background:transparent; color:#fff; border:1px solid #444; border-radius:5px; font-size:10px; cursor:pointer;">Báo cáo hoàn thành</button>` : ''}
+            `;
+            list.appendChild(card);
+        });
+    });
+
+    window.completeTask = async (id) => {
+        if(confirm("Xác nhận đã phục tùng tuyệt đối?")) {
+            await updateDoc(doc(db, "master_commands", id), { status: "COMPLETED" });
+        }
+    };
+
+    function formatDeadline(dl) {
+        const d = new Date(dl);
+        return d.toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' });
+    }
+
+</script>
+</body>
+</html>
