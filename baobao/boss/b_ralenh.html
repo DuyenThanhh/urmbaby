@@ -272,15 +272,7 @@
                 reward: document.getElementById('task-reward')?.value || ""
             };
 
-            try {
-                await addDoc(collection(db, "slave_tasks"), data);
-                setTimeout(() => {
-                    window.location.href = 'b_banglenh.html';
-                }, 2000);
-            } catch (e) { 
-                alert("Lỗi hệ thống thần quyền!"); 
-                document.getElementById('lock-overlay').style.display = 'none';
-            }
+          
         };
     </script>
 </body>

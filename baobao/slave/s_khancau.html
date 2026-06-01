@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Thỉnh Cầu Khế Ước - Dark Majesty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --blood: #660000; --gold: #b8860b; }
+        body { margin: 0; background: #000; color: #888; font-family: 'Quicksand', sans-serif; }
+        
+        .app-container {
+            width: 100%; min-height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('../img/5.png');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; align-items: center; padding: 20px; box-sizing: border-box;
+        }
+
+        .ritual-card {
+            width: 100%; max-width: 400px; background: rgba(10, 10, 10, 0.95);
+            border: 1px solid #222; padding: 25px; box-sizing: border-box;
+            clip-path: polygon(2% 0%, 98% 1%, 100% 4%, 99% 96%, 95% 100%, 5% 99%, 0% 95%, 1% 5%);
+            box-shadow: 0 0 50px #000;
+        }
+
+        h1 { font-family: 'Pirata One'; color: var(--blood); text-align: center; font-size: 35px; margin: 0 0 10px 0; letter-spacing: 3px; text-shadow: 0 0 15px red; }
+        p.sub-glow { color: var(--gold); text-align: center; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px; opacity: 0.7; }
+
+        .label { font-family: 'Pirata One'; color: var(--gold); font-size: 14px; margin-top: 18px; display: block; border-bottom: 1px solid #222; padding-bottom: 5px; }
+
+        textarea {
+            width: 100%; background: transparent; border: none; border-bottom: 1px solid #1a1a1a;
+            color: #eee; font-family: 'Quicksand'; font-size: 14px; padding: 10px 0;
+            resize: none; outline: none; margin-top: 5px; transition: 0.3s;
+        }
+        textarea:focus { border-bottom-color: var(--blood); }
+
+        .severity-options { display: flex; gap: 8px; margin-top: 12px; }
+        .sev-btn {
+            flex: 1; padding: 8px; background: #000; border: 1px solid #222;
+            color: #444; font-family: 'Pirata One'; cursor: pointer; transition: 0.3s; font-size: 14px;
+        }
+        .sev-btn.active { border-color: var(--blood); color: #fff; box-shadow: 0 0 10px var(--blood); }
+
+        .btn-submit {
+            width: 100%; padding: 18px; background: var(--blood); color: #fff;
+            border: none; font-family: 'Pirata One'; font-size: 24px;
+            letter-spacing: 3px; cursor: pointer; margin-top: 30px;
+            position: relative; overflow: hidden; box-shadow: 0 0 20px rgba(139, 0, 0, 0.5);
+        }
+
+        /* Hiệu ứng loading xiềng xích */
+        #ritual-loading {
+            position: fixed; inset: 0; background: #000; z-index: 10001;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .chains-shaking { font-size: 50px; color: var(--blood); animation: shake 0.2s infinite; }
+        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(3px); } 75% { transform: translateX(-3px); } }
+    </style>
+</head>
+<body>
+
+    <div id="ritual-loading">
+        <div class="chains-shaking"><i class="fa-solid fa-link"></i></div>
+        <p style="font-family: 'Pirata One'; color: var(--blood); margin-top: 20px; font-size: 20px; letter-spacing: 5px;">ĐANG TRUYỀN LỜI THỈNH CẦU...</p>
+    </div>
+
+    <div class="app-container">
+        <h1>ĐIỆN KHẤU ĐẦU</h1>
+        <p class="sub-glow">Petition for Punishment & Grace</p>
+
+        <div class="ritual-card">
+            <span class="label"><i class="fa-solid fa-gavel"></i> HÌNH PHẠT MONG MUỐN</span>
+            <textarea id="punish-action" rows="2" placeholder="Slave khao khát bị Master làm gì...?"></textarea>
+
+            <span class="label"><i class="fa-solid fa-person-praying"></i> TƯ THẾ KHI CHỊU PHẠT</span>
+            <textarea id="punish-posture" rows="1" placeholder="Quỳ, xích tay, bịt mắt...?"></textarea>
+
+            <span class="label"><i class="fa-solid fa-skull"></i> LÝ DO XỨNG ĐÁNG</span>
+            <textarea id="punish-reason" rows="2" placeholder="Ngươi đã phạm lỗi gì hoặc tại sao muốn bị phạt...?"></textarea>
+
+            <span class="label"><i class="fa-solid fa-fire"></i> CẤP ĐỘ NHỤC HÌNH</span>
+            <div class="severity-options">
+                <button class="sev-btn" onclick="setSev(this, 'LOW')">KHUYÊN BẢO</button>
+                <button class="sev-btn" onclick="setSev(this, 'MEDIUM')">ÁP CHẾ</button>
+                <button class="sev-btn" onclick="setSev(this, 'EXTREME')">XIỀNG XÍCH</button>
+            </div>
+
+            <span class="label"><i class="fa-solid fa-gift"></i> PHẦN THƯỞNG MONG MUỐN (NẾU HOÀN THÀNH)</span>
+            <textarea id="reward-request" rows="1" placeholder="Nếu chịu phạt tốt, ngươi mong Master ban gì...?"></textarea>
+
+            <button class="btn-submit" id="submit-btn" onclick="submitPetition()">DÂNG NỘP LỜI CẦU XIN</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+            authDomain: "photodiary-3d469.firebaseapp.com",
+            projectId: "photodiary-3d469",
+            storageBucket: "photodiary-3d469.firebasestorage.app",
+            messagingSenderId: "102477469911",
+            appId: "1:102477469911:web:13ed38ab426819fdb43892"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let selectedSeverity = "";
+
+        window.setSev = (btn, val) => {
+            document.querySelectorAll('.sev-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedSeverity = val;
+        };
+
+        // Hàm làm sạch tên nhiệm vụ để đặt ID
+        function cleanString(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^\w]/g, '');
+        }
+
+        window.submitPetition = async () => {
+            const action = document.getElementById('punish-action').value;
+            const posture = document.getElementById('punish-posture').value;
+            const reason = document.getElementById('punish-reason').value;
+            const reward = document.getElementById('reward-request').value;
+
+            if(!action || !selectedSeverity) return alert("Lời cầu xin chưa đủ thành tâm!");
+
+            document.getElementById('ritual-loading').style.display = 'flex';
+
+            try {
+                // TẠO ID THEO ĐỊNH DẠNG: Ngày-Tháng-Năm_Ten-Nhiem-Vu_Gio-Phut-Giay
+                const now = new Date();
+                const d = String(now.getDate()).padStart(2, '0');
+                const m = String(now.getMonth() + 1).padStart(2, '0');
+                const y = now.getFullYear();
+                const h = String(now.getHours()).padStart(2, '0');
+                const min = String(now.getMinutes()).padStart(2, '0');
+                const s = String(now.getSeconds()).padStart(2, '0');
+                
+                const taskClean = cleanString(action).substring(0, 20); // Lấy 20 ký tự đầu của nhiệm vụ
+                const customID = `${d}-${m}-${y}_${taskClean}_${h}-${min}-${s}`;
+
+                // GHI VÀO COLLECTION: punishment_petitions
+                await setDoc(doc(db, "punishment_petitions", customID), {
+                    petition_id: customID,
+                    requested_action: action,
+                    requested_posture: posture,
+                    reason: reason,
+                    severity: selectedSeverity,
+                    requested_reward: reward,
+                    status: "PENDING",
+                    submitted_at: Date.now()
+                });
+
+                alert("Lời khẩn cầu đã được niêm phong với ID: " + customID);
+                location.reload();
+            } catch (e) {
+                alert("Lỗi hiến tế: " + e.message);
+                document.getElementById('ritual-loading').style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>

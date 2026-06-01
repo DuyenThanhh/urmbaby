@@ -302,11 +302,323 @@
                 box-shadow: 0 0 5px var(--blood);
             }
         }
+
+        /* Giao diện Đàn Tế hiện đè lên */
+
+
+        /* OVERLAY ĐÀN TẾ RỰC LỬA */
+        /* --- HIỆU ỨNG XIỀNG XÍCH RUNG LẮC (LOADING) --- */
+        #loading-ritual {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 10001;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chains-shaking {
+            font-size: 50px;
+            color: var(--blood);
+            animation: ritual-shake 0.2s infinite;
+        }
+
+        @keyframes ritual-shake {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(3px);
+            }
+
+            75% {
+                transform: translateX(-3px);
+            }
+        }
+
+        /* --- ĐÀN TẾ HIẾN TẾ (OVERLAY) --- */
+        #submission-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url('../img/5.png');
+            background-size: cover;
+            z-index: 10000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .sacrifice-altar {
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid #222;
+            padding: 25px;
+            max-width: 400px;
+            margin: 20px auto;
+            clip-path: polygon(2% 0%, 98% 1%, 100% 4%, 99% 96%, 95% 100%, 5% 99%, 0% 95%, 1% 5%);
+            box-shadow: 0 0 50px #000;
+        }
+
+        /* --- NÚT BẤM RỰC LỬA (MIRROR + FLAME) --- */
+        .btn-sacrifice {
+            width: 100%;
+            padding: 20px;
+            background: var(--blood);
+            color: #fff;
+            border: none;
+            font-family: 'Pirata One';
+            font-size: 26px;
+            letter-spacing: 3px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.5);
+        }
+
+        .btn-sacrifice::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+            animation: flameRotate 4s linear infinite;
+        }
+
+        @keyframes flameRotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .sacrifice-altar {
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid #222;
+            padding: 25px;
+            position: relative;
+            max-width: 400px;
+            margin: 20px auto;
+            clip-path: polygon(2% 0%, 98% 1%, 100% 4%, 99% 96%, 95% 100%, 5% 99%, 0% 95%, 1% 5%);
+            box-shadow: 0 0 30px #000;
+        }
+
+        .label-ritual {
+            font-family: 'Pirata One';
+            font-size: 14px;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0 10px;
+        }
+
+        .label-ritual::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, var(--gold), transparent);
+        }
+
+        #sub-title {
+            font-size: 22px;
+            color: #eee;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: rgba(139, 0, 0, 0.1);
+            border-left: 3px solid var(--blood);
+        }
+
+        .ritual-upload {
+            width: 100%;
+            height: 200px;
+            background: #000;
+            border: 1px double #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .ritual-upload img,
+        .ritual-upload video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #ritual-confession {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            border-bottom: 1px solid #333;
+            color: #fff;
+            font-family: 'Quicksand';
+            padding: 10px 0;
+        }
+
+        .preview-box {
+            width: 100%;
+            min-height: 200px;
+            border: 1px dashed var(--gold);
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-box img,
+        .preview-box video {
+            max-width: 100%;
+            max-height: 300px;
+        }
+
+        .btn-back-sub {
+            color: var(--gold);
+            cursor: pointer;
+            font-family: 'Pirata One';
+            font-size: 18px;
+        }
+
+        /* NÚT DÂNG NỘP RỰC LỬA & QUÉT GƯƠNG */
+        .btn-sacrifice-ritual {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(145deg, #8b0000, #4a0000);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            font-family: 'Pirata One', cursive;
+            font-size: 26px;
+            letter-spacing: 4px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            /* Để hiệu ứng gương không tràn ra ngoài */
+            transition: 0.5s;
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.6);
+            text-transform: uppercase;
+        }
+
+        /* HIỆU ỨNG QUÉT GƯƠNG (MIRROR SWEEP) */
+        .btn-sacrifice-ritual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right,
+                    transparent,
+                    rgba(212, 175, 55, 0.4),
+                    transparent);
+            transform: skewX(-45deg);
+            transition: 0s;
+        }
+
+        .btn-sacrifice-ritual:hover::before {
+            left: 150%;
+            transition: 0.8s;
+        }
+
+        /* HIỆU ỨNG NHỊP ĐẬP RỰC LỬA */
+        .btn-sacrifice-ritual:active {
+            transform: scale(0.95);
+            box-shadow: 0 0 40px var(--blood);
+        }
+
+        /* NÚT LUI LẠI (STYLE GOTHIC) */
+        .btn-back-ritual {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 25px;
+            border: 1px solid #333;
+            color: #555;
+            font-family: 'Pirata One', cursive;
+            font-size: 16px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.02);
+            clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
+        }
+
+        .btn-back-ritual:hover {
+            color: var(--gold);
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.05);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+
+        /* Textarea kiểu da thuộc */
+        #ritual-confession {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #222;
+            border-bottom: 1px solid var(--blood);
+            color: #ccc;
+            font-family: 'Quicksand';
+            padding: 12px;
+            margin-top: 10px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        #ritual-confession:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 10px rgba(139, 0, 0, 0.3);
+        }
     </style>
 </head>
 
 <body>
+   <!-- MÀN HÌNH XIỀNG XÍCH -->
+<div id="loading-ritual">
+    <div class="chains-shaking"><i class="fa-solid fa-link"></i></div>
+    <p style="font-family: 'Pirata One'; color: var(--blood); margin-top: 20px; font-size: 20px; letter-spacing: 5px;">
+        ĐANG TRUYỀN LINH HỒN...
+    </p>
+</div>
 
+<!-- ĐÀN TẾ HIẾN TẾ -->
+<div id="submission-overlay">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h1 style="font-family: 'Pirata One'; color: var(--blood); font-size: 45px; margin: 0; text-shadow: 0 0 20px red;">HIẾN TẾ</h1>
+        <p style="color: var(--gold); font-size: 10px; letter-spacing: 4px;">SACRIFICE OF EVIDENCE</p>
+    </div>
+
+    <div class="sacrifice-altar">
+        <div class="label-ritual"><i class="fa-solid fa-scroll"></i> Mệnh lệnh</div>
+        <div id="sub-title" style="color: #eee; font-size: 20px; padding: 10px; background: rgba(139,0,0,0.1); border-left: 2px solid var(--blood); margin-bottom: 20px;"></div>
+
+        <div class="label-ritual"><i class="fa-solid fa-eye"></i> Vật chứng</div>
+        <div class="ritual-upload" onclick="document.getElementById('file-input').click()" style="width:100%; height:200px; background:#000; border:1px double #333; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+            <i class="fa-solid fa-skull" id="skull-icon" style="font-size: 40px; color: #222;"></i>
+            <div id="preview-area" style="width:100%; height:100%; display:none;"></div>
+        </div>
+        <input type="file" id="file-input" hidden accept="image/*,video/*">
+
+        <div class="label-ritual" style="margin-top:20px;"><i class="fa-solid fa-pen-nib"></i> Lời tự thú</div>
+        <textarea id="ritual-confession" rows="3" style="width:100%; background:transparent; border:none; border-bottom:1px solid #333; color:#fff; outline:none;" placeholder="Viết những lời hối lỗi..."></textarea>
+
+        <button class="btn-sacrifice" id="btn-final-submit" style="display:none;">DÂNG NỘP NGAY</button>
+
+        <div id="gps-status" style="font-size: 9px; text-align: center; margin-top: 15px; color: #444;">
+            <i class="fa-solid fa-location-crosshairs"></i> VỊ TRÍ: <span style="color: var(--blood); font-weight: bold;">ĐANG KHÓA...</span>
+        </div>
+
+        <div onclick="document.getElementById('submission-overlay').style.display='none'" style="text-align:center; margin-top:20px; color:#444; font-size:12px; text-decoration:underline; cursor:pointer;">
+            LUI LẠI HÀNH LANG
+        </div>
+    </div>
+</div>
     <div class="app-container">
         <div class="overlay"></div>
         <div class="content">
@@ -331,7 +643,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+        // SỬA: Thêm doc, setDoc, updateDoc vào đây
+        import { getFirestore, collection, onSnapshot, query, orderBy, doc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
@@ -345,107 +658,172 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // BỎ WHERE ĐỂ TRÁNH LỖI INDEX, LỌC BẰNG JAVASCRIPT PHÍA DƯỚI
+        // SỬA: Khai báo đầy đủ các biến toàn cục
+        let currentId = '';
+        let currentAction = '';
+        let realLocation = null;
+
         const q = query(collection(db, "slave_tasks"), orderBy("created_at", "desc"));
 
-      onSnapshot(q, (snap) => {
-    const list = document.getElementById('task-list');
-    let html = "";
+        onSnapshot(q, (snap) => {
+            const list = document.getElementById('task-list');
+            let html = "";
+            if (snap.empty) {
+                list.innerHTML = `<div style="text-align:center; padding:50px; font-family:'Pirata One'; color:var(--gold);">KHÔNG CÓ CHỈ THỊ NÀO</div>`;
+                return;
+            }
 
-    if (snap.empty) {
-        list.innerHTML = `<div style="text-align:center; padding:50px; font-family:'Pirata One'; color:var(--gold);">KHÔNG CÓ CHỈ THỊ NÀO</div>`;
-        return;
-    }
+            snap.forEach(docSnap => {
+                const data = docSnap.data();
+                if (data.status !== "LOCKED") return;
 
-    snap.forEach(docSnap => {
-        const data = docSnap.data();
-        if(data.status !== "LOCKED") return;
+                const action = data.action || "Mệnh lệnh tối mật";
+                const level = (data.level || "low").toUpperCase();
+                const deadline = data.deadline;
 
-        const action = data.action || "Mệnh lệnh tối mật";
-        const level = (data.level || "low").toUpperCase();
-        const deadline = data.deadline;
+                let cardHtml = `
+                <div class="decree-card">
+                    <div class="ghastly-clock"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <div class="countdown-text" id="timer-${docSnap.id}">--:--:--</div>
+                    <h2 class="action-title">${action}</h2>
+                    <div class="detail-row"><i class="fa-solid fa-skull"></i> CẤP ĐỘ: ${level}</div>
+                    ${data.status_req ? `<div class="detail-row"><i class="fa-solid fa-person-praying"></i> TƯ THẾ: ${data.status_req}</div>` : ''}
+                    <div class="detail-row"><i class="fa-solid fa-camera"></i> MINH CHỨNG: ${data.proof_type || 'Hình ảnh'}</div>
+                    ${data.mantra ? `<div class="mantra-box"><i class="fa-solid fa-comment-dots" style="color:var(--gold)"></i> <b>KHẨU QUYẾT:</b> "${data.mantra}"</div>` : ''}
+                    <div class="punishment-alert"><b>HÌNH PHẠT CƠ BẢN:</b> ${data.punishment || "Tùy chủ nhân quyết định"}</div>
+                    ${data.extreme_punish ? `<div class="extreme-punish-box"><i class="fa-solid fa-biohazard"></i> HẬU QUẢ TÀN KHỐC: <br>${data.extreme_punish}</div>` : ''}
+                    <button class="btn-obey" onclick="openSubmission('${docSnap.id}', '${action.replace(/'/g, "\\'")}')">
+                        CHẤP HÀNH & DÂNG NỘP
+                    </button>
+                </div>`;
+                html += cardHtml;
+                if (deadline) startGhastlyTimer(docSnap.id, deadline);
+            });
+            list.innerHTML = html;
+        });
 
-        // Render từng phần dựa trên việc có dữ liệu hay không
-        let cardHtml = `
-            <div class="decree-card">
-                <div class="ghastly-clock">
-                    <i class="fa-solid fa-clock-rotate-left"></i>
-                </div>
-                <div class="countdown-text" id="timer-${docSnap.id}">--:--:--</div>
-
-                <h2 class="action-title">${action}</h2>
-
-                <div class="detail-row">
-                    <i class="fa-solid fa-skull"></i> CẤP ĐỘ: ${level}
-                </div>
-
-                <!-- Tư thế & Trạng thái (Hiện nếu có) -->
-                ${data.status_req ? `
-                    <div class="detail-row">
-                        <i class="fa-solid fa-person-praying"></i> TƯ THẾ: ${data.status_req}
-                    </div>
-                ` : ''}
-
-                <div class="detail-row">
-                    <i class="fa-solid fa-camera"></i> MINH CHỨNG: ${data.proof_type || 'Hình ảnh'}
-                </div>
-
-                <!-- Khẩu quyết (Hiện nếu có) -->
-                ${data.mantra ? `
-                    <div class="mantra-box">
-                        <i class="fa-solid fa-comment-dots" style="color:var(--gold)"></i> 
-                        <b>KHẨU QUYẾT:</b> "${data.mantra}"
-                    </div>
-                ` : ''}
-
-                <!-- Hình phạt cơ bản -->
-                <div class="punishment-alert">
-                    <b>HÌNH PHẠT CƠ BẢN:</b>
-                    ${data.punishment || "Tùy chủ nhân quyết định"}
-                </div>
-
-                <!-- HẬU QUẢ TÀN KHỐC (Dành cho cấp XIỀNG XÍCH) -->
-                ${data.extreme_punish ? `
-                    <div class="extreme-punish-box">
-                        <i class="fa-solid fa-biohazard"></i> HẬU QUẢ TÀN KHỐC: <br>
-                        ${data.extreme_punish}
-                    </div>
-                ` : ''}
-
-
-
-                <button class="btn-obey" onclick="window.location.href='s_submission.html?id=${docSnap.id}'">
-                    CHẤP HÀNH & DÂNG NỘP
-                </button>
-            </div>
-        `;
-
-        html += cardHtml;
-        if(deadline) startGhastlyTimer(docSnap.id, deadline);
-    });
-
-    list.innerHTML = html || `<div style="text-align:center; padding:50px; font-family:'Pirata One'; color:var(--gold);">KHÔNG CÓ CHỈ THỊ NÀO</div>`;
-});
-
+        // Hàm đếm ngược
         function startGhastlyTimer(id, targetTime) {
-            setInterval(() => {
+            const timerInterval = setInterval(() => {
                 const now = new Date().getTime();
                 const target = new Date(targetTime).getTime();
                 const diff = target - now;
                 const el = document.getElementById(`timer-${id}`);
-                if (!el) return;
-
+                if (!el) { clearInterval(timerInterval); return; }
                 if (diff <= 0) {
-                    el.innerHTML = "HẾT HẠN";
+                    el.innerHTML = "HẾT HẠN - CHỜ PHẠT";
+                    el.style.color = "red";
+                    clearInterval(timerInterval);
                     return;
                 }
-
-                const h = Math.floor(diff / (1000 * 60 * 60));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 const s = Math.floor((diff % (1000 * 60)) / 1000);
-                el.innerHTML = `${h}H ${m}M ${s}S`;
+                el.innerHTML = `${h.toString().padStart(2, '0')}H ${m.toString().padStart(2, '0')}M ${s.toString().padStart(2, '0')}S`;
             }, 1000);
         }
+
+        // Gắn hàm vào window để HTML gọi được
+        window.openSubmission = (id, action) => {
+            currentId = id;
+            currentAction = action;
+            document.getElementById('sub-title').innerText = action;
+            document.getElementById('submission-overlay').style.display = 'block';
+
+            navigator.geolocation.getCurrentPosition(p => {
+                realLocation = { lat: p.coords.latitude, lng: p.coords.longitude };
+                const gpsSpan = document.querySelector('#gps-status span');
+                if (gpsSpan) {
+                    gpsSpan.innerText = "ĐÃ KHÓA MỤC TIÊU";
+                    gpsSpan.style.color = "var(--gold)";
+                }
+            });
+        };
+
+        document.getElementById('file-input').onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const skull = document.getElementById('skull-icon');
+            if (skull) skull.style.display = 'none';
+            const area = document.getElementById('preview-area');
+            area.style.display = 'block';
+            const url = URL.createObjectURL(file);
+            area.innerHTML = file.type.startsWith('image/') ? `<img src="${url}" style="width:100%">` : `<video src="${url}" controls style="width:100%"></video>`;
+            document.getElementById('btn-final-submit').style.display = 'block';
+        };
+
+       document.getElementById('btn-final-submit').onclick = async () => {
+    const file = document.getElementById('file-input').files[0];
+    if (!file || !realLocation) return alert("Vật chứng hoặc Vị trí chưa sẵn sàng!");
+
+    const submitBtn = document.getElementById('btn-final-submit');
+    const loadingRitual = document.getElementById('loading-ritual');
+
+    // KÍCH HOẠT NGHI LỄ: Hiện xiềng xích rung lắc
+    loadingRitual.style.display = 'flex';
+    submitBtn.disabled = true;
+
+    try {
+        const now = new Date();
+        const dateStr = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
+        const timeStr = `${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
+        
+        // Làm sạch tên hành động để đặt tên ID
+        const cleanName = currentAction.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^\w]/g, '');
+
+        // Đường dẫn folder: slave_boss/Ngày-Tháng-Năm
+        const folder = `slave_boss/${dateStr}`;
+        // ID duy nhất: Ngày_Tên_Giờ
+        const customID = `${dateStr}_${cleanName}_${timeStr}`;
+
+        // --- BƯỚC 1: HIẾN TẾ LÊN CLOUDINARY ---
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'cunlun');
+        formData.append('folder', folder);
+
+        const res = await fetch('https://api.cloudinary.com/v1_1/djjinlx7t/auto/upload', { 
+            method: 'POST', 
+            body: formData 
+        });
+        
+        if (!res.ok) throw new Error("Cloudinary từ chối vật chứng!");
+        const img = await res.json();
+
+        // --- BƯỚC 2: GHI VÀO VĂN KHỐ (FIREBASE) ---
+        await setDoc(doc(db, "task_submissions", customID), {
+            submission_id: customID,
+            task_id: currentId,
+            action_name: currentAction,
+            image_evidence: img.secure_url,
+            confession: document.getElementById('ritual-confession')?.value || "Kẻ phục tùng không để lại lời nào.",
+            location: {
+                latitude: realLocation.lat,
+                longitude: realLocation.lng,
+                google_map_link: `https://www.google.com/maps?q=${realLocation.lat},${realLocation.lng}`
+            },
+            submitted_at: Date.now(),
+            status: "PENDING" // Chờ Master phán xét
+        });
+
+        // --- BƯỚC 3: CẬP NHẬT TRẠNG THÁI LỆNH GỐC ---
+        await updateDoc(doc(db, "slave_tasks", currentId), { 
+            status: "SUBMITTED" 
+        });
+
+        // KẾT THÚC NGHI LỄ
+        alert("Vật chứng đã được niêm phong và gửi đi.");
+        location.reload(); 
+
+    } catch (err) {
+        console.error("Nghi lễ thất bại:", err);
+        alert("Lỗi hiến tế: " + err.message);
+        
+        // Tắt xiềng xích để slave thử lại
+        loadingRitual.style.display = 'none';
+        submitBtn.disabled = false;
+    }
+};
     </script>
 </body>
 

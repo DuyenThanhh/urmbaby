@@ -310,161 +310,154 @@
     </div>
 
     <script type="module">
-        let currentTaskLevel = "NORMAL"; // Mặc định
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc, setDoc, collection } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, updateDoc, addDoc, collection } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+    const firebaseConfig = {
+        apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+        authDomain: "photodiary-3d469.firebaseapp.com",
+        projectId: "photodiary-3d469",
+        storageBucket: "photodiary-3d469.firebasestorage.app",
+        messagingSenderId: "102477469911",
+        appId: "1:102477469911:web:13ed38ab426819fdb43892"
+    };
 
-        const firebaseConfig = {
-            // ... (Giữ nguyên config của bạn)
-            apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
-            authDomain: "photodiary-3d469.firebaseapp.com",
-            projectId: "photodiary-3d469",
-            storageBucket: "photodiary-3d469.firebasestorage.app",
-            messagingSenderId: "102477469911",
-            appId: "1:102477469911:web:13ed38ab426819fdb43892"
-        };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    const urlParams = new URLSearchParams(window.location.search);
+    const taskId = urlParams.get('id');
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const taskId = urlParams.get('id');
+    let currentTaskLevel = "NORMAL";
+    let realLocation = null;
 
-        // Biến lưu trữ tọa độ thực
-        let realLocation = null;
+    // --- HÀM LẤY TỌA ĐỘ GPS ---
+    function getPreciseLocation() {
+        const options = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
+        const statusTag = document.getElementById('loc-status');
 
-        // --- HÀM LẤY TỌA ĐỘ CHÍNH XÁC CAO ---
-        function getPreciseLocation() {
-            const options = {
-                enableHighAccuracy: true, // Bật chế độ GPS chính xác cao nhất
-                timeout: 10000,           // Chờ tối đa 10s
-                maximumAge: 0             // Không lấy dữ liệu cũ trong bộ nhớ đệm
-            };
-
-            const statusTag = document.getElementById('loc-status');
-
-            if (navigator.geolocation) {
-                navigator.geolocation.watchPosition( // Dùng watch để bám đuổi vị trí liên tục
-                    (pos) => {
-                        realLocation = {
-                            lat: pos.coords.latitude,
-                            lng: pos.coords.longitude,
-                            accuracy: pos.coords.accuracy // Độ sai số (mét)
-                        };
-                        statusTag.innerText = `ĐÃ KHÓA: ${realLocation.lat.toFixed(4)}, ${realLocation.lng.toFixed(4)}`;
-                        statusTag.style.color = "#00ff00";
-                        console.log("GPS Locked:", realLocation);
-                    },
-                    (err) => {
-                        console.error("Lỗi GPS:", err);
-                        statusTag.innerText = "MỤC TIÊU ĐANG LẨN TRỐN (LỖI GPS)";
-                        statusTag.style.color = "red";
-                    },
-                    options
-                );
-            } else {
-                statusTag.innerText = "TRÌNH DUYỆT KHÔNG HỖ TRỢ ĐỊNH VỊ";
-            }
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(
+                (pos) => {
+                    realLocation = {
+                        lat: pos.coords.latitude,
+                        lng: pos.coords.longitude,
+                        accuracy: pos.coords.accuracy
+                    };
+                    statusTag.innerText = `ĐÃ KHÓA: ${realLocation.lat.toFixed(4)}, ${realLocation.lng.toFixed(4)}`;
+                    statusTag.style.color = "#00ff00";
+                },
+                (err) => {
+                    statusTag.innerText = "MỤC TIÊU ĐANG LẨN TRỐN (LỖI GPS)";
+                    statusTag.style.color = "red";
+                },
+                options
+            );
         }
-
-        // Gọi hàm định vị ngay khi vào trang
-        getPreciseLocation();
-
-        // Load tên nhiệm vụ
-        if (taskId) {
-            getDoc(doc(db, "slave_tasks", taskId)).then(s => {
-                if (s.exists()) {
-                    const data = s.data();
-                    document.getElementById('target-action').innerText = data.action;
-                    currentTaskLevel = (data.level || "low").toUpperCase(); // Lưu cấp độ vào biến
-                }
-            });
-        }
-
-        // Preview ảnh
-        document.getElementById('file-input').onchange = e => {
-            const file = e.target.files[0];
-            if (file) {
-                document.getElementById('preview').src = URL.createObjectURL(file);
-                document.getElementById('preview').style.display = 'block';
-            }
-        };
-
-        // --- XỬ LÝ DÂNG NỘP ---
-        // --- XỬ LÝ DÂNG NỘP ---
-       document.getElementById('submit-btn').onclick = async () => {
-    const file = document.getElementById('file-input').files[0];
-    const confession = document.getElementById('confession').value;
-    const taskName = document.getElementById('target-action').innerText;
-
-    if (!file) return alert("Không có vật chứng, Ngài sẽ nổi giận!");
-    if (!realLocation) return alert("Hệ thống chưa xác định được vị trí!");
-
-    document.getElementById('loading').style.display = 'flex';
-
-    try {
-        // --- BƯỚC 1: TẠO CẤU TRÚC ĐƯỜNG DẪN FOLDER ---
-        const now = new Date();
-        
-        // Định dạng Ngày-Tháng-Năm (VD: 05-06-2024)
-        const dateStr = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
-        
-        // Định dạng Giờ-Phút-Giây (VD: 14-30-05)
-        const timeStr = `${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
-        
-        // Tên folder con: Tên nhiệm vụ_Cấp độ_GiờPhútGiây
-        // (Xử lý xóa dấu cách trong tên nhiệm vụ để đường dẫn đẹp hơn)
-        const cleanTaskName = taskName.replace(/\s+/g, '_');
-        const subFolderName = `${cleanTaskName}_${currentTaskLevel}_${timeStr}`;
-
-        // Đường dẫn cuối cùng: slave_boss/Ngày-Tháng-Năm/TênNhiệmVụ_CấpĐộ_GiờPhútGiây
-        const finalCloudinaryPath = `slave_boss/${dateStr}/${subFolderName}`;
-
-        // --- BƯỚC 2: UPLOAD LÊN CLOUDINARY ---
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'ml_default'); 
-        formData.append('folder', finalCloudinaryPath); // Truyền đường dẫn động vào đây
-
-        const res = await fetch('https://api.cloudinary.com/v1_1/djjinlx7t/image/upload', {
-            method: 'POST', body: formData
-        });
-
-        if (!res.ok) throw new Error("Không thể tải ảnh lên thánh điện Cloudinary");
-        const imgData = await res.json();
-
-        // --- BƯỚC 3: LƯU VÀO FIREBASE ---
-        await addDoc(collection(db, "task_submissions"), {
-            task_id: taskId,
-            action_name: taskName,
-            level: currentTaskLevel,
-            confession: confession,
-            image_evidence: imgData.secure_url,
-            cloudinary_path: finalCloudinaryPath, // Lưu lại đường dẫn để Boss dễ tìm
-            location: {
-                latitude: realLocation.lat,
-                longitude: realLocation.lng,
-                accuracy: realLocation.accuracy,
-                google_map_link: `https://www.google.com/maps?q=${realLocation.lat},${realLocation.lng}`
-            },
-            submitted_at: Date.now(),
-            status: "PENDING"
-        });
-
-        await updateDoc(doc(db, "slave_tasks", taskId), { status: "SUBMITTED" });
-
-        alert("Vật chứng đã được niêm phong vào văn khố.");
-        window.location.href = "s_doilenh.html";
-
-    } catch (err) {
-        console.error(err);
-        alert("Lỗi: " + err.message);
-    } finally {
-        document.getElementById('loading').style.display = 'none';
     }
-};
-    </script>
+    getPreciseLocation();
+
+    // --- LOAD THÔNG TIN NHIỆM VỤ ---
+    if (taskId) {
+        getDoc(doc(db, "slave_tasks", taskId)).then(s => {
+            if (s.exists()) {
+                const data = s.data();
+                document.getElementById('target-action').innerText = data.action;
+                currentTaskLevel = (data.level || "low").toUpperCase();
+            }
+        });
+    }
+
+    // Xem trước ảnh/video
+    document.getElementById('file-input').onchange = e => {
+        const file = e.target.files[0];
+        const preview = document.getElementById('preview');
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+        }
+    };
+
+    // --- XỬ LÝ DÂNG NỘP KHI NHẤN NÚT ---
+    document.getElementById('submit-btn').onclick = async () => {
+        // Lấy dữ liệu từ giao diện
+        const taskName = document.getElementById('target-action').innerText;
+        const file = document.getElementById('file-input').files[0];
+        const confession = document.getElementById('confession').value;
+
+        // Kiểm tra điều kiện
+        if (!file) return alert("Vật chứng đâu? Ngài sẽ nổi giận!");
+        if (!realLocation) return alert("Hệ thống chưa xác định được vị trí!");
+
+        document.getElementById('loading').style.display = 'flex';
+
+        try {
+            // --- BƯỚC 1: TẠO CHUỖI ĐỊNH DANH (ID) ---
+            const now = new Date();
+            const dateStr = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
+            
+            // Làm sạch tên nhiệm vụ (Bỏ dấu, bỏ khoảng trắng)
+            const cleanTaskName = taskName.normalize("NFD")
+                                          .replace(/[\u0300-\u036f]/g, "")
+                                          .replace(/\s+/g, '_')
+                                          .replace(/[^\w]/g, '');
+            
+            // Đường dẫn Folder trên Cloudinary
+            const cloudinaryFolder = `slave_boss/${dateStr}/${cleanTaskName}_${currentTaskLevel}_${timeStr}`;
+
+            // ID trên Firebase (Dùng gạch dưới thay cho gạch chéo)
+            const customFirebaseID = `${dateStr}_${cleanTaskName}_${currentTaskLevel}_${timeStr}`;
+
+            // --- BƯỚC 2: UPLOAD CLOUDINARY ---
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', 'cunlun'); // Đảm bảo preset này là Unsigned
+            formData.append('folder', cloudinaryFolder);
+
+            const cloudRes = await fetch('https://api.cloudinary.com/v1_1/djjinlx7t/auto/upload', {
+                method: 'POST', body: formData
+            });
+            
+            if (!cloudRes.ok) {
+                const errData = await cloudRes.json();
+                throw new Error(errData.error.message || "Lỗi Cloudinary");
+            }
+            const imgData = await cloudRes.json();
+
+            // --- BƯỚC 3: LƯU VÀO FIREBASE VỚI ID TỰ CHỌN ---
+            await setDoc(doc(db, "task_submissions", customFirebaseID), {
+                submission_id: customFirebaseID,
+                task_id: taskId,
+                action_name: taskName,
+                level: currentTaskLevel,
+                confession: confession,
+                image_evidence: imgData.secure_url,
+                cloudinary_path: cloudinaryFolder,
+                location: {
+                    latitude: realLocation.lat,
+                    longitude: realLocation.lng,
+                    accuracy: realLocation.accuracy,
+                    google_map_link: `https://www.google.com/maps?q=${realLocation.lat},${realLocation.lng}`
+                },
+                submitted_at: Date.now(),
+                status: "PENDING"
+            });
+
+            // Cập nhật trạng thái nhiệm vụ gốc
+            await updateDoc(doc(db, "slave_tasks", taskId), { status: "SUBMITTED" });
+
+            alert("Vật chứng đã được niêm phong với mã: " + customFirebaseID);
+            window.location.href = "s_doilenh.html";
+
+        } catch (err) {
+            console.error("FULL ERROR:", err);
+            alert("Lỗi: " + err.message);
+        } finally {
+            document.getElementById('loading').style.display = 'none';
+        }
+    };
+</script>
 </body>
 
 </html>

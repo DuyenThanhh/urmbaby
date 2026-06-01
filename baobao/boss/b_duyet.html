@@ -105,25 +105,44 @@
             text-align: center; padding: 100px 20px;
             font-family: 'Pirata One'; font-size: 22px; color: #444;
         }
+        /* Tiêu đề phân khu */
+.section-divider {
+    font-family: 'Pirata One'; font-size: 22px; color: var(--gold);
+    margin: 40px 0 20px; border-bottom: 1px double var(--blood);
+    padding-bottom: 5px; text-transform: uppercase; letter-spacing: 2px;
+}
+
+/* Thẻ thỉnh cầu (Petition Card) nhìn khác với thẻ vật chứng */
+.petition-card {
+    background: rgba(20, 20, 20, 0.9); border: 1px solid #333;
+    border-left: 5px solid var(--gold); margin-bottom: 30px; padding: 20px;
+}
+.petition-info { font-size: 13px; margin-bottom: 8px; color: #bbb; }
+.petition-info b { color: var(--gold); }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <div class="overlay"></div>
-    <div class="content">
-        
-        <div class="header-judgment">
-            <h1>NGÀI VÀNG PHÁN XÉT</h1>
-            <p>Supreme Authority</p>
-        </div>
-
-        <div id="judgment-list">
-            <!-- Danh sách vật chứng dâng nộp sẽ hiện ở đây -->
-            <div class="empty-state">Đang lắng nghe lời khẩn cầu...</div>
-        </div>
-
+   <div class="content">
+    <div class="header-judgment">
+        <h1>NGÀI VÀNG PHÁN XÉT</h1>
+        <p>Supreme Authority</p>
     </div>
+
+    <!-- PHẦN 1: DUYỆT VẬT CHỨNG -->
+    <div class="section-divider"><i class="fa-solid fa-scroll"></i> Vật Chứng Hiến Tế</div>
+    <div id="judgment-list">
+        <div class="empty-state">Đang lắng nghe vật chứng...</div>
+    </div>
+
+    <!-- PHẦN 2: DUYỆT THỈNH CẦU -->
+    <div class="section-divider"><i class="fa-solid fa-person-praying"></i> Lời Cầu Xin Nhục Hình</div>
+    <div id="petition-list">
+        <div class="empty-state">Không có kẻ nào đang quỳ lạy...</div>
+    </div>
+</div>
 </div>
 
 <script type="module">
@@ -205,6 +224,52 @@
             alert("Lỗi phán xét!");
         }
     };
+    // --- LOGIC CHO LỜI CẦU XIN (PETITIONS) ---
+
+// 1. Truy vấn các bản thỉnh cầu PENDING
+const qPet = query(collection(db, "slave_petitions"), where("status", "==", "PENDING"));
+
+onSnapshot(qPet, (snap) => {
+    const pList = document.getElementById('petition-list');
+    if (snap.empty) {
+        pList.innerHTML = `<div class="empty-state">Hành lang thỉnh cầu đang trống...</div>`;
+        return;
+    }
+
+    let html = "";
+    snap.forEach(docSnap => {
+        const data = docSnap.data();
+        html += `
+            <div class="petition-card">
+                <div style="font-family:'Pirata One'; font-size:20px; color:#eee; margin-bottom:10px;">${data.requested_action}</div>
+                <div class="petition-info"><b>Tư thế:</b> ${data.requested_posture}</div>
+                <div class="petition-info"><b>Lý do:</b> ${data.reason}</div>
+                <div class="petition-info"><b>Cấp độ:</b> ${data.severity}</div>
+                <div class="petition-info"><b>Phần thưởng xin:</b> ${data.requested_reward}</div>
+                
+                <div class="judgment-actions">
+                    <button class="btn-judge btn-bless" onclick="judgePetition('${docSnap.id}', 'ACCEPTED')">CHẤP THUẬN</button>
+                    <button class="btn-judge btn-punish" onclick="judgePetition('${docSnap.id}', 'DENIED')">BÁC BỎ</button>
+                </div>
+            </div>
+        `;
+    });
+    pList.innerHTML = html;
+});
+
+// 2. Hàm xử lý Phán xét Thỉnh cầu
+window.judgePetition = async (id, decision) => {
+    if(!confirm("Xác nhận phản hồi lời cầu xin này?")) return;
+    try {
+        await updateDoc(doc(db, "punishment_petitions", id), {
+            status: decision,
+            responded_at: Date.now()
+        });
+        alert(decision === 'ACCEPTED' ? "Đã chấp thuận lời van xin!" : "Đã bác bỏ sự hèn mọn!");
+    } catch (err) {
+        alert("Lỗi thực thi!");
+    }
+};
 </script>
 </body>
 </html>

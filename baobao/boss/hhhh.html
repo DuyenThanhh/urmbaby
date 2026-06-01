@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Imperial Archives - The Eternal Timeline</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --blood: #8b0000;
+            --obsidian: #050505;
+            --glass: rgba(15, 15, 15, 0.95);
+        }
+
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            font-family: 'Quicksand', sans-serif; background: #000; color: #ccc;
+        }
+
+        .app-container {
+            width: 100%; min-height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)), url('../img/3.png');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            padding: 20px; box-sizing: border-box;
+        }
+
+        .header { text-align: center; margin-bottom: 25px; }
+        .header h1 { 
+            font-family: 'Pirata One', cursive; font-size: 32px; color: var(--gold);
+            margin: 0; letter-spacing: 4px; text-transform: uppercase;
+        }
+
+        /* HỆ THỐNG LỌC PHÂN CẤP (TIME HIERARCHY) */
+        .timeline-selector {
+            background: var(--glass);
+            border: 1px solid #222;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .filter-label {
+            font-family: 'Pirata One'; font-size: 14px; color: var(--gold);
+            margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+        }
+
+        .scroll-wrapper {
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;
+            scrollbar-width: none;
+        }
+        .scroll-wrapper::-webkit-scrollbar { display: none; }
+
+        .time-chip {
+            white-space: nowrap; padding: 8px 18px; border-radius: 5px;
+            background: #111; border: 1px solid #333;
+            color: #666; font-size: 11px; font-weight: 700; cursor: pointer;
+            transition: 0.3s; text-transform: uppercase;
+        }
+        .time-chip.active {
+            background: var(--blood); border-color: var(--gold);
+            color: var(--gold); box-shadow: 0 0 15px rgba(139, 0, 0, 0.4);
+        }
+
+        /* LỌC TRẠNG THÁI */
+        .status-filter {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+            margin-bottom: 25px;
+        }
+        .status-btn {
+            padding: 10px; text-align: center; font-size: 10px; font-weight: 800;
+            background: rgba(20,20,20,0.8); border: 1px solid #222; border-radius: 5px;
+            color: #555; cursor: pointer; transition: 0.3s;
+        }
+        .status-btn.active[data-status="LOCKED"] { color: #888; border-color: #444; background: #111; }
+        .status-btn.active[data-status="SUBMITTED"] { color: #ff0000; border-color: #ff0000; box-shadow: 0 0 10px rgba(255,0,0,0.2); }
+        .status-btn.active[data-status="COMPLETED"] { color: #00ff00; border-color: #00ff00; box-shadow: 0 0 10px rgba(0,255,0,0.2); }
+
+        /* DANH SÁCH THẺ LỆNH */
+        #master-list { display: flex; flex-direction: column; gap: 15px; }
+
+        .decree-card {
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            padding: 15px; position: relative;
+            border-left: 3px solid var(--gold);
+            animation: slideIn 0.4s ease forwards;
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .card-id { font-size: 9px; color: #444; font-family: monospace; }
+        
+        .card-action {
+            font-family: 'Pirata One'; font-size: 20px; color: #eee;
+            margin: 5px 0; display: block;
+        }
+
+        .card-footer {
+            margin-top: 12px; padding-top: 8px; border-top: 1px solid #111;
+            display: flex; justify-content: space-between; font-size: 10px; color: #555;
+        }
+
+        .status-indicator { font-family: 'Pirata One'; font-size: 12px; letter-spacing: 1px; }
+        .ind-LOCKED { color: #555; }
+        .ind-SUBMITTED { color: #ff0000; animation: blink 1s infinite; }
+        .ind-COMPLETED { color: var(--gold); }
+
+        @keyframes blink { 50% { opacity: 0.5; } }
+
+        .btn-judge {
+            background: var(--blood); color: #fff; padding: 6px 12px;
+            font-family: 'Pirata One'; font-size: 14px; border: none; border-radius: 3px;
+            cursor: pointer; text-decoration: none; display: inline-block; margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="header">
+        <h1>VĂN KHỐ THƯỢNG LỆNH</h1>
+    </div>
+
+    <!-- BỘ LỌC THỜI GIAN PHÂN CẤP -->
+    <div class="timeline-selector">
+        <div class="filter-label"><i class="fa-solid fa-clock-rotate-left"></i> QUY MÔ THỜI GIAN</div>
+        <div class="scroll-wrapper" id="time-hierarchy">
+            <div class="time-chip active" data-range="all">Vĩnh hằng</div>
+            <div class="time-chip" data-range="century">Thế kỷ này</div>
+            <div class="time-chip" data-range="year">Năm nay</div>
+            <div class="time-chip" data-range="month">Tháng này</div>
+            <div class="time-chip" data-range="week">Tuần này</div>
+            <div class="time-chip" data-range="today">Hôm nay</div>
+        </div>
+    </div>
+
+    <!-- BỘ LỌC TRẠNG THÁI -->
+    <div class="status-filter">
+        <div class="status-btn active" data-status="all">TẤT CẢ</div>
+        <div class="status-btn" data-status="LOCKED">ĐANG LÀM</div>
+        <div class="status-btn" data-status="SUBMITTED">CHỜ DUYỆT</div>
+        <div class="status-btn" data-status="COMPLETED">HOÀN THÀNH</div>
+    </div>
+
+    <div id="master-list">
+        <!-- Dữ liệu từ Firebase -->
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+        authDomain: "photodiary-3d469.firebaseapp.com",
+        projectId: "photodiary-3d469",
+        storageBucket: "photodiary-3d469.firebasestorage.app",
+        messagingSenderId: "102477469911",
+        appId: "1:102477469911:web:13ed38ab426819fdb43892"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let allTasks = [];
+    let filters = { time: 'all', status: 'all' };
+
+    // --- LOGIC LỌC THỜI GIAN ---
+    function isTaskInTimeRange(taskDate, range) {
+        const now = new Date();
+        const task = new Date(taskDate);
+        
+        switch(range) {
+            case 'today':
+                return task.toDateString() === now.toDateString();
+            case 'week':
+                const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 1)).setHours(0,0,0,0);
+                return task >= startOfWeek;
+            case 'month':
+                return task.getMonth() === now.getMonth() && task.getFullYear() === now.getFullYear();
+            case 'year':
+                return task.getFullYear() === now.getFullYear();
+            case 'century':
+                return Math.floor(task.getFullYear() / 100) === Math.floor(now.getFullYear() / 100);
+            default:
+                return true;
+        }
+    }
+
+    // --- SỰ KIỆN CLICK LỌC ---
+    document.querySelectorAll('.time-chip').forEach(chip => {
+        chip.onclick = function() {
+            document.querySelectorAll('.time-chip').forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            filters.time = this.dataset.range;
+            renderTasks();
+        }
+    });
+
+    document.querySelectorAll('.status-btn').forEach(btn => {
+        btn.onclick = function() {
+            document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            filters.status = this.dataset.status;
+            renderTasks();
+        }
+    });
+
+    // --- LẤY DỮ LIỆU REALTIME ---
+    const q = query(collection(db, "slave_tasks"), orderBy("created_at", "desc"));
+    onSnapshot(q, async (snap) => {
+        const subSnap = await getDocs(collection(db, "task_submissions"));
+        const submissions = {};
+        subSnap.forEach(s => submissions[s.data().task_id] = s.id);
+
+        allTasks = [];
+        snap.forEach(d => allTasks.push({ id: d.id, subId: submissions[d.id], ...d.data() }));
+        renderTasks();
+    });
+
+    function renderTasks() {
+        const list = document.getElementById('master-list');
+        list.innerHTML = "";
+
+        const filtered = allTasks.filter(t => {
+            const timeMatch = isTaskInTimeRange(t.created_at, filters.time);
+            const statusMatch = filters.status === 'all' || t.status === filters.status;
+            return timeMatch && statusMatch;
+        });
+
+        if(filtered.length === 0) {
+            list.innerHTML = `<div style="text-align:center; padding:50px; opacity:0.3;">KHÔNG TÌM THẤY DẤU VẾT...</div>`;
+            return;
+        }
+
+        filtered.forEach(task => {
+            const status = task.status || "LOCKED";
+            const dateStr = new Date(task.created_at).toLocaleString('vi-VN', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+
+            list.innerHTML += `
+                <div class="decree-card">
+                    <div class="card-header">
+                        <span class="card-id">#${task.id.slice(-6).toUpperCase()}</span>
+                        <span class="status-indicator ind-${status}">${status === 'SUBMITTED' ? 'CHỜ DUYỆT' : status}</span>
+                    </div>
+                    <span class="card-action">${task.action}</span>
+                    ${status === 'SUBMITTED' ? `<a href="b_accept.html?subId=${task.subId}&taskId=${task.id}" class="btn-judge">PHÁN XÉT</a>` : ''}
+                    <div class="card-footer">
+                        <span><i class="fa-solid fa-calendar-day"></i> ${dateStr}</span>
+                        <span>Cấp: ${(task.level || 'low').toUpperCase()}</span>
+                    </div>
+                </div>
+            `;
+        });
+    }
+</script>
+</body>
+</html>
