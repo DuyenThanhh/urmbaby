@@ -359,7 +359,7 @@
 
     // --- LOAD THÔNG TIN NHIỆM VỤ ---
     if (taskId) {
-        getDoc(doc(db, "slave_tasks", taskId)).then(s => {
+        getDoc(doc(db, "boss_ra_lenh", taskId)).then(s => {
             if (s.exists()) {
                 const data = s.data();
                 document.getElementById('target-action').innerText = data.action;
@@ -426,7 +426,7 @@
             const imgData = await cloudRes.json();
 
             // --- BƯỚC 3: LƯU VÀO FIREBASE VỚI ID TỰ CHỌN ---
-            await setDoc(doc(db, "task_submissions", customFirebaseID), {
+            await setDoc(doc(db, "slave_nop", customFirebaseID), {
                 submission_id: customFirebaseID,
                 task_id: taskId,
                 action_name: taskName,
@@ -445,7 +445,7 @@
             });
 
             // Cập nhật trạng thái nhiệm vụ gốc
-            await updateDoc(doc(db, "slave_tasks", taskId), { status: "SUBMITTED" });
+            await updateDoc(doc(db, "boss_ra_lenh", taskId), { status: "SUBMITTED" });
 
             alert("Vật chứng đã được niêm phong với mã: " + customFirebaseID);
             window.location.href = "s_doilenh.html";

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Khế Ước Cổ Đại - Dấu Ấn Quyền Năng</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Pirata+One&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --dark-void: #030303; /* Gần như đen tuyệt đối */
+            --steel-gray: #1a1a1a;
+            --silver-light: #cccccc;
+            --blood-red: #cc0000; /* Đỏ máu đậm */
+            --subtle-red-glow: rgba(204,0,0,0.4);
+            --frame-border-dark: #0f0f0f;
+            --frame-border-light: #333333;
+            --text-muted: #888888;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'IBM Plex Mono', monospace; /* Font công nghệ/mật mã cho text thường */
+            color: var(--silver-light);
+            background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.98)), url('img/3.png');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            filter: grayscale(0.9) contrast(1.8) brightness(0.2); /* Mạnh mẽ hơn */
+            animation: bg-deep-shimmer 25s infinite alternate ease-in-out;
+        }
+
+        @keyframes bg-deep-shimmer {
+            0% { filter: grayscale(0.9) contrast(1.8) brightness(0.2); transform: scale(1); }
+            100% { filter: grayscale(0.95) contrast(1.9) brightness(0.15); transform: scale(1.03); }
+        }
+
+        /* Khung chứa nội dung chính - Giờ như một phiến đá/kim loại cổ */
+        .pact-container {
+            position: relative;
+            width: 90%;
+            max-width: 850px; /* Hơi rộng hơn */
+            height: 90vh;
+            background: linear-gradient(160deg, var(--steel-gray) 0%, var(--dark-void) 70%); /* Gradient kim loại */
+            border: 5px solid var(--frame-border-dark); /* Viền đậm */
+            box-shadow: 0 0 60px rgba(0,0,0,0.9), inset 0 0 30px rgba(0,0,0,0.95);
+            padding: 40px; /* Tăng padding */
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--blood-red) var(--dark-void);
+            animation: container-reveal 2s ease-out forwards;
+            /* Border-image dạng gồ ghề, cổ kính */
+            border-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="%231a1a1a" d="M0 0h100v100H0z"/><path fill="none" stroke="%23333333" stroke-width="2" d="M10 10h80v80H10z"/></svg>') 10 repeat;
+        }
+        
+        @keyframes container-reveal {
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Hiệu ứng khe nứt phát sáng */
+        .pact-container::before, .pact-container::after {
+            content: '';
+            position: absolute;
+            z-index: 1; /* Đảm bảo nằm trên lớp nền của container */
+        }
+        .pact-container::before {
+            inset: -7px;
+            border: 2px solid var(--blood-red); /* Viền đỏ rực */
+            box-shadow: 0 0 40px var(--subtle-red-glow), inset 0 0 20px var(--blood-red);
+            pointer-events: none;
+            animation: red-crack-glow 3.5s infinite alternate ease-in-out;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 0, 
+                               1% 1%, 99% 1%, 99% 99%, 1% 99%, 1% 1); /* Tạo khe hở giữa border và fill */
+        }
+
+        @keyframes red-crack-glow {
+            0% { opacity: 0.7; box-shadow: 0 0 30px var(--subtle-red-glow), inset 0 0 15px var(--blood-red); }
+            50% { opacity: 1; box-shadow: 0 0 50px var(--subtle-red-glow), 0 0 80px rgba(204,0,0,0.2), inset 0 0 25px var(--blood-red); }
+            100% { opacity: 0.7; box-shadow: 0 0 30px var(--subtle-red-glow), inset 0 0 15px var(--blood-red); }
+        }
+
+        /* Thanh cuộn tùy chỉnh cho Webkit */
+        .pact-container::-webkit-scrollbar {
+            width: 15px; /* Dày hơn */
+        }
+        .pact-container::-webkit-scrollbar-track {
+            background: var(--dark-void);
+            border-left: 1px solid var(--steel-gray);
+        }
+        .pact-container::-webkit-scrollbar-thumb {
+            background-color: var(--blood-red);
+            border-radius: 0; /* Sắc cạnh */
+            border: 3px solid var(--dark-void);
+        }
+
+        /* Tiêu đề trang */
+        .pact-header {
+            text-align: center;
+            margin-bottom: 50px; /* Rộng hơn */
+            padding-bottom: 25px;
+            border-bottom: 2px solid var(--steel-gray); /* Viền kim loại */
+            position: relative;
+        }
+        .pact-header::after { /* Đường trang trí bên dưới tiêu đề */
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--blood-red);
+            box-shadow: 0 0 10px var(--blood-red);
+        }
+
+        .pact-header h1 {
+            font-family: 'Cinzel Decorative', serif;
+            color: var(--silver-light); /* Tiêu đề bạc */
+            font-size: 3.5em; /* Rất lớn */
+            letter-spacing: 8px; /* Rộng rãi */
+            margin: 0;
+            text-shadow: 0 0 20px rgba(255,255,255,0.4), 0 0 40px rgba(255,255,255,0.2); /* Ánh bạc lạnh */
+            animation: title-cold-shine 5s infinite alternate ease-in-out;
+        }
+
+        @keyframes title-cold-shine {
+            0%, 100% { text-shadow: 0 0 15px rgba(255,255,255,0.3), 0 0 30px rgba(255,255,255,0.1); }
+            50% { text-shadow: 0 0 25px rgba(255,255,255,0.5), 0 0 50px rgba(255,255,255,0.3); }
+        }
+
+        .pact-header p {
+            font-family: 'Pirata One', cursive;
+            color: var(--text-muted); /* Xám mờ */
+            font-size: 1.3em;
+            text-transform: uppercase;
+            margin-top: 20px;
+            letter-spacing: 4px;
+            text-shadow: 0 0 5px rgba(0,0,0,0.8);
+        }
+
+        /* Nội dung chính - ảnh khế ước */
+        .pact-content {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            margin-top: 40px;
+        }
+
+        .pact-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            border: 4px solid var(--blood-red); /* Viền đỏ máu đậm */
+            box-shadow: 0 0 30px rgba(204,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.8);
+            filter: contrast(1.3) brightness(1.1); /* Làm ảnh cực kỳ sắc nét */
+            transform: skewX(-1deg); /* Nghiêng nhẹ tạo cảm giác bất ổn */
+            transition: transform 0.5s ease-in-out;
+        }
+        .pact-content img:hover {
+            transform: skewX(0deg) scale(1.02);
+            box-shadow: 0 0 40px rgba(204,0,0,0.9), inset 0 0 25px rgba(0,0,0,0.9);
+        }
+
+        /* Footer nhỏ */
+        .pact-footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px dashed var(--steel-gray);
+            font-size: 1em;
+            color: var(--text-muted);
+            font-style: italic;
+            text-shadow: 0 0 3px rgba(0,0,0,0.7);
+        }
+
+        /* Nút Back - Thiết kế lại như một glyph khắc đá */
+        .back-button {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%) rotateZ(-2deg); /* Nghiêng nhẹ */
+            background-color: var(--steel-gray);
+            border: 2px solid var(--frame-border-light);
+            color: var(--silver-light);
+            padding: 12px 25px;
+            cursor: pointer;
+            font-size: 1.3em;
+            font-family: 'Cinzel Decorative', serif; /* Font tiêu đề cho nút */
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 10px rgba(255,255,255,0.1); /* Bóng sâu và highlight */
+            transition: all 0.3s ease;
+            z-index: 20;
+            border-radius: 2px; /* Góc hơi bo */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .back-button:hover {
+            background-color: #333333; /* Sáng hơn một chút */
+            box-shadow: 0 0 30px rgba(0,0,0,0.9), inset 0 0 15px rgba(255,255,255,0.2);
+            transform: translateX(-50%) scale(1.05) rotateZ(-2deg);
+            color: var(--blood-red); /* Đổi màu chữ sang đỏ máu */
+        }
+        
+        .back-button .fas {
+            margin-right: 10px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .pact-container {
+                padding: 25px;
+            }
+            .pact-header h1 {
+                font-size: 2.8em;
+                letter-spacing: 5px;
+            }
+            .pact-header p {
+                font-size: 1.1em;
+                letter-spacing: 3px;
+            }
+            .back-button {
+                top: 25px;
+                padding: 10px 20px;
+                font-size: 1.1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pact-container {
+                padding: 15px;
+            }
+            .pact-header h1 {
+                font-size: 2.2em;
+                letter-spacing: 2px;
+            }
+            .pact-header p {
+                font-size: 1em;
+                letter-spacing: 2px;
+            }
+            .pact-content img {
+                border-width: 2px;
+                box-shadow: 0 0 20px rgba(204,0,0,0.7);
+            }
+            .pact-footer {
+                margin-top: 40px;
+                padding-top: 20px;
+                font-size: 0.9em;
+            }
+            .back-button {
+                top: 15px;
+                padding: 8px 15px;
+                font-size: 1em;
+                letter-spacing: 1px;
+                transform: translateX(-50%) rotateZ(-1deg);
+            }
+            .back-button .fas {
+                margin-right: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="back-button" onclick="goBack()">
+        <i class="fas fa-arrow-left"></i> Quay Lại
+    </button>
+
+    <div class="pact-container">
+        <div class="pact-header">
+            <h1>KHẾ ƯỚC CỔ ĐẠI</h1>
+            <p>Dấu Ấn Hắc Ám</p>
+        </div>
+
+        <div class="pact-content">
+            <img src="img/khe_uoc.png" alt="Bản Khế Ước Tuyệt Đối Trung Thành">
+        </div>
+
+        <div class="pact-footer">
+            "Trong vực thẳm vĩnh hằng, lời thề này là bất biến."
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+
+</body>
+</html>

@@ -129,7 +129,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const q = query(collection(db, "slave_tasks"), orderBy("created_at", "desc"));
+    const q = query(collection(db, "boss_ra_lenh"), orderBy("created_at", "desc"));
 
     onSnapshot(q, async (snap) => {
         const list = document.getElementById('master-list');

@@ -255,7 +255,7 @@
         const db = getFirestore(app);
 
         // Truy vấn các bản nộp có status là PENDING
-        const q = query(collection(db, "task_submissions"), where("status", "==", "PENDING"));
+        const q = query(collection(db, "slave_nop"), where("status", "==", "PENDING"));
 
         onSnapshot(q, (snap) => {
             const list = document.getElementById('judgment-list');
@@ -298,14 +298,13 @@
 
             try {
                 // 1. Cập nhật trạng thái bản nộp
-                await updateDoc(doc(db, "task_submissions", submissionId), {
+                await updateDoc(doc(db, "slave_nop", submissionId), {
                     status: decision,
                     judged_at: new Date().getTime()
                 });
 
-                // 2. Cập nhật trạng thái lệnh gốc trong slave_tasks
                 const finalStatus = decision === 'APPROVED' ? "COMPLETED" : "FAILED";
-                await updateDoc(doc(db, "slave_tasks", taskId), {
+                await updateDoc(doc(db, "boss_ra_lenh", taskId), {
                     status: finalStatus,
                     status_req: decision === 'APPROVED' ? "Đã được chấp nhận" : "Bị từ chối - Chờ phạt"
                 });

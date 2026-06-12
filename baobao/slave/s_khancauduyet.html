@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sổ Thu Phục Linh Hồn - Dark Majesty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Orbitron:wght@500;700&family=Quicksand:wght@300;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-dark: #1a0000;
+            --accent-red: #ff0000;
+            --accent-white: #ffffff;
+            --text-light: #bbb;
+            --text-dark: #666;
+            --border-color: #444;
+            --shadow-intensity: 0 0 20px rgba(255,0,0,0.7);
+            --bg-texture: url('https://www.transparenttextures.com/patterns/dark-metal.png');
+            --approved-color: #00ff00; /* Stronger green */
+            --rejected-color: #ff4500; /* Stronger orange-red */
+            --grace-approved-color: #ffd700; /* Gold for grace mode approved */
+            --grace-rejected-color: #8B0000; /* Darker red for grace mode rejected */
+        }
+
+        body {
+            margin: 0;
+            background: #000;
+            color: var(--text-light);
+            font-family: 'Quicksand', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+            background-image: var(--bg-texture);
+            background-color: #000;
+        }
+
+        .master-background {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.95)), url('../img/4.png');
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(0.7) contrast(1.5) brightness(0.3);
+            z-index: -1;
+            animation: bg-pulse 15s infinite alternate ease-in-out;
+        }
+
+        @keyframes bg-pulse {
+            0% { transform: scale(1); filter: grayscale(0.7) contrast(1.5) brightness(0.3); }
+            100% { transform: scale(1.03); filter: grayscale(0.8) contrast(1.6) brightness(0.25); }
+        }
+
+        .shackle-frame {
+            width: 95%;
+            max-width: 1000px;
+            height: 90%;
+            background: linear-gradient(145deg, #050505, #150505);
+            border: 2px solid var(--border-color);
+            position: relative;
+            padding: 30px;
+            box-shadow: var(--shadow-intensity), inset 0 0 30px #000;
+            border-image: linear-gradient(to bottom right, #600000, #300000, #101010) 1;
+            transform: rotateX(3deg) rotateY(-3deg);
+            transition: transform 0.5s ease-out;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 20px;
+            overflow: hidden;
+        }
+
+        .shackle-frame:hover {
+            transform: rotateX(0deg) rotateY(0deg) scale(1.005);
+            box-shadow: 0 0 70px rgba(255,0,0,0.9);
+        }
+
+        .shackle-frame::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border: 1px solid var(--accent-red);
+            animation: heart-throb 1.2s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes heart-throb {
+            0% { opacity: 0.6; transform: scale(1); border-color: rgba(255,0,0,0.8); }
+            50% { opacity: 0.2; transform: scale(1.02); border-color: rgba(255,0,0,0.4); }
+            100% { opacity: 0.6; transform: scale(1); border-color: rgba(255,0,0,0.8); }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        header h1 {
+            font-family: 'Cinzel Decorative', serif;
+            color: var(--accent-white);
+            font-size: 3em;
+            letter-spacing: 8px;
+            margin: 0;
+            text-shadow: 0 0 15px var(--accent-red), 0 0 30px var(--primary-dark);
+            animation: title-glow 3s infinite alternate;
+        }
+
+        @keyframes title-glow {
+            from { text-shadow: 0 0 10px var(--accent-red), 0 0 20px var(--primary-dark); }
+            to { text-shadow: 0 0 20px var(--accent-red), 0 0 40px var(--primary-dark); }
+        }
+
+        header p {
+            font-family: 'Pirata One';
+            color: var(--accent-red);
+            font-size: 1.2em;
+            text-transform: uppercase;
+            margin-top: 10px;
+            letter-spacing: 3px;
+        }
+
+        .main-content {
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('../img/4.png');
+            background-size: cover;
+            background-position: center;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 20px;
+            height: 100%;
+            overflow: hidden;
+
+        }
+
+        .dominance-meter-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7));
+            border: 1px solid #222;
+            box-shadow: inset 0 0 20px #000;
+            padding: 20px;
+            grid-column: 1 / 2;
+        }
+
+        .dominance-symbol {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            border: 5px solid var(--accent-red);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px var(--accent-red), inset 0 0 20px var(--primary-dark);
+            animation: symbol-pulse 4s infinite alternate ease-in-out;
+            background-image: url('../img/xich.png'); /* Replace with a dark, mystic symbol */
+            background-size: cover;
+            background-position: center;
+        }
+
+        @keyframes symbol-pulse {
+            0% { box-shadow: 0 0 30px var(--accent-red), inset 0 0 20px var(--primary-dark); transform: scale(1); }
+            100% { box-shadow: 0 0 40px var(--accent-red), inset 0 0 25px var(--primary-dark); transform: scale(1.02); }
+        }
+
+        .dominance-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background: linear-gradient(to top, var(--accent-red), #600000);
+            box-shadow: 0 0 40px var(--accent-red);
+            transition: height 2s cubic-bezier(0.95, 0.05, 0.795, 0.035);
+            border-top: 2px solid var(--accent-white);
+        }
+
+        .percentage-display-new, .stat-box strong {
+            font-family: 'Orbitron', sans-serif; /* NEW FONT FOR NUMBERS */
+            font-weight: 700; /* Bold Orbitron */
+            color: var(--accent-white);
+            text-shadow: 4px 4px 0 var(--accent-red), 6px 6px 0 var(--primary-dark);
+            animation: percentage-pulse 2s infinite alternate;
+            z-index: 1;
+            position: relative;
+        }
+        .percentage-display-new {
+            font-size: 5em;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        @keyframes percentage-pulse {
+            from { transform: scale(1); text-shadow: 4px 4px 0 var(--accent-red), 6px 6px 0 var(--primary-dark); }
+            to { transform: scale(1.02); text-shadow: 5px 5px 0 var(--accent-red), 7px 7px 0 var(--primary-dark); }
+        }
+
+        .status-msg {
+            font-size: 1.1em;
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+            color: var(--text-dark);
+            border-top: 1px dashed var(--primary-dark);
+            padding-top: 20px;
+            line-height: 1.6;
+        }
+
+        .stat-grid {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 20px;
+            border-top: 1px solid #222;
+            padding-top: 20px;
+        }
+        .stat-box {
+            background: #000;
+            padding: 10px 20px;
+            text-align: center;
+            border: 1px solid #1a1a1a;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            flex: 1;
+            margin: 0 5px;
+        }
+        .stat-box span {
+            font-size: 0.8em;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 5px;
+        }
+        .stat-box strong {
+            font-size: 2.5em; /* Applies Orbitron from above */
+        }
+
+        .petition-list-container {
+            background: #0a0a0a;
+            border: 1px solid #222;
+            box-shadow: inset 0 0 15px #000;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .petition-list-container h3 {
+            font-family: 'Pirata One', serif;
+            color: var(--accent-white);
+            font-size: 1.5em;
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-align: center;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .petition-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-red) #333;
+        }
+
+        .petition-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        .petition-list::-webkit-scrollbar-track {
+            background: #222;
+        }
+        .petition-list::-webkit-scrollbar-thumb {
+            background-color: var(--accent-red);
+            border-radius: 4px;
+            border: 2px solid #000;
+        }
+
+        /* --- NEW STYLES FOR PETITION ITEMS --- */
+        /* --- Cập nhật NEW STYLES FOR PETITION ITEMS --- */
+.petition-item {
+    display: flex;
+    align-items: flex-start; /* Align items to the top for multi-line content */
+    padding: 12px; /* Slightly more padding */
+    margin-bottom: 8px; /* More space between items */
+    border: 1px solid #333;
+    background-color: #000;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    /* Font chung cho các chi tiết trong item */
+    font-family: 'Quicksand', sans-serif;
+}
+
+.petition-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.7), 0 0 15px currentColor; /* Glow with item color */
+}
+
+.petition-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px; /* Thicker vertical accent line */
+    background-color: currentColor;
+    box-shadow: 1px 0 8px currentColor; /* Subtle glow for the line */
+}
+
+.petition-item .icon {
+    margin-right: 15px; /* More space for icon */
+    font-size: 1.5em; /* Larger icon */
+    width: 25px; /* Fixed width for icon */
+    text-align: center;
+    color: currentColor;
+    flex-shrink: 0; /* Prevent icon from shrinking */
+    padding-top: 2px; /* Align icon better with text */
+}
+
+.petition-item-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Space between detail rows */
+    margin-right: 10px; /* Space before status tag */
+}
+
+.detail-row {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+    align-items: baseline;
+}
+
+.detail-label {
+    font-family: 'Pirata One', serif; /* Font cho nhãn */
+    font-size: 0.8em;
+    color: var(--text-dark);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-right: 5px;
+    min-width: 60px; /* Ensure labels are somewhat aligned */
+    flex-shrink: 0; /* Prevent label from shrinking */
+}
+
+.detail-value {
+    font-size: 0.95em;
+    color: var(--text-light);
+    word-break: break-word; /* Allow long words to break */
+}
+
+.detail-value.requested-action {
+    font-weight: bold; /* Make the main request stand out */
+    color: var(--accent-white);
+    text-shadow: 0 0 5px rgba(255,255,255,0.2);
+}
+.detail-value.severity {
+    font-family: 'Orbitron', sans-serif; /* Special font for severity */
+    font-weight: 500;
+}
+
+
+.petition-item-status-tag {
+    font-family: 'Pirata One', serif;
+    text-transform: uppercase;
+    font-size: 0.8em;
+    letter-spacing: 1px;
+    padding: 4px 8px;
+    border: 1px solid currentColor;
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 2px;
+    color: currentColor;
+    flex-shrink: 0; /* Prevent tag from shrinking */
+    margin-left: auto; /* Push to the right */
+    align-self: flex-start; /* Align tag to the top */
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+/* Specific colors for approved/rejected items */
+.petition-item.approved {
+    border-color: var(--approved-color);
+    color: var(--approved-color); /* Sets text color for icon, status, and default values */
+}
+.petition-item.rejected {
+    border-color: var(--rejected-color);
+    color: var(--rejected-color);
+}
+/* Ensure the ID text is readable regardless of item color */
+.petition-item.approved .petition-item-id,
+.petition-item.rejected .petition-item-id {
+    color: var(--text-light); /* Keep ID neutral */
+}
+
+/* Grace Mode Specific Petition Item Colors */
+.grace-mode .petition-item.approved {
+    color: var(--grace-approved-color);
+    border-color: var(--grace-approved-color);
+}
+.grace-mode .petition-item.rejected {
+    color: var(--grace-rejected-color);
+    border-color: var(--grace-rejected-color);
+}
+/* Ensure the ID text is readable regardless of item color in grace mode */
+.grace-mode .petition-item.approved .petition-item-id,
+.grace-mode .petition-item.rejected .petition-item-id {
+    color: var(--text-light);
+}
+
+/* Responsive adjustments - ensure new elements look good */
+@media (max-width: 500px) {
+    .petition-item {
+        flex-wrap: wrap; /* Allow icon and details to wrap */
+        padding: 10px;
+    }
+    .petition-item .icon {
+        font-size: 1.2em;
+        width: 20px;
+        margin-right: 10px;
+    }
+    .petition-item-details {
+        width: calc(100% - 30px); /* Adjust width for icon */
+        margin-right: 0;
+    }
+    .detail-label {
+        min-width: 50px;
+        font-size: 0.7em;
+    }
+    .detail-value {
+        font-size: 0.85em;
+    }
+    .petition-item-status-tag {
+        margin-top: 10px; /* Push tag below details on small screens */
+        width: 100%;
+        text-align: center;
+    }
+}
+        .petition-item.approved {
+            border-color: var(--approved-color);
+            color: var(--approved-color);
+        }
+        .petition-item.rejected {
+            border-color: var(--rejected-color);
+            color: var(--rejected-color);
+        }
+
+        /* GRACE MODE */
+        .grace-mode {
+            --primary-dark: #303000;
+            --accent-red: #ffd700; /* Gold */
+            --shadow-intensity: 0 0 30px rgba(255,215,0,0.8);
+        }
+        .grace-mode .shackle-frame {
+            border-image: linear-gradient(to bottom right, #b8860b, #775500, #333) 1;
+            box-shadow: var(--shadow-intensity), inset 0 0 30px #202000;
+        }
+        .grace-mode .shackle-frame::before {
+            border-color: var(--accent-red);
+            animation: grace-throb 1.8s infinite ease-in-out;
+        }
+        .grace-mode header h1 {
+            color: var(--accent-red);
+            text-shadow: 0 0 20px rgba(255,215,0,0.8), 0 0 40px rgba(184,134,11,0.7);
+            animation: grace-title-glow 3s infinite alternate;
+        }
+        .grace-mode .dominance-symbol {
+            border-color: var(--accent-red);
+            box-shadow: 0 0 40px var(--accent-red), inset 0 0 25px var(--primary-dark);
+            animation: grace-symbol-pulse 4s infinite alternate ease-in-out;
+        }
+        .grace-mode .dominance-fill {
+            background: linear-gradient(to top, var(--accent-red), #b8860b);
+            box-shadow: 0 0 50px var(--accent-red);
+            border-top: 2px solid var(--accent-white);
+        }
+        .grace-mode .percentage-display-new, .grace-mode .stat-box strong {
+            color: var(--accent-red);
+            text-shadow: 4px 4px 0 #000, 6px 6px 0 #200;
+        }
+        .grace-mode #grace-banner {
+            background: var(--accent-red);
+            box-shadow: 0 0 25px var(--accent-red), inset 0 0 10px rgba(0,0,0,0.5);
+        }
+        
+        /* Grace Mode Specific Petition Item Colors */
+        .grace-mode .petition-item.approved {
+            color: var(--grace-approved-color);
+            border-color: var(--grace-approved-color);
+        }
+        .grace-mode .petition-item.rejected {
+            color: var(--grace-rejected-color);
+            border-color: var(--grace-rejected-color);
+        }
+
+        #grace-banner {
+            display: none;
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%) rotateZ(-3deg);
+            background: var(--accent-red);
+            color: #000;
+            padding: 8px 30px;
+            font-family: 'Pirata One';
+            font-size: 1.4em;
+            z-index: 10;
+            box-shadow: 0 0 25px var(--accent-red), inset 0 0 10px rgba(0,0,0,0.5);
+            border: 2px solid #000;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .scanline {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, rgba(255,0,0,0.05), rgba(255,0,0,0.3), rgba(255,0,0,0.05));
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            animation: scan 4s linear infinite;
+            z-index: 5;
+            opacity: 0.7;
+            box-shadow: 0 0 10px rgba(255,0,0,0.5);
+        }
+        @keyframes scan {
+            0% { top: 0%; opacity: 0.7; }
+            50% { top: 100%; opacity: 0.3; }
+            100% { top: 0%; opacity: 0.7; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 900px) {
+            .shackle-frame {
+                grid-template-rows: auto auto 1fr;
+                height: auto;
+                max-height: 95vh;
+            }
+            .main-content {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                overflow-y: auto;
+            }
+            .dominance-meter-container {
+                padding: 15px;
+            }
+            .dominance-symbol {
+                width: 180px;
+                height: 180px;
+            }
+            .percentage-display-new {
+                font-size: 4em;
+            }
+            .petition-list-container {
+                height: 300px;
+            }
+            .stat-grid {
+                flex-wrap: wrap;
+            }
+            .stat-box {
+                flex: 1 1 45%;
+                margin: 5px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            header h1 { font-size: 2em; letter-spacing: 5px; }
+            header p { font-size: 0.9em; letter-spacing: 2px; }
+            .dominance-symbol { width: 150px; height: 150px; }
+            .percentage-display-new { font-size: 3em; }
+            .stat-box strong { font-size: 2em; }
+            .petition-list-container h3 { font-size: 1.2em; }
+            .petition-item { font-size: 0.8em; }
+            #grace-banner { font-size: 1.1em; padding: 6px 15px; top: -15px; }
+            .petition-item .icon { font-size: 1em; width: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="master-background"></div>
+
+    <div class="shackle-frame" id="main-container">
+        <div class="scanline"></div>
+        <div id="grace-banner">ĐÃ NHẬN ÂN HUỆ TỪ CHỦ NHÂN</div>
+
+        <header>
+            <h1>SỔ CHIẾM HỮU</h1>
+            <p>Soul Accountability & Willpower Depletion</p>
+        </header>
+
+        <div class="main-content">
+            <div class="dominance-meter-container">
+                <div class="dominance-symbol">
+                    <div class="dominance-fill" id="progress-fill"></div>
+                </div>
+                <span class="percentage-display-new" id="percent-val">0%</span>
+                
+                <div class="stat-grid">
+                    <div class="stat-box">
+                        <span>Được Chấp Thuận</span>
+                        <strong id="approved-count" style="color: var(--accent-red);">0</strong>
+                    </div>
+                    <div class="stat-box">
+                        <span>Bị Khước Từ</span>
+                        <strong id="rejected-count">0</strong>
+                    </div>
+                </div>
+
+                <div class="status-msg" id="status-text">
+                    "Đang chờ Master phán quyết định mệnh của ngươi..."
+                </div>
+            </div>
+
+            <div class="petition-list-container">
+                <h3>Linh Hồn Đã Thu Phục</h3>
+                <ul class="petition-list" id="approved-list">
+                    <!-- Dynamic content will go here -->
+                </ul>
+            </div>
+
+            <div class="petition-list-container">
+                <h3>Linh Hồn Bị Khước Từ</h3>
+                <ul class="petition-list" id="rejected-list">
+                    <!-- Dynamic content will go here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+            authDomain: "photodiary-3d469.firebaseapp.com",
+            projectId: "photodiary-3d469",
+            storageBucket: "photodiary-3d469.firebasestorage.app",
+            messagingSenderId: "102477469911",
+            appId: "1:102477469911:web:13ed38ab426819fdb43892"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let allPetitions = [];
+
+        onSnapshot(collection(db, "slave_petitions"), (snapshot) => {
+            let approved = 0;
+            let rejected = 0;
+            allPetitions = [];
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const id = doc.id;
+                allPetitions.push({ id, ...data });
+
+                if (data.status === "ACCEPTED") approved++;
+                if (data.status === "REJECTED") rejected++;
+            });
+
+            updateDominance(approved, rejected);
+            renderPetitionLists(allPetitions);
+        });
+
+        function updateDominance(appr, rej) {
+            const totalDecided = appr + rej;
+            const percent = totalDecided === 0 ? 0 : Math.round((appr / (totalDecided+10)) * 100);
+            
+            document.getElementById('approved-count').innerText = appr;
+            document.getElementById('rejected-count').innerText = rej;
+            document.getElementById('percent-val').innerText = percent + "%";
+            document.getElementById('progress-fill').style.height = percent + "%";
+
+            const container = document.getElementById('main-container');
+            const statusText = document.getElementById('status-text');
+            const banner = document.getElementById('grace-banner');
+
+            if (percent > 85) {
+                container.classList.add('grace-mode');
+                banner.style.display = 'block';
+                statusText.innerHTML = "Ngươi đã hoàn toàn thuộc về ta. Ta ban cho ngươi đặc ân được phục vụ.";
+            } else if (percent > 50) {
+                container.classList.remove('grace-mode');
+                banner.style.display = 'none';
+                statusText.innerHTML = "Sự ngoan ngoãn của ngươi đang được ghi nhận. Đừng làm ta thất vọng.";
+            } else {
+                container.classList.remove('grace-mode');
+                banner.style.display = 'none';
+                statusText.innerHTML = "Lời cầu xin của ngươi chưa đủ thành kính. Ta chưa thấy được sự phục tùng.";
+            }
+        }
+
+     function renderPetitionLists(petitions) {
+    const approvedList = document.getElementById('approved-list');
+    const rejectedList = document.getElementById('rejected-list');
+
+    approvedList.innerHTML = ''; // Clear existing lists
+    rejectedList.innerHTML = '';
+
+    // Sắp xếp theo thời gian tạo (created_at) mới nhất trước
+    // Giả định created_at là timestamp dạng số
+    petitions.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+
+    petitions.forEach(petition => {
+        const li = document.createElement('li');
+        li.classList.add('petition-item');
+        
+        let iconHtml = '';
+        let statusText = '';
+        let itemClass = ''; // For approved/rejected styling
+
+        // Chuyển đổi timestamp Unix sang định dạng ngày giờ dễ đọc hơn
+        const createdAtDate = petition.created_at ? new Date(petition.created_at * 1000).toLocaleString('vi-VN') : 'N/A';
+        const respondedAtDate = petition.responded_at ? new Date(petition.responded_at * 1000).toLocaleString('vi-VN') : 'Chưa phản hồi';
+
+        // Quyết định biểu tượng, trạng thái và class CSS
+        if (petition.status === "APPROVED" || petition.status === "ACCEPTED") { // Adjusting for "ACCEPTED" as per your image
+            itemClass = 'approved';
+            iconHtml = '<i class="fas fa-check-circle icon"></i>'; // Biểu tượng dấu tích
+            statusText = 'ĐỒNG Ý';
+        } else if (petition.status === "REJECTED") {
+            itemClass = 'rejected';
+            iconHtml = '<i class="fas fa-times-circle icon"></i>'; // Biểu tượng dấu X
+            statusText = 'KHƯỚC TỪ';
+        } else { // Handle other potential statuses like PENDING
+            itemClass = 'pending'; // You might want to define styles for 'pending'
+            iconHtml = '<i class="fas fa-hourglass-half icon"></i>'; // Biểu tượng đồng hồ cát
+            statusText = 'ĐANG CHỜ';
+        }
+
+        li.classList.add(itemClass); // Add the specific class
+
+        li.innerHTML = `
+            ${iconHtml}
+            <div class="petition-item-details">
+                <div class="detail-row">
+                    <span class="detail-label">Yêu cầu:</span>
+                    <span class="detail-value requested-action">${petition.requested_action || 'Không rõ'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Lý do:</span>
+                    <span class="detail-value reason">${petition.reason || 'Không có'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Mức độ:</span>
+                    <span class="detail-value severity">${petition.severity || 'UNKNOWN'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Tạo lúc:</span>
+                    <span class="detail-value created-at">${createdAtDate}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Phản hồi:</span>
+                    <span class="detail-value responded-at">${respondedAtDate}</span>
+                </div>
+            </div>
+            <span class="petition-item-status-tag">${statusText}</span>
+        `;
+        
+        // Thêm vào danh sách tương ứng
+        if (itemClass === 'approved') {
+            approvedList.appendChild(li);
+        } else if (itemClass === 'rejected') {
+            rejectedList.appendChild(li);
+        }
+        // Bạn có thể thêm logic để xử lý nếu có trạng thái 'pending' và muốn hiển thị nó ở đâu đó
+    });
+}
+    </script>
+</body>
+</html>

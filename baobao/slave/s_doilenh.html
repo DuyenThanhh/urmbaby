@@ -663,7 +663,7 @@
         let currentAction = '';
         let realLocation = null;
 
-        const q = query(collection(db, "slave_tasks"), orderBy("created_at", "desc"));
+        const q = query(collection(db, "boss_ra_lenh"), orderBy("created_at", "desc"));
 
         onSnapshot(q, (snap) => {
             const list = document.getElementById('task-list');
@@ -791,7 +791,7 @@
         const img = await res.json();
 
         // --- BƯỚC 2: GHI VÀO VĂN KHỐ (FIREBASE) ---
-        await setDoc(doc(db, "task_submissions", customID), {
+        await setDoc(doc(db, "slave_nop", customID), {
             submission_id: customID,
             task_id: currentId,
             action_name: currentAction,
@@ -807,7 +807,7 @@
         });
 
         // --- BƯỚC 3: CẬP NHẬT TRẠNG THÁI LỆNH GỐC ---
-        await updateDoc(doc(db, "slave_tasks", currentId), { 
+        await updateDoc(doc(db, "boss_ra_lenh", currentId), { 
             status: "SUBMITTED" 
         });
 

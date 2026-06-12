@@ -3,203 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phòng Sám Hối - Nơi Quỳ Xuống</title>
+    <title>Hầm Gục Định Đoạt - Slave Dossier</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=EB+Garamond:ital,wght@0,400;1,500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Pirata+One&family=Quicksand:wght@500;700&family=Charm:wght@400;700&family=Nosifer&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --blood: #4a0404;
+            --bright-blood: #ff0000;
+            --deep-black: #020202;
+            --iron: #1a1a1a;
+        }
+
         body {
-            background-color: #020202;
-            background-image: radial-gradient(circle at center, #1a0505 0%, #020202 100%);
-            color: #bfa181; /* Màu vàng đồng cũ */
-            font-family: 'EB Garamond', serif;
+            background-color: var(--deep-black);
+            background-image: 
+                radial-gradient(circle, transparent 20%, var(--deep-black) 80%),
+                linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.95)),
+                url('../img/4.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: #999;
+            font-family: 'Quicksand', sans-serif;
             min-height: 100vh;
-            margin: 0;
             overflow-x: hidden;
         }
 
-        /* Hiệu ứng màng sương đen tối bao quanh */
-        body::before {
-            content: "";
+        /* Hiệu ứng bóng tối bao trùm (Vignette) */
+        .vignette {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 20%, black 150%);
+            inset: 0;
+            background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.9) 100%);
             pointer-events: none;
             z-index: 10;
         }
 
-        .master-header {
-            font-family: 'Cinzel Decorative', cursive;
-            text-align: center;
-            padding: 40px 20px 20px;
-            letter-spacing: 3px;
-        }
-
-        .master-header h1 {
-            font-size: 1.8rem;
-            color: #8b0000; /* Màu đỏ máu */
-            text-shadow: 0 0 15px rgba(139, 0, 0, 0.7);
-            margin-bottom: 5px;
-        }
-
-        .master-header p {
-            font-style: italic;
-            font-size: 0.9rem;
-            opacity: 0.6;
-        }
-
-        /* Vòng Tròn Phục Tùng - Trái Tim Nô Lệ */
-        .heart-of-submission {
+        /* Vòng tròn nhịp tim sợ hãi */
+        .shackle-meter {
             position: relative;
-            width: 220px;
-            height: 220px;
-            margin: 20px auto;
+            width: 200px;
+            height: 200px;
+            margin: 40px auto;
+            border-radius: 50%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border-radius: 50%;
-            background: url('https://www.transparenttextures.com/patterns/dark-leather.png'), #000;
-            border: 4px double #4a0000;
-            box-shadow: inset 0 0 30px #000, 0 0 20px rgba(139, 0, 0, 0.5);
-            animation: heartbeat 2s infinite ease-in-out;
-        }
-
-        @keyframes heartbeat {
-            0% { transform: scale(1); box-shadow: 0 0 20px rgba(139, 0, 0, 0.5); }
-            5% { transform: scale(1.05); }
-            10% { transform: scale(1); }
-            15% { transform: scale(1.03); }
-            100% { transform: scale(1); box-shadow: 0 0 40px rgba(139, 0, 0, 0.2); }
-        }
-
-        .loyalty-percent {
-            font-family: 'Cinzel Decorative', cursive;
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: #eee;
-            text-shadow: 2px 2px 10px #000;
-            line-height: 1;
-        }
-
-        /* Danh sách xiềng xích (Hình phạt) */
-        .chain-list {
-            position: relative;
-            padding: 0 25px;
+            background: radial-gradient(circle, #200000 0%, #000 100%);
+            box-shadow: 0 0 40px var(--blood);
+            border: 2px solid var(--blood);
+            animation: heartBeat 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
             z-index: 20;
         }
 
-        .section-title {
-            font-family: 'Cinzel Decorative', cursive;
-            font-size: 0.8rem;
-            color: #4a4a4a;
-            border-bottom: 1px solid #2a0000;
-            padding-bottom: 5px;
-            margin: 30px 0 15px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        @keyframes heartBeat {
+            0% { transform: scale(0.95); box-shadow: 0 0 20px var(--blood); }
+            5% { transform: scale(1.1); box-shadow: 0 0 50px var(--bright-blood); }
+            10% { transform: scale(0.95); }
+            15% { transform: scale(1.05); }
+            100% { transform: scale(0.95); }
         }
 
-        .punishment-card {
-            background: linear-gradient(90deg, #120000 0%, #050505 100%);
-            border: 1px solid #2a0000;
-            padding: 15px;
+        .loyalty-percent {
+            font-family: 'Nosifer', cursive; /* Font chữ máu me */
+            font-size: 3.5rem;
+            color: var(--bright-blood);
+            line-height: 1;
+            text-shadow: 0 0 15px #000;
+            animation: textJitter 0.3s infinite alternate;
+        }
+
+        @keyframes textJitter {
+            0% { transform: translate(0,0); }
+            100% { transform: translate(1px, -1px) skew(1deg); }
+        }
+
+        /* Khung Ân Huệ - Như mảnh da cũ */
+        .rare-graces-section {
+            background: rgba(15, 15, 15, 0.9);
+            border: 1px solid var(--blood);
+            margin: 30px 20px;
+            padding: 20px;
+            position: relative;
+            clip-path: polygon(2% 0%, 98% 1%, 100% 4%, 99% 95%, 97% 100%, 3% 98%, 0% 95%, 1% 5%);
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .grace-scroll {
+            font-family: 'Charm', cursive;
+            color: #cecece;
+            font-size: 1.1rem;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        /* Khung Thẻ Tội Trạng - Man rợ */
+        .card-sin {
+            background: linear-gradient(90deg, rgba(40,0,0,0.9) 0%, rgba(10,10,10,0.9) 100%);
+            border-left: 5px solid var(--bright-blood);
             margin-bottom: 15px;
+            padding: 15px;
             position: relative;
             overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
         }
 
-        .punishment-card::before {
-            content: "FAILED";
+        .card-sin::after {
+            content: "";
             position: absolute;
-            right: -10px;
-            top: 5px;
-            font-size: 2rem;
-            font-weight: 900;
-            color: rgba(139, 0, 0, 0.1);
-            transform: rotate(-15deg);
+            top: 0; right: 0;
+            width: 50px; height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--blood));
+            opacity: 0.3;
         }
 
-        .blessing-card {
-            background: linear-gradient(90deg, #001200 0%, #050505 100%);
-            border: 1px solid #002a00;
-            padding: 15px;
+        .card-bless {
+            background: linear-gradient(90deg, rgba(0,40,0,0.6) 0%, rgba(10,10,10,0.9) 100%);
+            border-left: 5px solid #006400;
             margin-bottom: 15px;
+            padding: 15px;
+            clip-path: polygon(0 0, 95% 0, 100% 100%, 0% 100%);
         }
 
-        .task-action {
-            color: #d1d1d1;
-            font-size: 1rem;
-            margin-bottom: 5px;
+        .section-tag {
+            font-family: 'Cinzel Decorative';
+            font-size: 12px;
+            letter-spacing: 3px;
+            color: var(--bright-blood);
             display: block;
+            margin-bottom: 10px;
+            text-decoration: underline;
         }
 
-        .task-detail {
-            font-size: 0.85rem;
-            color: #8b0000; /* Đỏ cho hình phạt */
-            font-style: italic;
+        /* Thanh tiêu đề máu me */
+        .header-dossier h1 {
+            font-family: 'Pirata One', cursive;
+            font-size: 3rem;
+            background: linear-gradient(to bottom, #fff, var(--bright-blood));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 5px 5px 10px #000;
         }
 
-        .blessing-card .task-detail {
-            color: #008b45; /* Xanh cho ân huệ */
-        }
-
-        /* Thanh trạng thái loading Slave */
+        /* Hiệu ứng loading ghê rợn */
         #loading-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 1000;
+            position: fixed; inset: 0; background: #000; z-index: 1000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
-        
-        .loading-text {
-            font-family: 'Cinzel Decorative', cursive;
-            font-size: 0.7rem;
-            letter-spacing: 5px;
-            color: #4a0000;
-            animation: blink 1.5s infinite;
+        .scary-eye {
+            width: 80px; height: 80px;
+            background: radial-gradient(circle, #ff0000 20%, #4a0000 60%, #000 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 30px var(--bright-blood);
+            animation: eyeBlink 1s infinite;
         }
-
-        @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
-
+        @keyframes eyeBlink {
+            0%, 90% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+            100% { transform: scaleY(1); }
+        }
     </style>
 </head>
 <body>
 
+    <div class="vignette"></div>
+
     <div id="loading-overlay">
-        <div class="loading-text">ĐANG KHAI TRÌNH TỘI LỖI...</div>
+        <div class="scary-eye"></div>
+        <div class="mt-8 text-[10px] tracking-[8px] text-red-600 font-bold uppercase animate-pulse">Đang xiềng xích linh hồn...</div>
     </div>
 
-    <div class="master-header">
-        <h1>BẢN GHI NHẬN NHỤC HÌNH</h1>
-        <p>"Mọi hành động đều nằm trong tầm mắt Chủ nhân"</p>
-    </div>
-
-    <!-- Trái tim nô lệ: Nơi hiển thị % trung thành -->
-    <div class="heart-of-submission">
-        <div class="text-[10px] tracking-[4px] uppercase opacity-40">Khuất phục</div>
-        <div class="loyalty-percent" id="loyalty-val">0</div>
-        <div class="text-[14px] mt-[-5px] opacity-80 uppercase font-bold text-[#8b0000]">%</div>
-        <div class="text-[9px] mt-2 italic text-gray-500" id="task-stats">0/0 Đã hoàn thành</div>
-    </div>
-
-    <div class="chain-list pb-24">
-        <!-- ÁN PHẠT -->
-        <h2 class="section-title">Gông Cùm & Hình Phạt</h2>
-        <div id="punishments">
-            <!-- Data -->
+    <div class="relative z-20">
+        <div class="header-dossier text-center pt-10 px-5">
+            <h1>HỒ SƠ KHỔ SAI</h1>
+            <p class="text-[9px] tracking-[5px] uppercase text-red-900 font-bold">Vật hiến tế của Chủ nhân</p>
         </div>
 
-        <!-- ÂN HUỆ -->
-        <h2 class="section-title">Ân Huệ Hiếm Hoi</h2>
-        <div id="blessings">
-            <!-- Data -->
+        <!-- Chỉ số phục tùng đập theo nhịp tim -->
+        <div class="shackle-meter">
+            <span class="text-[8px] uppercase tracking-[4px] text-gray-400">Sự Khuất Phục</span>
+            <div class="loyalty-percent" id="loyalty-val">0</div>
+            <span class="text-[10px] font-black text-red-600">PERCENT</span>
+            <div class="text-[8px] mt-2 text-gray-500 italic uppercase" id="task-stats">Đang run rẩy...</div>
+        </div>
+
+        <!-- MỤC ÂN HUỆ - NHƯ DA NGƯỜI -->
+        <div class="rare-graces-section">
+            <div class="text-center text-[10px] tracking-[4px] text-yellow-900 font-bold mb-3">ÂN HUỆ HIẾM HOI</div>
+            <div id="rare-rewards-container" class="grace-scroll">
+                Đang tìm kiếm sự thương hại...
+            </div>
+            <div class="absolute bottom-1 right-2 text-[8px] opacity-20 italic">Ghi bằng máu</div>
+        </div>
+
+        <div class="px-6 pb-20">
+            <!-- ÁN PHẠT -->
+            <div class="mb-10">
+                <span class="section-tag">TỘI TRẠNG (SIN)</span>
+                <div id="punishments"></div>
+            </div>
+
+            <!-- CÔNG TRẠNG -->
+            <div>
+                <span class="section-tag" style="color: #008000;">ÂN ĐIỂM (GRACE)</span>
+                <div id="blessings"></div>
+            </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = {
+        const firebaseConfig = {
             apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
             authDomain: "photodiary-3d469.firebaseapp.com",
             projectId: "photodiary-3d469",
@@ -207,46 +224,81 @@ const firebaseConfig = {
             messagingSenderId: "102477469911",
             appId: "1:102477469911:web:13ed38ab426819fdb43892"
         };
+
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        async function fetchSlaveHistory() {
+        async function fetchDossier() {
             try {
-                const querySnapshot = await getDocs(collection(db, "slave_tasks"));
-                let total = 0, success = 0;
+                const q = query(collection(db, "boss_ra_lenh"), orderBy("created_at", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                let completed = 0;
+                let judgedTasks = 0;
                 let punHTML = '', blessHTML = '';
+                let rewardsList = [];
 
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    total++;
-                    if(data.status === "SUCCESS") {
-                        success++;
-                        blessHTML += `
-                            <div class="blessing-card">
-                                <span class="task-action">◈ ${data.action}</span>
-                                <div class="task-detail">Ân huệ: ${data.reward || 'Được phép tiếp tục phục vụ'}</div>
-                            </div>`;
-                    } else if(data.status === "FAILED") {
-                        punHTML += `
-                            <div class="punishment-card">
-                                <span class="task-action">◈ ${data.action}</span>
-                                <div class="task-detail">Hình phạt: ${data.punishment || 'Chờ nhục hình mới'}</div>
-                                <div class="text-[10px] mt-2 opacity-30 text-right uppercase tracking-tighter">
-                                    Trạng thái: ${data.status_req}
-                                </div>
-                            </div>`;
+                    
+                    if(data.reward && data.status === "COMPLETED") {
+                        rewardsList.push(data.reward);
+                    }
+
+                    if(data.status === "COMPLETED" || data.status === "FAILED") {
+                        judgedTasks++;
+                        if(data.status === "COMPLETED") {
+                            completed++;
+                            blessHTML += `
+                                <div class="card-bless">
+                                    <div class="text-white text-xs font-bold uppercase"><i class="fa-solid fa-droplet mr-2 text-green-600"></i> ${data.action}</div>
+                                    <div class="text-[10px] text-gray-400 mt-1">Được Ngài ghi nhận công trạng.</div>
+                                </div>`;
+                        } else {
+                            punHTML += `
+                                <div class="card-sin">
+                                    <div class="text-white text-xs font-bold uppercase"><i class="fa-solid fa-skull mr-2 text-red-600"></i> ${data.action}</div>
+                                    <div class="text-[10px] text-red-300 mt-1">Hình phạt: ${data.punishment || 'Nỗi đau vĩnh cửu'}</div>
+                                </div>`;
+                        }
                     }
                 });
 
-                document.getElementById('loyalty-val').innerText = total > 0 ? Math.round((success/total)*100) : 0;
-                document.getElementById('task-stats').innerText = `${success}/${total} Kiếp nạn đã qua`;
-                document.getElementById('punishments').innerHTML = punHTML || '<p class="text-center opacity-20 italic">Chưa có tội lỗi nào bị lộ...</p>';
-                document.getElementById('blessings').innerHTML = blessHTML || '<p class="text-center opacity-20 italic">Chưa xứng đáng nhận ân huệ...</p>';
+                const percent = judgedTasks > 0 ? Math.round((completed / judgedTasks) * 100) : 0;
+                
+                // Hiệu ứng số chạy
+                let count = 0;
+                const interval = setInterval(() => {
+                    if(count >= percent) {
+                        document.getElementById('loyalty-val').innerText = percent;
+                        clearInterval(interval);
+                    } else {
+                        count++;
+                        document.getElementById('loyalty-val').innerText = count;
+                    }
+                }, 20);
 
-            } catch (e) { console.error(e); }
-            finally { document.getElementById('loading-overlay').style.display = 'none'; }
+                document.getElementById('task-stats').innerText = `${completed} VÂNG LỜI / ${judgedTasks} PHÁN QUYẾT`;
+
+                const rewardContainer = document.getElementById('rare-rewards-container');
+                if(rewardsList.length > 0) {
+                    rewardContainer.innerHTML = rewardsList.map(r => `<div>- ${r} -</div>`).join('');
+                } else {
+                    rewardContainer.innerHTML = `<span class="opacity-40 italic text-sm">Chưa đủ trung thành để được ban ơn...</span>`;
+                }
+
+                document.getElementById('punishments').innerHTML = punHTML || '<p class="text-center text-[10px] opacity-30 italic">Chưa có tội lỗi nào bị lộ...</p>';
+                document.getElementById('blessings').innerHTML = blessHTML || '<p class="text-center text-[10px] opacity-30 italic">Chưa có ân điển nào được ban...</p>';
+
+            } catch (e) { 
+                console.error(e); 
+            } finally { 
+                setTimeout(() => {
+                    document.getElementById('loading-overlay').style.display = 'none'; 
+                }, 1000);
+            }
         }
-        fetchSlaveHistory();
+        fetchDossier();
     </script>
 </body>
 </html>
