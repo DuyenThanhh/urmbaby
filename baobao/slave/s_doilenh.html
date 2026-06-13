@@ -579,46 +579,56 @@
 </head>
 
 <body>
-   <!-- MÀN HÌNH XIỀNG XÍCH -->
-<div id="loading-ritual">
-    <div class="chains-shaking"><i class="fa-solid fa-link"></i></div>
-    <p style="font-family: 'Pirata One'; color: var(--blood); margin-top: 20px; font-size: 20px; letter-spacing: 5px;">
-        ĐANG TRUYỀN LINH HỒN...
-    </p>
-</div>
-
-<!-- ĐÀN TẾ HIẾN TẾ -->
-<div id="submission-overlay">
-    <div style="text-align: center; margin-bottom: 20px;">
-        <h1 style="font-family: 'Pirata One'; color: var(--blood); font-size: 45px; margin: 0; text-shadow: 0 0 20px red;">HIẾN TẾ</h1>
-        <p style="color: var(--gold); font-size: 10px; letter-spacing: 4px;">SACRIFICE OF EVIDENCE</p>
+    <!-- MÀN HÌNH XIỀNG XÍCH -->
+    <div id="loading-ritual">
+        <div class="chains-shaking"><i class="fa-solid fa-link"></i></div>
+        <p
+            style="font-family: 'Pirata One'; color: var(--blood); margin-top: 20px; font-size: 20px; letter-spacing: 5px;">
+            ĐANG TRUYỀN LINH HỒN...
+        </p>
     </div>
 
-    <div class="sacrifice-altar">
-        <div class="label-ritual"><i class="fa-solid fa-scroll"></i> Mệnh lệnh</div>
-        <div id="sub-title" style="color: #eee; font-size: 20px; padding: 10px; background: rgba(139,0,0,0.1); border-left: 2px solid var(--blood); margin-bottom: 20px;"></div>
-
-        <div class="label-ritual"><i class="fa-solid fa-eye"></i> Vật chứng</div>
-        <div class="ritual-upload" onclick="document.getElementById('file-input').click()" style="width:100%; height:200px; background:#000; border:1px double #333; display:flex; align-items:center; justify-content:center; overflow:hidden;">
-            <i class="fa-solid fa-skull" id="skull-icon" style="font-size: 40px; color: #222;"></i>
-            <div id="preview-area" style="width:100%; height:100%; display:none;"></div>
-        </div>
-        <input type="file" id="file-input" hidden accept="image/*,video/*">
-
-        <div class="label-ritual" style="margin-top:20px;"><i class="fa-solid fa-pen-nib"></i> Lời tự thú</div>
-        <textarea id="ritual-confession" rows="3" style="width:100%; background:transparent; border:none; border-bottom:1px solid #333; color:#fff; outline:none;" placeholder="Viết những lời hối lỗi..."></textarea>
-
-        <button class="btn-sacrifice" id="btn-final-submit" style="display:none;">DÂNG NỘP NGAY</button>
-
-        <div id="gps-status" style="font-size: 9px; text-align: center; margin-top: 15px; color: #444;">
-            <i class="fa-solid fa-location-crosshairs"></i> VỊ TRÍ: <span style="color: var(--blood); font-weight: bold;">ĐANG KHÓA...</span>
+    <!-- ĐÀN TẾ HIẾN TẾ -->
+    <div id="submission-overlay">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h1
+                style="font-family: 'Pirata One'; color: var(--blood); font-size: 45px; margin: 0; text-shadow: 0 0 20px red;">
+                HIẾN TẾ</h1>
+            <p style="color: var(--gold); font-size: 10px; letter-spacing: 4px;">SACRIFICE OF EVIDENCE</p>
         </div>
 
-        <div onclick="document.getElementById('submission-overlay').style.display='none'" style="text-align:center; margin-top:20px; color:#444; font-size:12px; text-decoration:underline; cursor:pointer;">
-            LUI LẠI HÀNH LANG
+        <div class="sacrifice-altar">
+            <div class="label-ritual"><i class="fa-solid fa-scroll"></i> Mệnh lệnh</div>
+            <div id="sub-title"
+                style="color: #eee; font-size: 20px; padding: 10px; background: rgba(139,0,0,0.1); border-left: 2px solid var(--blood); margin-bottom: 20px;">
+            </div>
+
+            <div class="label-ritual"><i class="fa-solid fa-eye"></i> Vật chứng</div>
+            <div class="ritual-upload" onclick="document.getElementById('file-input').click()"
+                style="width:100%; height:200px; background:#000; border:1px double #333; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+                <i class="fa-solid fa-skull" id="skull-icon" style="font-size: 40px; color: #222;"></i>
+                <div id="preview-area" style="width:100%; height:100%; display:none;"></div>
+            </div>
+            <input type="file" id="file-input" hidden accept="image/*,video/*">
+
+            <div class="label-ritual" style="margin-top:20px;"><i class="fa-solid fa-pen-nib"></i> Lời tự thú</div>
+            <textarea id="ritual-confession" rows="3"
+                style="width:100%; background:transparent; border:none; border-bottom:1px solid #333; color:#fff; outline:none;"
+                placeholder="Viết những lời hối lỗi..."></textarea>
+
+            <button class="btn-sacrifice" id="btn-final-submit" style="display:none;">DÂNG NỘP NGAY</button>
+
+            <div id="gps-status" style="font-size: 9px; text-align: center; margin-top: 15px; color: #444;">
+                <i class="fa-solid fa-location-crosshairs"></i> VỊ TRÍ: <span
+                    style="color: var(--blood); font-weight: bold;">ĐANG KHÓA...</span>
+            </div>
+
+            <div onclick="document.getElementById('submission-overlay').style.display='none'"
+                style="text-align:center; margin-top:20px; color:#444; font-size:12px; text-decoration:underline; cursor:pointer;">
+                LUI LẠI HÀNH LANG
+            </div>
         </div>
     </div>
-</div>
     <div class="app-container">
         <div class="overlay"></div>
         <div class="content">
@@ -661,6 +671,7 @@
         // SỬA: Khai báo đầy đủ các biến toàn cục
         let currentId = '';
         let currentAction = '';
+        let currentLevel = '';
         let realLocation = null;
 
         const q = query(collection(db, "boss_ra_lenh"), orderBy("created_at", "desc"));
@@ -692,9 +703,9 @@
                     ${data.mantra ? `<div class="mantra-box"><i class="fa-solid fa-comment-dots" style="color:var(--gold)"></i> <b>KHẨU QUYẾT:</b> "${data.mantra}"</div>` : ''}
                     <div class="punishment-alert"><b>HÌNH PHẠT CƠ BẢN:</b> ${data.punishment || "Tùy chủ nhân quyết định"}</div>
                     ${data.extreme_punish ? `<div class="extreme-punish-box"><i class="fa-solid fa-biohazard"></i> HẬU QUẢ TÀN KHỐC: <br>${data.extreme_punish}</div>` : ''}
-                    <button class="btn-obey" onclick="openSubmission('${docSnap.id}', '${action.replace(/'/g, "\\'")}')">
-                        CHẤP HÀNH & DÂNG NỘP
-                    </button>
+                    <button class="btn-obey" onclick="openSubmission('${docSnap.id}', '${action.replace(/'/g, "\\'")}', '${level}')">
+    CHẤP HÀNH & DÂNG NỘP
+</button>
                 </div>`;
                 html += cardHtml;
                 if (deadline) startGhastlyTimer(docSnap.id, deadline);
@@ -724,9 +735,10 @@
         }
 
         // Gắn hàm vào window để HTML gọi được
-        window.openSubmission = (id, action) => {
+        window.openSubmission = (id, action, level) => {
             currentId = id;
             currentAction = action;
+            currentLevel = level;
             document.getElementById('sub-title').innerText = action;
             document.getElementById('submission-overlay').style.display = 'block';
 
@@ -752,78 +764,75 @@
             document.getElementById('btn-final-submit').style.display = 'block';
         };
 
-       document.getElementById('btn-final-submit').onclick = async () => {
-    const file = document.getElementById('file-input').files[0];
-    if (!file || !realLocation) return alert("Vật chứng hoặc Vị trí chưa sẵn sàng!");
+        document.getElementById('btn-final-submit').onclick = async () => {
+            const file = document.getElementById('file-input').files[0];
+            if (!file || !realLocation) return alert("Vật chứng hoặc Vị trí chưa sẵn sàng!");
 
-    const submitBtn = document.getElementById('btn-final-submit');
-    const loadingRitual = document.getElementById('loading-ritual');
+            const submitBtn = document.getElementById('btn-final-submit');
+            const loadingRitual = document.getElementById('loading-ritual');
 
-    // KÍCH HOẠT NGHI LỄ: Hiện xiềng xích rung lắc
-    loadingRitual.style.display = 'flex';
-    submitBtn.disabled = true;
+            // KÍCH HOẠT NGHI LỄ
+            loadingRitual.style.display = 'flex';
+            submitBtn.disabled = true;
 
-    try {
-        const now = new Date();
-        const dateStr = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
-        const timeStr = `${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
-        
-        // Làm sạch tên hành động để đặt tên ID
-        const cleanName = currentAction.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^\w]/g, '');
+            try {
+                const now = new Date();
+                const dateStr = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
+                const timeStr = `${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
 
-        // Đường dẫn folder: slave_boss/Ngày-Tháng-Năm
-        const folder = `slave_boss/${dateStr}`;
-        // ID duy nhất: Ngày_Tên_Giờ
-        const customID = `${dateStr}_${cleanName}_${timeStr}`;
+                const cleanName = currentAction.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^\w]/g, '');
 
-        // --- BƯỚC 1: HIẾN TẾ LÊN CLOUDINARY ---
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'cunlun');
-        formData.append('folder', folder);
+                // 1. Tạo đường dẫn Folder và ID
+                const folderPath = `slave_boss/${dateStr}/${cleanName}_${currentLevel}_${timeStr}`;
+                const customID = `${dateStr}_${currentLevel}_${cleanName}_${timeStr}`;
 
-        const res = await fetch('https://api.cloudinary.com/v1_1/djjinlx7t/auto/upload', { 
-            method: 'POST', 
-            body: formData 
-        });
-        
-        if (!res.ok) throw new Error("Cloudinary từ chối vật chứng!");
-        const img = await res.json();
 
-        // --- BƯỚC 2: GHI VÀO VĂN KHỐ (FIREBASE) ---
-        await setDoc(doc(db, "slave_nop", customID), {
-            submission_id: customID,
-            task_id: currentId,
-            action_name: currentAction,
-            image_evidence: img.secure_url,
-            confession: document.getElementById('ritual-confession')?.value || "Kẻ phục tùng không để lại lời nào.",
-            location: {
-                latitude: realLocation.lat,
-                longitude: realLocation.lng,
-                google_map_link: `https://www.google.com/maps?q=${realLocation.lat},${realLocation.lng}`
-            },
-            submitted_at: Date.now(),
-            status: "PENDING" // Chờ Master phán xét
-        });
+                // 2. KHỞI TẠO formData TRƯỚC KHI APPEND
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', 'cunlun');
+                formData.append('folder', folderPath); // Dùng đúng biến folderPath ở đây
 
-        // --- BƯỚC 3: CẬP NHẬT TRẠNG THÁI LỆNH GỐC ---
-        await updateDoc(doc(db, "boss_ra_lenh", currentId), { 
-            status: "SUBMITTED" 
-        });
+                // --- BƯỚC 1: HIẾN TẾ LÊN CLOUDINARY ---
+                const res = await fetch('https://api.cloudinary.com/v1_1/djjinlx7t/auto/upload', {
+                    method: 'POST',
+                    body: formData
+                });
 
-        // KẾT THÚC NGHI LỄ
-        alert("Vật chứng đã được niêm phong và gửi đi.");
-        location.reload(); 
+                if (!res.ok) throw new Error("Cloudinary từ chối vật chứng!");
+                const img = await res.json();
 
-    } catch (err) {
-        console.error("Nghi lễ thất bại:", err);
-        alert("Lỗi hiến tế: " + err.message);
-        
-        // Tắt xiềng xích để slave thử lại
-        loadingRitual.style.display = 'none';
-        submitBtn.disabled = false;
-    }
-};
+                // --- BƯỚC 2: GHI VÀO VĂN KHỐ (FIREBASE) ---
+                await setDoc(doc(db, "slave_nop", customID), {
+                    submission_id: customID,
+                    task_id: currentId,
+                    action_name: currentAction,
+                    image_evidence: img.secure_url,
+                    confession: document.getElementById('ritual-confession')?.value || "Kẻ phục tùng không để lại lời nào.",
+                    location: {
+                        latitude: realLocation.lat,
+                        longitude: realLocation.lng,
+                        google_map_link: `https://www.google.com/maps?q=${realLocation.lat},${realLocation.lng}`
+                    },
+                    submitted_at: Date.now(),
+                    status: "PENDING"
+                });
+
+                // --- BƯỚC 3: CẬP NHẬT TRẠNG THÁI LỆNH GỐC ---
+                await updateDoc(doc(db, "boss_ra_lenh", currentId), {
+                    status: "SUBMITTED"
+                });
+
+                alert("Vật chứng đã được niêm phong và gửi đi.");
+                location.reload();
+
+            } catch (err) {
+                console.error("Nghi lễ thất bại:", err);
+                alert("Lỗi hiến tế: " + err.message);
+                loadingRitual.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        };
     </script>
 </body>
 

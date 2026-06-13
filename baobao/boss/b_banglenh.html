@@ -1,192 +1,720 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Archival of Authority - Dark Majesty</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Eternal Archive - Dark Majesty Edition</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Quicksand:wght@400;700&family=Cinzel+Decorative:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
+        /* --- VARIABLE SYSTEM --- */
         :root {
             --gold: #d4af37;
-            --blood: #8b0000;
-            --obsidian: #050505;
-            --glass: rgba(10, 10, 10, 0.85);
+            --light-gold: #f9e295;
+            --blood: #b30000;
+            --dark-blood: #4d0000;
+            --obsidian: #0a0a0a;
+            --void: #000000;
+            --glass: rgba(15, 15, 15, 0.95);
+            --completed-gray: #444;
+            --font-main: 'Quicksand', sans-serif;
+            --font-ancient: 'Pirata One', cursive;
+            --font-royal: 'Cinzel Decorative', cursive;
+            --shadow-gold: 0 0 15px rgba(212, 175, 55, 0.5);
+            --shadow-blood: 0 0 20px rgba(179, 0, 0, 0.6);
         }
 
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            font-family: 'Quicksand', sans-serif; background: #000; 
-            color: #ccc; overflow-x: hidden;
+        /* --- GLOBAL RESET --- */
+        * {
+            box-sizing: border-box;
+            outline: none;
         }
 
-        /* NỀN CÓ CHIỀU SÂU */
-        .app-container {
-            width: 100%; min-height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('../img/3.png');
-            background-size: cover; background-position: center; background-attachment: fixed;
-            position: relative; padding: 20px; box-sizing: border-box;
+        ::-webkit-scrollbar {
+            width: 5px;
         }
 
-        .header { text-align: center; margin-bottom: 40px; }
-        .header h1 { 
-            font-family: 'Pirata One', cursive; font-size: 42px; color: var(--gold);
-            margin: 0; letter-spacing: 4px; text-transform: uppercase;
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        ::-webkit-scrollbar-track {
+            background: var(--void);
         }
-        .header p { font-size: 10px; color: var(--blood); letter-spacing: 5px; text-transform: uppercase; margin-top: 5px; font-weight: 800; }
 
-        /* DANH SÁCH LỆNH PHONG CÁCH QUÝ TỘC */
-        #master-list { display: flex; flex-direction: column; gap: 25px; }
+        ::-webkit-scrollbar-thumb {
+            background: var(--blood);
+            border-radius: 10px;
+        }
+
+        body {
+            background: var(--void);
+            color: #e0e0e0;
+            font-family: var(--font-main);
+            margin: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- BACKGROUND EFFECTS --- */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1a0a0a 0%, #000 80%);
+            z-index: -1;
+        }
+
+        .fog {
+            position: fixed;
+            width: 200%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            opacity: 0.1;
+            z-index: -1;
+            animation: drift 60s linear infinite;
+        }
+
+        @keyframes drift {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* --- LAYOUT --- */
+        .app-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* --- HEADER SECTION --- */
+        .royal-header {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 2px solid var(--blood);
+            padding-bottom: 20px;
+            position: relative;
+        }
+
+        .royal-header h1 {
+            font-family: var(--font-royal);
+            font-size: 56px;
+            color: var(--gold);
+            margin: 0;
+            text-shadow: var(--shadow-gold), 0 0 40px var(--blood);
+            letter-spacing: 8px;
+            text-transform: uppercase;
+        }
+
+        .royal-header p {
+            font-family: var(--font-ancient);
+            letter-spacing: 5px;
+            color: var(--blood);
+            font-size: 20px;
+            margin: 10px 0 0;
+        }
+
+        /* --- FILTER SYSTEM (RUNES) --- */
+        .rune-filters {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .rune-btn {
+            background: #111;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 12px 25px;
+            font-family: var(--font-ancient);
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+        }
+
+        .rune-btn:hover,
+        .rune-btn.active {
+            background: var(--gold);
+            color: var(--void);
+            box-shadow: var(--shadow-gold);
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        .rune-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: 0.5s;
+        }
+
+        .rune-btn:hover::after {
+            left: 100%;
+        }
+
+        /* --- BREADCRUMB --- */
+        .navigation-path {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-ancient);
+            color: var(--blood);
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .btn-return {
+            background: var(--blood);
+            color: #fff;
+            border: none;
+            padding: 5px 15px;
+            font-family: var(--font-main);
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        .btn-return:hover {
+            background: #ff0000;
+            transform: scale(1.05);
+        }
+
+        /* --- GRID CONTAINER --- */
+        .archive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .grid-folder {
+            background: var(--glass);
+            border: 1px solid #333;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            border-bottom: 4px solid var(--blood);
+        }
+
+        .grid-folder:hover {
+            border-color: var(--gold);
+            background: #1a1a1a;
+            transform: translateY(-10px);
+        }
+
+        .grid-folder i {
+            font-size: 40px;
+            color: var(--gold);
+            margin-bottom: 15px;
+        }
+
+        .grid-folder .folder-name {
+            font-family: var(--font-royal);
+            font-size: 18px;
+            color: #fff;
+            display: block;
+        }
+
+        .grid-folder .folder-count {
+            font-size: 12px;
+            color: var(--blood);
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        /* --- DECREE CARDS (TASK) --- */
+        .decree-list {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
 
         .decree-card {
             background: var(--glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 20px;
+            border-left: 5px solid var(--gold);
+            padding: 25px;
             position: relative;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            /* Cắt góc kiểu hầm hố */
-            clip-path: polygon(0% 0%, 95% 0%, 100% 15%, 100% 100%, 5% 100%, 0% 85%);
+            transition: 0.5s;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        .decree-card:hover {
-            border-color: var(--gold);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        /* Status: Pending */
+        .decree-card.pending {
+            border-left-color: var(--gold);
+            animation: pulseGold 3s infinite;
         }
 
-        /* TRẠNG THÁI (STATUS LABEL) */
-        .status-badge {
-            position: absolute; top: 15px; right: 20px;
-            font-family: 'Pirata One'; font-size: 14px; letter-spacing: 1px;
-            padding: 2px 12px; border-radius: 20px;
+        /* Status: Submitted (Waiting) */
+        .decree-card.submitted {
+            border-left-color: #ff4d4d;
+            background: linear-gradient(90deg, rgba(77, 0, 0, 0.3) 0%, rgba(15, 15, 15, 1) 100%);
         }
-        .status-pending { color: var(--gold); text-shadow: 0 0 10px var(--gold); }
-        .status-submitted { color: #00ff00; text-shadow: 0 0 10px #00ff00; animation: blink 1.5s infinite; }
-        .status-completed { color: #555; text-decoration: line-through; }
 
-        @keyframes blink { 50% { opacity: 0.4; } }
+        /* Status: Completed */
+        .decree-card.completed {
+            border-left-color: #444;
+            opacity: 0.7;
+            filter: grayscale(0.8);
+        }
+
+        .decree-card.completed::before {
+            content: 'TERMINATED';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            font-family: var(--font-royal);
+            font-size: 50px;
+            color: rgba(255, 0, 0, 0.1);
+            border: 5px solid rgba(255, 0, 0, 0.1);
+            padding: 10px 20px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes pulseGold {
+            0% {
+                box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+            }
+
+            100% {
+                box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+            }
+        }
+
+        .decree-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
 
         .decree-level {
-            font-size: 11px; font-weight: 800; color: var(--blood);
-            text-transform: uppercase; margin-bottom: 10px; display: block;
+            font-family: var(--font-ancient);
+            font-size: 14px;
+            color: var(--blood);
+            text-transform: uppercase;
         }
 
-        .decree-action {
-            font-family: 'Pirata One'; font-size: 24px; color: #fff;
-            margin: 10px 0; display: block; line-height: 1.2;
+        .decree-id {
+            font-size: 11px;
+            color: #555;
         }
 
-        /* NÚT XỬ LÝ (JUDGE BUTTON) */
-        .btn-judge {
-            display: inline-flex; align-items: center; gap: 8px;
-            margin-top: 15px; padding: 8px 16px;
-            background: var(--blood); color: #fff;
-            text-decoration: none; font-family: 'Pirata One'; font-size: 16px;
-            border: none; cursor: pointer; transition: 0.3s;
-        }
-        .btn-judge:hover { background: #ff0000; box-shadow: 0 0 15px #ff0000; }
-
-        .decree-footer {
-            margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);
-            display: flex; justify-content: space-between; font-size: 11px; color: #666;
+        .decree-title {
+            font-family: var(--font-royal);
+            font-size: 26px;
+            color: #fff;
+            margin: 15px 0;
+            display: block;
         }
 
-        /* EMPTY STATE */
-        .empty-palace {
-            text-align: center; padding: 100px 20px; color: #333;
-            font-family: 'Pirata One'; font-size: 24px;
+        /* PROGRESS BAR LIFE-LINE */
+        .life-line-container {
+            width: 100%;
+            height: 4px;
+            background: #222;
+            margin: 15px 0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .life-line-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--blood), var(--gold));
+            width: 0%;
+            transition: 1s linear;
+        }
+
+        .timer-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-ancient);
+            font-size: 20px;
+            color: var(--light-gold);
+        }
+
+       .timer-box.urgent {
+    color: #ff0000;
+    text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000; /* Tạo hiệu ứng rực đỏ răn đe */
+    animation: shake 0.5s infinite; /* Giữ nguyên rung lắc */
+}
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-2px);
+            }
+
+            75% {
+                transform: translateX(2px);
+            }
+        }
+
+        .btn-action {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 30px;
+            background: var(--blood);
+            color: #fff;
+            text-decoration: none;
+            font-family: var(--font-ancient);
+            font-size: 18px;
+            clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 10% 100%);
+            transition: 0.3s;
+        }
+
+        .btn-action:hover {
+            background: #ff0000;
+            transform: scale(1.1);
+            box-shadow: var(--shadow-blood);
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- EMPTY STATE --- */
+        .void-message {
+            text-align: center;
+            padding: 100px 0;
+            font-family: var(--font-royal);
+            font-size: 24px;
+            color: #333;
+            letter-spacing: 3px;
         }
     </style>
 </head>
+
 <body>
 
-<div class="app-container">
-    <div class="header">
-        <h1>VĂN KHỐ MỆNH LỆNH</h1>
-        <p>Command Archive</p>
+    <div class="ambient-bg"></div>
+    <div class="fog"></div>
+
+    <div class="app-wrapper">
+        <header class="royal-header">
+            <h1>The Archive</h1>
+            <p>VĂN KHỐ MỆNH LỆNH TỐI CAO</p>
+        </header>
+
+        <!-- Rune Filter Tabs -->
+        <nav class="rune-filters">
+            <button class="rune-btn active" data-mode="today">Hôm Nay</button>
+            <button class="rune-btn" data-mode="week">Tuần Này</button>
+            <button class="rune-btn" data-mode="month">Tháng</button>
+            <button class="rune-btn" data-mode="year">Năm</button>
+            <button class="rune-btn" data-mode="century">Thế Kỷ</button>
+        </nav>
+
+        <!-- Breadcrumb -->
+        <div id="nav-path-container" class="navigation-path">
+            <!-- Dynamic Path Content -->
+        </div>
+
+        <!-- Main Content Area -->
+        <main id="archive-content">
+            <!-- Dynamic Content (Folders or Cards) -->
+        </main>
     </div>
 
-    <div id="master-list">
-        <!-- Lệnh sẽ hiện ở đây -->
-    </div>
-</div>
+    <!-- JS MODULE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, query, orderBy, where, getDocs } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+            authDomain: "photodiary-3d469.firebaseapp.com",
+            projectId: "photodiary-3d469",
+            storageBucket: "photodiary-3d469.firebasestorage.app",
+            messagingSenderId: "102477469911",
+            appId: "1:102477469911:web:13ed38ab426819fdb43892"
+        };
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
-        authDomain: "photodiary-3d469.firebaseapp.com",
-        projectId: "photodiary-3d469",
-        storageBucket: "photodiary-3d469.firebasestorage.app",
-        messagingSenderId: "102477469911",
-        appId: "1:102477469911:web:13ed38ab426819fdb43892"
-    };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+        // --- GLOBAL STATE ---
+        let rawTasks = [];
+        let config = {
+            mode: 'today', // today | week | month | year | century
+            stack: [] // [ {type: 'year', val: 2024}, {type: 'month', val: 5} ]
+        };
 
-    const q = query(collection(db, "boss_ra_lenh"), orderBy("created_at", "desc"));
+        // --- UTILITIES ---
+        const getWeekNumber = (d) => {
+            const date = new Date(d.getTime());
+            date.setHours(0, 0, 0, 0);
+            date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+            const week1 = new Date(date.getFullYear(), 0, 4);
+            return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+        };
 
-    onSnapshot(q, async (snap) => {
-        const list = document.getElementById('master-list');
-        list.innerHTML = "";
+        const calculateLifePercent = (start, end) => {
+            const now = new Date().getTime();
+            const total = new Date(end).getTime() - new Date(start).getTime();
+            const left = new Date(end).getTime() - now;
+            return Math.max(0, Math.min(100, (left / total) * 100));
+        };
 
-        if (snap.empty) {
-            list.innerHTML = `<div class="empty-palace">CHƯA CÓ LỆNH NÀO ĐƯỢC BAN XUỐNG...</div>`;
-            return;
+        function getTimeRemaining(dueDate) {
+            const diff = new Date(dueDate).getTime() - new Date().getTime();
+
+            // Nếu hết thời gian: Trả về icon đầu lâu đỏ và lời đe dọa
+           // Tìm đoạn if (diff <= 0) và sửa lại text như sau:
+if (diff <= 0) return {
+    expired: true,
+    urgent: true,
+    text: `<i class="fa-solid fa-skull" style="filter: drop-shadow(0 0 5px red);"></i> HẾT HẠN - CHỜ PHẠT`
+};
+            const d = Math.floor(diff / 86400000);
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+
+            return {
+                expired: false,
+                urgent: d < 1, // Dưới 1 ngày là báo động đỏ
+                text: `${d}D : ${h}H : ${m}M : ${s}S`,
+                raw: diff
+            };
         }
 
-        // Lấy danh sách submission để kiểm tra xem có GPS/Ảnh chưa
-        const subSnap = await getDocs(collection(db, "task_submissions"));
-        const submissions = {};
-        subSnap.forEach(s => submissions[s.data().task_id] = { id: s.id, ...s.data() });
+        // --- CORE LOGIC: DRILL DOWN ---
+        function filterDataByStack(tasks) {
+            let filtered = [...tasks];
+            config.stack.forEach(step => {
+                if (step.type === 'year') filtered = filtered.filter(t => new Date(t.created_at).getFullYear() === step.val);
+                if (step.type === 'month') filtered = filtered.filter(t => new Date(t.created_at).getMonth() === step.val);
+                if (step.type === 'week') filtered = filtered.filter(t => getWeekNumber(new Date(t.created_at)) === step.val);
+                if (step.type === 'day') filtered = filtered.filter(t => new Date(t.created_at).toDateString() === step.val);
+            });
+            return filtered;
+        }
+        function renderArchive() {
+            const container = document.getElementById('archive-content');
+            const pathContainer = document.getElementById('nav-path-container');
+            let data = filterDataByStack(rawTasks);
 
-        snap.forEach(d => {
-            const task = d.data();
-            const status = task.status || "LOCKED";
-            let statusText = "ĐANG THỰC HIỆN";
-            let statusClass = "status-pending";
-
-            if(status === "SUBMITTED") {
-                statusText = "CHỜ PHÁN XÉT";
-                statusClass = "status-submitted";
-            } else if (status === "COMPLETED") {
-                statusText = "HOÀN THÀNH";
-                statusClass = "status-completed";
+            // 1. Cập nhật Breadcrumb (Đường dẫn)
+            pathContainer.innerHTML = `<span>ROOT / ${config.mode.toUpperCase()}</span>`;
+            config.stack.forEach((s) => {
+                pathContainer.innerHTML += ` <i class="fa-solid fa-angles-right"></i> <span>${s.label}</span>`;
+            });
+            if (config.stack.length > 0) {
+                const btn = document.createElement('button');
+                btn.className = 'btn-return';
+                btn.innerHTML = '<i class="fa-solid fa-reply"></i> TRỞ LẠI';
+                btn.onclick = () => { config.stack.pop(); renderArchive(); };
+                pathContainer.appendChild(btn);
             }
 
-            // Giao diện thẻ lệnh
-            let cardHtml = `
-                <div class="decree-card">
-                    <span class="status-badge ${statusClass}">${statusText}</span>
-                    <span class="decree-level">Level: ${task.level || 'Normal'}</span>
-                    <span class="decree-action">${task.action}</span>
-            `;
+            const depth = config.stack.length;
+            const lastStepType = depth > 0 ? config.stack[depth - 1].type : null;
 
-            // Nếu Slave đã nộp (SUBMITTED), Boss có nút "PHÁN XÉT"
-            if(status === "SUBMITTED" && submissions[d.id]) {
-                const subId = submissions[d.id].id;
-                cardHtml += `
-                    <a href="b_duyet.html?subId=${subId}&taskId=${d.id}" class="btn-judge">
-                        <i class="fa-solid fa-gavel"></i> PHÁN XÉT NGAY
-                    </a>
+            // 2. Logic điều hướng phân cấp
+            if (config.mode === 'today') {
+                const today = new Date().toDateString();
+                data = data.filter(t => new Date(t.created_at).toDateString() === today);
+                renderTasks(data);
+            }
+            // Nếu bước cuối cùng là 'day' (Ngày), thì hiển thị danh sách Lệnh
+            else if (lastStepType === 'day') {
+                renderTasks(data);
+            }
+            // Ngược lại, tính toán xem hiển thị Folder cấp tiếp theo là gì
+            else {
+                let nextType = '';
+                let groupingFn = null;
+                let prefix = '';
+                let formatFn = v => v;
+
+                // Xác định Folder tiếp theo dựa trên Mode và độ sâu (depth)
+                if (depth === 0) {
+                    if (config.mode === 'century') { nextType = 'year'; groupingFn = t => new Date(t.created_at).getFullYear(); prefix = 'Năm '; }
+                    else if (config.mode === 'year') { nextType = 'month'; groupingFn = t => new Date(t.created_at).getMonth(); prefix = 'Tháng '; formatFn = v => parseInt(v) + 1; }
+                    else if (config.mode === 'month') { nextType = 'week'; groupingFn = t => getWeekNumber(new Date(t.created_at)); prefix = 'Tuần '; }
+                    else if (config.mode === 'week') { nextType = 'day'; groupingFn = t => new Date(t.created_at).toDateString(); prefix = ''; formatFn = v => new Date(v).toLocaleDateString('vi-VN'); }
+                }
+                else {
+                    // Các cấp trung gian
+                    if (lastStepType === 'year') { nextType = 'month'; groupingFn = t => new Date(t.created_at).getMonth(); prefix = 'Tháng '; formatFn = v => parseInt(v) + 1; }
+                    else if (lastStepType === 'month') { nextType = 'week'; groupingFn = t => getWeekNumber(new Date(t.created_at)); prefix = 'Tuần '; }
+                    else if (lastStepType === 'week') { nextType = 'day'; groupingFn = t => new Date(t.created_at).toDateString(); prefix = ''; formatFn = v => new Date(v).toLocaleDateString('vi-VN'); }
+                }
+
+                renderFolders(data, groupingFn, nextType, prefix, formatFn);
+            }
+        }
+
+        function renderFolders(data, groupingFn, type, labelPrefix, formatFn = v => v) {
+            const container = document.getElementById('archive-content');
+            container.innerHTML = `<div class="archive-grid"></div>`;
+            const grid = container.querySelector('.archive-grid');
+
+            const groups = {};
+            data.forEach(t => {
+                const key = groupingFn(t);
+                if (!groups[key]) groups[key] = 0;
+                groups[key]++;
+            });
+
+            if (Object.keys(groups).length === 0) {
+                container.innerHTML = `<div class="void-message">HƯ VÔ... KHÔNG CÓ MỆNH LỆNH NÀO TẠI ĐÂY</div>`;
+                return;
+            }
+
+            Object.keys(groups).sort().forEach(key => {
+                const folder = document.createElement('div');
+                folder.className = 'grid-folder';
+                folder.innerHTML = `
+                    <i class="fa-solid fa-scroll-old"></i>
+                    <span class="folder-name">${labelPrefix}${formatFn(key)}</span>
+                    <span class="folder-count">${groups[key]} MỆNH LỆNH</span>
                 `;
+                folder.onclick = () => {
+                    config.stack.push({ type: type, val: isNaN(key) ? key : parseInt(key), label: labelPrefix + formatFn(key) });
+                    renderArchive();
+                };
+                grid.appendChild(folder);
+            });
+        }
+
+        function renderTasks(tasks) {
+            const container = document.getElementById('archive-content');
+            if (tasks.length === 0) {
+                container.innerHTML = `<div class="void-message">LỆNH TRUYỀN ĐÃ BIẾN MẤT VÀO HƯ KHÔNG...</div>`;
+                return;
             }
 
-            cardHtml += `
-                    <div class="decree-footer">
-                        <span><i class="fa-regular fa-calendar"></i> ${new Date(task.created_at).toLocaleDateString()}</span>
-                        <span>#${d.id.substring(0,6)}</span>
+            container.innerHTML = `<div class="decree-list"></div>`;
+            const list = container.querySelector('.decree-list');
+
+            tasks.forEach(task => {
+                const tr = getTimeRemaining(task.deadline);
+                const lifeProgress = calculateLifePercent(task.created_at, task.deadline);
+
+                let statusClass = 'pending';
+                let statusText = 'ĐANG THI HÀNH';
+                if (task.status === 'SUBMITTED') { statusClass = 'submitted'; statusText = 'CHỜ PHÁN QUYẾT'; }
+                if (task.status === 'COMPLETED') { statusClass = 'completed'; statusText = 'ĐÃ PHONG ẤN'; }
+
+                const card = document.createElement('div');
+                card.className = `decree-card ${statusClass}`;
+                card.innerHTML = `
+                    <div class="decree-header">
+                        <span class="decree-level">LEVEL: ${task.level || 'NORMAL'} - ${statusText}</span>
+                        <span class="decree-id">#ID-${task.id.substring(0, 8)}</span>
                     </div>
-                </div>
-            `;
-            list.innerHTML += cardHtml;
-        });
+                    <span class="decree-title">${task.action}</span>
+                    
+                    <div class="life-line-container">
+                        <div class="life-line-fill" style="width: ${lifeProgress}%"></div>
+                    </div>
+
+                    <div class="timer-box ${tr.urgent ? 'urgent' : ''}" data-due="${task.deadline}" data-start="${task.created_at}">
+                        <i class="fa-solid fa-hourglass-half"></i> 
+                        <span>${tr.text}</span>
+                    </div>
+
+                    ${task.status === 'SUBMITTED' ? `<a href="b_duyet.html?taskId=${task.id}" class="btn-action">PHÁN QUYẾT</a>` : ''}
+                    
+                    <div style="margin-top:15px; font-size:11px; color:#555; font-family: sans-serif;">
+                        BAN XUỐNG: ${new Date(task.created_at).toLocaleString('vi-VN')}
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        // --- REAL-TIME TICKER ---
+        // --- REAL-TIME TICKER ---
+       // --- REAL-TIME TICKER ---
+setInterval(() => {
+    const timers = document.querySelectorAll('.timer-box');
+    timers.forEach(box => {
+        const deadline = box.dataset.due;
+        const start = box.dataset.start;
+        const tr = getTimeRemaining(deadline);
+        const card = box.closest('.decree-card');
+        const fill = card.querySelector('.life-line-fill');
+
+        // PHẢI DÙNG innerHTML thay vì innerText
+        box.querySelector('span').innerHTML = tr.text;
+
+        if (card.classList.contains('completed')) {
+    box.querySelector('span').innerHTML = `<i class="fa-solid fa-check-double"></i> ĐÃ HOÀN THÀNH`;
+    box.style.color = "#888"; // Đổi chữ sang màu xám trắng cho giống ảnh
+    return;
+}
+
+        if (tr.urgent || tr.expired) {
+            box.classList.add('urgent'); // Thêm hiệu ứng rung lắc đã có trong CSS
+        } else {
+            box.classList.remove('urgent');
+        }
+
+        if (fill) fill.style.width = calculateLifePercent(start, deadline) + '%';
     });
-</script>
+}, 1000);
+
+        // --- FIREBASE LISTENERS ---
+        onSnapshot(query(collection(db, "boss_ra_lenh"), orderBy("created_at", "desc")), (snap) => {
+            rawTasks = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            renderArchive();
+        });
+
+        // --- UI EVENTS ---
+        document.querySelectorAll('.rune-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelector('.rune-btn.active').classList.remove('active');
+                btn.classList.add('active');
+                config.mode = btn.dataset.mode;
+                config.stack = [];
+                renderArchive();
+            };
+        });
+
+    </script>
 </body>
+
 </html>

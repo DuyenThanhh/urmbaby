@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Eternal Archive - Depth Filter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Quicksand:wght@400;700&family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --gold: #d4af37;
+            --blood: #8b0000;
+            --obsidian: #050505;
+            --glass: rgba(10, 10, 10, 0.9);
+            --completed-gray: #444;
+        }
+
+        body {
+            background: #000; color: #ccc; font-family: 'Quicksand', sans-serif;
+            margin: 0; min-height: 100vh; overflow-x: hidden;
+        }
+
+        /* --- BACKGROUND ANIMATION --- */
+        .bg-vignette {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 20%, black 150%), url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
+            z-index: -1;
+        }
+
+        .app-container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 {
+            font-family: 'Cinzel Decorative', cursive; font-size: 50px; color: var(--gold);
+            margin: 0; text-shadow: 0 0 20px var(--blood); letter-spacing: 5px;
+        }
+
+        /* --- TABS --- */
+        .filter-tabs {
+            display: flex; justify-content: center; gap: 10px; margin-bottom: 30px;
+        }
+        .tab-item {
+            font-family: 'Pirata One', cursive; font-size: 22px; color: var(--gold);
+            padding: 10px 20px; border: 1px solid var(--gold); cursor: pointer;
+            transition: 0.3s; background: rgba(20, 20, 20, 0.8);
+        }
+        .tab-item.active { background: var(--gold); color: #000; box-shadow: 0 0 15px var(--gold); }
+
+        /* --- BREADCRUMB --- */
+        .breadcrumb {
+            background: rgba(139, 0, 0, 0.1); padding: 15px; border-radius: 5px;
+            margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+            font-family: 'Pirata One', cursive; font-size: 18px; color: var(--gold);
+        }
+        .btn-back {
+            background: var(--blood); color: white; border: none; padding: 5px 15px;
+            cursor: pointer; font-family: 'Quicksand'; font-size: 12px; font-weight: bold;
+        }
+
+        /* --- GRID FOLDERS --- */
+        .grid-container {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px; animation: fadeInUp 0.5s ease;
+        }
+        .folder-card {
+            background: var(--glass); border: 1px solid #333; padding: 30px 15px;
+            text-align: center; cursor: pointer; transition: 0.4s; position: relative;
+            border-bottom: 3px solid var(--blood);
+        }
+        .folder-card:hover { border-color: var(--gold); transform: translateY(-10px); background: #111; }
+        .folder-card i { font-size: 40px; color: var(--gold); margin-bottom: 15px; display: block; }
+        .folder-card .label { font-family: 'Cinzel Decorative'; font-size: 16px; color: #fff; }
+        .folder-card .count { font-size: 12px; color: var(--blood); display: block; margin-top: 5px; }
+
+        /* --- DECREE CARDS --- */
+        .decree-list { display: flex; flex-direction: column; gap: 20px; }
+        .decree-card {
+            background: var(--glass); border-left: 5px solid var(--gold);
+            padding: 25px; position: relative; transition: 0.3s;
+            clip-path: polygon(0% 0%, 98% 0%, 100% 10%, 100% 100%, 2% 100%, 0% 90%);
+        }
+        .decree-card.completed { border-color: var(--completed-gray); opacity: 0.6; filter: grayscale(1); }
+        
+        .decree-title { font-family: 'Cinzel Decorative'; font-size: 24px; color: #fff; margin-bottom: 10px; display: block; }
+        
+        /* TIMER DISPLAY */
+        .timer-display {
+            font-family: 'Pirata One', cursive; font-size: 24px; color: var(--gold);
+            display: flex; align-items: center; gap: 10px; margin: 15px 0;
+            background: rgba(0,0,0,0.4); padding: 10px; border-radius: 4px;
+        }
+        .timer-display.expired { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
+        .timer-display.finished { color: #00ff00; }
+
+        .badge {
+            position: absolute; top: 15px; right: 25px; padding: 4px 12px;
+            font-family: 'Pirata One'; font-size: 14px; border-radius: 20px; border: 1px solid;
+        }
+        .badge-pending { color: var(--gold); border-color: var(--gold); }
+        .badge-completed { color: #666; border-color: #666; }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="bg-vignette"></div>
+
+    <div class="app-container">
+        <div class="header">
+            <h1>ARCHIVE OF COMMANDS</h1>
+            <p style="font-family: 'Pirata One'; color: var(--blood); letter-spacing: 3px;">MỆNH LỆNH VĨNH HẰNG</p>
+        </div>
+
+        <div class="filter-tabs" id="filter-tabs">
+            <div class="tab-item active" data-mode="today">Hôm Nay</div>
+            <div class="tab-item" data-mode="week">Tuần</div>
+            <div class="tab-item" data-mode="month">Tháng</div>
+            <div class="tab-item" data-mode="year">Năm</div>
+            <div class="tab-item" data-mode="century">Thế Kỷ</div>
+        </div>
+
+        <div class="breadcrumb" id="breadcrumb">
+            <!-- Breadcrumb content -->
+        </div>
+
+        <div id="main-content">
+            <!-- Content will be injected here -->
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
+            authDomain: "photodiary-3d469.firebaseapp.com",
+            projectId: "photodiary-3d469",
+            storageBucket: "photodiary-3d469.firebasestorage.app",
+            messagingSenderId: "102477469911",
+            appId: "1:102477469911:web:13ed38ab426819fdb43892"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // --- STATE ---
+        let allTasks = [];
+        let currentMode = 'today';
+        let navStack = []; // Lưu lại các bước khoan sâu: [{type: 'year', value: 2024, label: 'Năm 2024'}]
+
+        // --- HÀM HỖ TRỢ THỜI GIAN ---
+        const getISOWeek = (d) => {
+            const date = new Date(d.getTime());
+            date.setHours(0, 0, 0, 0);
+            date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+            const week1 = new Date(date.getFullYear(), 0, 4);
+            return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+        };
+
+        // --- RENDER LOGIC ---
+
+        function updateDisplay() {
+            renderBreadcrumb();
+            let data = filterByStack([...allTasks]);
+            const depth = navStack.length;
+
+            if (currentMode === 'today') {
+                const today = new Date().toDateString();
+                const filtered = allTasks.filter(t => new Date(t.created_at).toDateString() === today);
+                renderDecreeCards(filtered);
+                return;
+            }
+
+            // Logic khoan sâu dựa trên Mode và độ sâu hiện tại
+            // Quy tắc: Thế kỷ -> Năm -> Tháng -> Tuần -> Ngày -> Lệnh
+            
+            if (currentMode === 'century' && depth === 0) {
+                renderFolders(data, t => new Date(t.created_at).getFullYear(), 'year', 'Năm ');
+            } 
+            else if ((currentMode === 'year' && depth === 0) || (depth === 1 && navStack[0].type === 'year')) {
+                renderFolders(data, t => new Date(t.created_at).getMonth(), 'month', 'Tháng ', (m) => parseInt(m) + 1);
+            }
+            else if ((currentMode === 'month' && depth === 0) || (depth > 0 && navStack[depth-1].type === 'month')) {
+                renderFolders(data, t => getISOWeek(new Date(t.created_at)), 'week', 'Tuần ');
+            }
+            else if ((currentMode === 'week' && depth === 0) || (depth > 0 && navStack[depth-1].type === 'week')) {
+                renderFolders(data, t => new Date(t.created_at).toDateString(), 'day', '', (d) => new Date(d).toLocaleDateString('vi-VN'));
+            }
+            else {
+                renderDecreeCards(data);
+            }
+        }
+
+        function filterByStack(tasks) {
+            navStack.forEach(s => {
+                if (s.type === 'year') tasks = tasks.filter(t => new Date(t.created_at).getFullYear() === s.value);
+                if (s.type === 'month') tasks = tasks.filter(t => new Date(t.created_at).getMonth() === s.value);
+                if (s.type === 'week') tasks = tasks.filter(t => getISOWeek(new Date(t.created_at)) === s.value);
+                if (s.type === 'day') tasks = tasks.filter(t => new Date(t.created_at).toDateString() === s.value);
+            });
+            return tasks;
+        }
+
+        function renderFolders(data, groupFn, type, prefix, formatFn = v => v) {
+            const container = document.getElementById('main-content');
+            container.innerHTML = `<div class="grid-container"></div>`;
+            const grid = container.querySelector('.grid-container');
+
+            const groups = {};
+            data.forEach(t => {
+                const key = groupFn(t);
+                groups[key] = (groups[key] || 0) + 1;
+            });
+
+            Object.keys(groups).sort().forEach(key => {
+                const card = document.createElement('div');
+                card.className = 'folder-card';
+                card.innerHTML = `
+                    <i class="fa-solid fa-box-archive"></i>
+                    <span class="label">${prefix}${formatFn(key)}</span>
+                    <span class="count">${groups[key]} Mệnh lệnh</span>
+                `;
+                card.onclick = () => {
+                    navStack.push({ type, value: isNaN(key) ? key : parseInt(key), label: prefix + formatFn(key) });
+                    updateDisplay();
+                };
+                grid.appendChild(card);
+            });
+
+            if (Object.keys(groups).length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:50px;">HƯ VÔ... KHÔNG CÓ LỆNH NÀO</div>`;
+            }
+        }
+
+        function renderDecreeCards(tasks) {
+            const container = document.getElementById('main-content');
+            container.innerHTML = `<div class="decree-list"></div>`;
+            const list = container.querySelector('.decree-list');
+
+            tasks.forEach(task => {
+                const isComp = task.status === 'COMPLETED';
+                const card = document.createElement('div');
+                card.className = `decree-card ${isComp ? 'completed' : ''}`;
+                card.innerHTML = `
+                    <span class="badge ${isComp ? 'badge-completed' : 'badge-pending'}">${task.status}</span>
+                    <span style="color:var(--blood); font-family:'Pirata One';">LEVEL: ${task.level || 'LOW'}</span>
+                    <span class="decree-title">${task.action}</span>
+                    
+                    <div class="timer-display" id="timer-${task.id}" data-deadline="${task.deadline}" data-status="${task.status}">
+                        <i class="fa-regular fa-clock"></i> ĐANG TÍNH TOÁN...
+                    </div>
+
+                    <div style="font-size:11px; color:#555;">ID: ${task.id} | Ngày tạo: ${new Date(task.created_at).toLocaleString()}</div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function renderBreadcrumb() {
+            const bc = document.getElementById('breadcrumb');
+            bc.innerHTML = `<span>ROOT / ${currentMode.toUpperCase()}</span>`;
+            
+            navStack.forEach(s => {
+                bc.innerHTML += ` <i class="fa-solid fa-chevron-right" style="font-size:10px;"></i> <span>${s.label}</span>`;
+            });
+
+            if (navStack.length > 0) {
+                const btn = document.createElement('button');
+                btn.className = 'btn-back';
+                btn.innerHTML = 'QUAY LẠI';
+                btn.onclick = () => { navStack.pop(); updateDisplay(); };
+                bc.appendChild(btn);
+            }
+        }
+
+        // --- HÀM ĐẾM NGƯỢC (TỐI ƯU) ---
+        function runGlobalTimer() {
+            setInterval(() => {
+                const timers = document.querySelectorAll('.timer-display');
+                timers.forEach(el => {
+                    if (el.dataset.status === 'COMPLETED') {
+                        el.innerHTML = `<i class="fa-solid fa-check-double"></i> ĐÃ HOÀN THÀNH`;
+                        el.classList.add('finished');
+                        return;
+                    }
+
+                    const deadline = el.dataset.deadline;
+                    if (!deadline) return;
+
+                    const now = new Date().getTime();
+                    const target = new Date(deadline).getTime();
+                    const diff = target - now;
+
+                    if (diff <= 0) {
+                        el.innerHTML = `<i class="fa-solid fa-skull-crossbones"></i> HẾT HẠN - CHỜ PHẠT`;
+                        el.classList.add('expired');
+                        return;
+                    }
+
+                    const h = Math.floor(diff / (1000 * 60 * 60));
+                    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const s = Math.floor((diff % (1000 * 60)) / 1000);
+                    
+                    el.innerHTML = `<i class="fa-solid fa-hourglass-half"></i> ${h.toString().padStart(2, '0')}H ${m.toString().padStart(2, '0')}M ${s.toString().padStart(2, '0')}S`;
+                });
+            }, 1000);
+        }
+
+        // --- EVENTS & FIREBASE ---
+        onSnapshot(query(collection(db, "boss_ra_lenh"), orderBy("created_at", "desc")), (snap) => {
+            allTasks = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            updateDisplay();
+        });
+
+        document.querySelectorAll('.tab-item').forEach(tab => {
+            tab.onclick = () => {
+                document.querySelector('.tab-item.active').classList.remove('active');
+                tab.classList.add('active');
+                currentMode = tab.dataset.mode;
+                navStack = [];
+                updateDisplay();
+            };
+        });
+
+        // Khởi chạy đồng hồ
+        runGlobalTimer();
+
+    </script>
+</body>
+</html>
