@@ -2,7 +2,7 @@
 
 // 1. Lấy cấu hình từ LocalStorage
 // Nếu chưa từng cài đặt, mặc định sẽ là 'nhac-nen.mp3'
-const savedMusic = localStorage.getItem('musicUrl') || "nhac-nen.mp3";
+const savedMusic = localStorage.getItem('musicUrl') || "nhac-nen2.mp3";
 const musicStatus = localStorage.getItem('musicStatus') || "playing"; // Mặc định là bật
 
 const player = document.createElement('audio');

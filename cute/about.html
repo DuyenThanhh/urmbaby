@@ -262,25 +262,56 @@
         const docRef = doc(db, "us_metadata", "about_us");
 
         // 2. ĐẾM NGÀY YÊU NHAU
-        function calculateLoveDays() {
-            const dateStartStr = "2025-04-25"; // Ngày bắt đầu
-            const parts = dateStartStr.split('-');
-            document.getElementById('startDateText').innerText = `${parts[2]}/${parts[1]}/${parts[0]}`;
+       function calculateLoveDays() {
+    const dateStartStr = "2025-04-25"; // Ngày bắt đầu của bạn
+    const parts = dateStartStr.split('-');
+    
+    // Đảm bảo phần tử này tồn tại trong HTML của bạn
+    const startDateTextElement = document.getElementById('startDateText');
+    if (startDateTextElement) {
+        startDateTextElement.innerText = `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
 
-            const startDate = new Date(dateStartStr);
-            const currentDate = new Date();
-            const daysDiff = Math.floor((currentDate - startDate) / (1000 * 3600 * 24));
+    const startDate = new Date(dateStartStr);
+    startDate.setHours(0, 0, 0, 0); // Đặt thời gian bắt đầu về 00:00:00
 
-            let current = 0;
-            const timer = setInterval(() => {
-                current += Math.ceil(daysDiff / 30);
-                if (current >= daysDiff) {
-                    current = daysDiff;
-                    clearInterval(timer);
-                }
-                document.getElementById('daysCount').innerText = current;
-            }, 30);
+    const currentDate = new Date();
+    // Để tính cả ngày hiện tại là ngày thứ N, chúng ta sẽ đặt thời gian hiện tại
+    // về cuối ngày (hoặc chỉ cần đảm bảo nó sau thời điểm 00:00 của ngày hiện tại).
+    // Tuy nhiên, cách đơn giản nhất để đảm bảo kết quả luôn tròn lên là sử dụng Math.ceil
+    // hoặc điều chỉnh currentDate về 00:00 và sau đó cộng 1 nếu muốn tính ngày hiện tại.
+
+    // Cách 1: Sử dụng Math.ceil để tính toán, nó sẽ làm tròn lên nếu có dù chỉ 1 phần của ngày mới bắt đầu.
+    // Điều này sẽ cho ra 425 nếu ngày hiện tại đã bắt đầu.
+    let daysDiff = Math.ceil((currentDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+    
+    // Hoặc Cách 2: Đặt currentDate về 00:00 và sau đó cộng 1 để tính ngày hiện tại là ngày thứ N.
+    // currentDate.setHours(0, 0, 0, 0);
+    // let daysDiff = Math.round((currentDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+    // if (daysDiff >= 0) { // Đảm bảo chỉ cộng 1 nếu startDate không ở tương lai
+    //    daysDiff++;
+    // }
+
+    // Đảm bảo phần tử này tồn tại trong HTML của bạn
+    const daysCountElement = document.getElementById('daysCount');
+    if (!daysCountElement) {
+        console.error("Element with id 'daysCount' not found.");
+        return;
+    }
+
+    let current = 0;
+    // Điều chỉnh bước nhảy để hiệu ứng mượt mà hơn và nhanh hơn nếu số ngày lớn
+    const step = Math.max(1, Math.floor(daysDiff / 100)); // Ít nhất là 1, tối đa 1/100 tổng số ngày
+
+    const timer = setInterval(() => {
+        current += step;
+        if (current >= daysDiff) {
+            current = daysDiff;
+            clearInterval(timer);
         }
+        daysCountElement.innerText = current;
+    }, 15); // Tăng tốc độ đếm để mượt mà hơn
+}
 
         // 3. XỬ LÝ ABOUT US (Firebase)
         async function loadAbout() {
