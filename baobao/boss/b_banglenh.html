@@ -359,11 +359,13 @@
             color: var(--light-gold);
         }
 
-       .timer-box.urgent {
-    color: #ff0000;
-    text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000; /* Tạo hiệu ứng rực đỏ răn đe */
-    animation: shake 0.5s infinite; /* Giữ nguyên rung lắc */
-}
+        .timer-box.urgent {
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+            /* Tạo hiệu ứng rực đỏ răn đe */
+            animation: shake 0.5s infinite;
+            /* Giữ nguyên rung lắc */
+        }
 
         @keyframes shake {
 
@@ -481,9 +483,11 @@
         };
 
         // --- UTILITIES ---
+        // --- UTILITIES ---
         const getWeekNumber = (d) => {
             const date = new Date(d.getTime());
             date.setHours(0, 0, 0, 0);
+            // Chuẩn hóa để tuần bắt đầu từ Thứ Hai (0 là Chủ Nhật, 1 là Thứ Hai...)
             date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
             const week1 = new Date(date.getFullYear(), 0, 4);
             return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
@@ -499,13 +503,11 @@
         function getTimeRemaining(dueDate) {
             const diff = new Date(dueDate).getTime() - new Date().getTime();
 
-            // Nếu hết thời gian: Trả về icon đầu lâu đỏ và lời đe dọa
-           // Tìm đoạn if (diff <= 0) và sửa lại text như sau:
-if (diff <= 0) return {
-    expired: true,
-    urgent: true,
-    text: `<i class="fa-solid fa-skull" style="filter: drop-shadow(0 0 5px red);"></i> HẾT HẠN - CHỜ PHẠT`
-};
+            if (diff <= 0) return {
+                expired: true,
+                urgent: true,
+                text: `<i class="fa-solid fa-skull" style="filter: drop-shadow(0 0 5px red);"></i> HẾT HẠN - CHỜ PHẠT`
+            };
             const d = Math.floor(diff / 86400000);
             const h = Math.floor((diff % 86400000) / 3600000);
             const m = Math.floor((diff % 3600000) / 60000);
@@ -513,10 +515,41 @@ if (diff <= 0) return {
 
             return {
                 expired: false,
-                urgent: d < 1, // Dưới 1 ngày là báo động đỏ
+                urgent: d < 1,
                 text: `${d}D : ${h}H : ${m}M : ${s}S`,
                 raw: diff
             };
+        }
+
+        // --- NEW: FILTER DATA BY CURRENT MODE (FOR TOP LEVEL) ---
+        function filterDataByMode(tasks, mode) {
+            const now = new Date();
+            let filtered = [...tasks];
+
+            if (mode === 'today') {
+                const todayStr = now.toDateString();
+                filtered = filtered.filter(t => new Date(t.created_at).toDateString() === todayStr);
+            } else if (mode === 'week') {
+                const currentWeek = getWeekNumber(now);
+                const currentYear = now.getFullYear();
+                filtered = filtered.filter(t => {
+                    const taskDate = new Date(t.created_at);
+                    return getWeekNumber(taskDate) === currentWeek && taskDate.getFullYear() === currentYear;
+                });
+            } else if (mode === 'month') {
+                const currentMonth = now.getMonth();
+                const currentYear = now.getFullYear();
+                filtered = filtered.filter(t => {
+                    const taskDate = new Date(t.created_at);
+                    return taskDate.getMonth() === currentMonth && taskDate.getFullYear() === currentYear;
+                });
+            } else if (mode === 'year') {
+                const currentYear = now.getFullYear();
+                filtered = filtered.filter(t => new Date(t.created_at).getFullYear() === currentYear);
+            }
+            // 'century' mode will display all available data, so no specific filter needed here
+
+            return filtered;
         }
 
         // --- CORE LOGIC: DRILL DOWN ---
@@ -530,10 +563,14 @@ if (diff <= 0) return {
             });
             return filtered;
         }
+
         function renderArchive() {
             const container = document.getElementById('archive-content');
             const pathContainer = document.getElementById('nav-path-container');
-            let data = filterDataByStack(rawTasks);
+
+            // Bắt đầu lọc dữ liệu theo mode hiện tại TRƯỚC, sau đó mới áp dụng stack
+            let data = filterDataByMode(rawTasks, config.mode);
+            data = filterDataByStack(data);
 
             // 1. Cập nhật Breadcrumb (Đường dẫn)
             pathContainer.innerHTML = `<span>ROOT / ${config.mode.toUpperCase()}</span>`;
@@ -552,13 +589,8 @@ if (diff <= 0) return {
             const lastStepType = depth > 0 ? config.stack[depth - 1].type : null;
 
             // 2. Logic điều hướng phân cấp
-            if (config.mode === 'today') {
-                const today = new Date().toDateString();
-                data = data.filter(t => new Date(t.created_at).toDateString() === today);
-                renderTasks(data);
-            }
-            // Nếu bước cuối cùng là 'day' (Ngày), thì hiển thị danh sách Lệnh
-            else if (lastStepType === 'day') {
+            // Nếu depth = 0 VÀ mode là 'today' HOẶC bước cuối cùng là 'day', thì hiển thị danh sách Lệnh
+            if ((depth === 0 && config.mode === 'today') || lastStepType === 'day') {
                 renderTasks(data);
             }
             // Ngược lại, tính toán xem hiển thị Folder cấp tiếp theo là gì
@@ -576,13 +608,17 @@ if (diff <= 0) return {
                     else if (config.mode === 'week') { nextType = 'day'; groupingFn = t => new Date(t.created_at).toDateString(); prefix = ''; formatFn = v => new Date(v).toLocaleDateString('vi-VN'); }
                 }
                 else {
-                    // Các cấp trung gian
+                    // Các cấp trung gian (đã đi vào sâu hơn)
                     if (lastStepType === 'year') { nextType = 'month'; groupingFn = t => new Date(t.created_at).getMonth(); prefix = 'Tháng '; formatFn = v => parseInt(v) + 1; }
                     else if (lastStepType === 'month') { nextType = 'week'; groupingFn = t => getWeekNumber(new Date(t.created_at)); prefix = 'Tuần '; }
                     else if (lastStepType === 'week') { nextType = 'day'; groupingFn = t => new Date(t.created_at).toDateString(); prefix = ''; formatFn = v => new Date(v).toLocaleDateString('vi-VN'); }
                 }
 
-                renderFolders(data, groupingFn, nextType, prefix, formatFn);
+                if (nextType) { // Chỉ render folders nếu có nextType hợp lệ
+                    renderFolders(data, groupingFn, nextType, prefix, formatFn);
+                } else { // Nếu không có nextType, có thể là trường hợp cuối cùng -> render task
+                    renderTasks(data);
+                }
             }
         }
 
@@ -668,34 +704,34 @@ if (diff <= 0) return {
 
         // --- REAL-TIME TICKER ---
         // --- REAL-TIME TICKER ---
-       // --- REAL-TIME TICKER ---
-setInterval(() => {
-    const timers = document.querySelectorAll('.timer-box');
-    timers.forEach(box => {
-        const deadline = box.dataset.due;
-        const start = box.dataset.start;
-        const tr = getTimeRemaining(deadline);
-        const card = box.closest('.decree-card');
-        const fill = card.querySelector('.life-line-fill');
+        // --- REAL-TIME TICKER ---
+        setInterval(() => {
+            const timers = document.querySelectorAll('.timer-box');
+            timers.forEach(box => {
+                const deadline = box.dataset.due;
+                const start = box.dataset.start;
+                const tr = getTimeRemaining(deadline);
+                const card = box.closest('.decree-card');
+                const fill = card.querySelector('.life-line-fill');
 
-        // PHẢI DÙNG innerHTML thay vì innerText
-        box.querySelector('span').innerHTML = tr.text;
+                // PHẢI DÙNG innerHTML thay vì innerText
+                box.querySelector('span').innerHTML = tr.text;
 
-        if (card.classList.contains('completed')) {
-    box.querySelector('span').innerHTML = `<i class="fa-solid fa-check-double"></i> ĐÃ HOÀN THÀNH`;
-    box.style.color = "#888"; // Đổi chữ sang màu xám trắng cho giống ảnh
-    return;
-}
+                if (card.classList.contains('completed')) {
+                    box.querySelector('span').innerHTML = `<i class="fa-solid fa-check-double"></i> ĐÃ HOÀN THÀNH`;
+                    box.style.color = "#888"; // Đổi chữ sang màu xám trắng cho giống ảnh
+                    return;
+                }
 
-        if (tr.urgent || tr.expired) {
-            box.classList.add('urgent'); // Thêm hiệu ứng rung lắc đã có trong CSS
-        } else {
-            box.classList.remove('urgent');
-        }
+                if (tr.urgent || tr.expired) {
+                    box.classList.add('urgent'); // Thêm hiệu ứng rung lắc đã có trong CSS
+                } else {
+                    box.classList.remove('urgent');
+                }
 
-        if (fill) fill.style.width = calculateLifePercent(start, deadline) + '%';
-    });
-}, 1000);
+                if (fill) fill.style.width = calculateLifePercent(start, deadline) + '%';
+            });
+        }, 1000);
 
         // --- FIREBASE LISTENERS ---
         onSnapshot(query(collection(db, "boss_ra_lenh"), orderBy("created_at", "desc")), (snap) => {

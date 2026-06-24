@@ -72,13 +72,13 @@
 
         <div class="ritual-card">
             <span class="label"><i class="fa-solid fa-gavel"></i> HÌNH PHẠT MONG MUỐN</span>
-            <textarea id="punish-action" rows="2" placeholder="Slave khao khát bị Master làm gì...?"></textarea>
+            <textarea id="punish-action" rows="2" placeholder="Em khao khát bị Chủ Nhân phạt gì...?"></textarea>
 
             <span class="label"><i class="fa-solid fa-person-praying"></i> TƯ THẾ KHI CHỊU PHẠT</span>
-            <textarea id="punish-posture" rows="1" placeholder="Quỳ, xích tay, bịt mắt...?"></textarea>
+            <textarea id="punish-posture" rows="1" placeholder="Bị bóp vú,bịt mắt...?"></textarea>
 
             <span class="label"><i class="fa-solid fa-skull"></i> LÝ DO XỨNG ĐÁNG</span>
-            <textarea id="punish-reason" rows="2" placeholder="Ngươi đã phạm lỗi gì hoặc tại sao muốn bị phạt...?"></textarea>
+            <textarea id="punish-reason" rows="2" placeholder="Lý do để Chủ Nhân chấp nhận hình phạt...?"></textarea>
 
             <span class="label"><i class="fa-solid fa-fire"></i> CẤP ĐỘ NHỤC HÌNH</span>
             <div class="severity-options">
@@ -88,7 +88,7 @@
             </div>
 
             <span class="label"><i class="fa-solid fa-gift"></i> PHẦN THƯỞNG MONG MUỐN (NẾU HOÀN THÀNH)</span>
-            <textarea id="reward-request" rows="1" placeholder="Nếu chịu phạt tốt, ngươi mong Master ban gì...?"></textarea>
+            <textarea id="reward-request" rows="1" placeholder="Nếu chịu phạt tốt, Em mong Chủ Nhân ban gì...?"></textarea>
 
             <button class="btn-submit" id="submit-btn" onclick="submitPetition()">DÂNG NỘP LỜI CẦU XIN</button>
         </div>
@@ -146,8 +146,8 @@
                 const taskClean = cleanString(action).substring(0, 20); // Lấy 20 ký tự đầu của nhiệm vụ
                 const customID = `${d}-${m}-${y}_${taskClean}_${h}-${min}-${s}`;
 
-                // GHI VÀO COLLECTION: punishment_petitions
-                await setDoc(doc(db, "punishment_petitions", customID), {
+                // GHI VÀO COLLECTION: slave_petitions
+                await setDoc(doc(db, "slave_petitions", customID), {
                     petition_id: customID,
                     requested_action: action,
                     requested_posture: posture,

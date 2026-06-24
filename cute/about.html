@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -15,10 +16,17 @@
             --text: #5d4037;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        body, html {
-            width: 100%; height: 100%;
+        body,
+        html {
+            width: 100%;
+            height: 100%;
             font-family: 'Quicksand', sans-serif;
             background: #fdf2f4;
             overflow: hidden;
@@ -26,35 +34,52 @@
 
         /* KHUNG ỨNG DỤNG */
         .app-container {
-            width: 100%; height: 100%;
-            max-width: 450px; margin: 0 auto;
+            width: 100%;
+            height: 100%;
+            max-width: 450px;
+            margin: 0 auto;
             background: url('img/10.png') no-repeat center center;
             background-size: cover;
             position: relative;
-            display: flex; flex-direction: column;
+            display: flex;
+            flex-direction: column;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
         }
 
         /* HEADER */
         .header {
             padding: 30px 20px 10px;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             z-index: 10;
         }
+
         .back-btn {
-            width: 40px; height: 40px; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(5px);
-            display: flex; align-items: center; justify-content: center;
-            color: var(--p-main); font-size: 18px; cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--p-main);
+            font-size: 18px;
+            cursor: pointer;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
         .main-content {
-            flex: 1; overflow-y: auto;
+            flex: 1;
+            overflow-y: auto;
             padding: 10px 20px 100px;
             scrollbar-width: none;
         }
-        .main-content::-webkit-scrollbar { display: none; }
+
+        .main-content::-webkit-scrollbar {
+            display: none;
+        }
 
         /* COUPLE BOX */
         .couple-box {
@@ -63,78 +88,226 @@
             border: 2px solid rgba(255, 255, 255, 0.6);
             border-radius: 40px;
             padding: 30px 15px;
-            display: flex; justify-content: space-around; align-items: center;
-            position: relative; margin-top: 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: relative;
+            margin-top: 10px;
             box-shadow: 0 10px 25px rgba(255, 143, 171, 0.1);
         }
-        .profile { text-align: center; width: 45%; }
-        .avatar-wrap { width: 95px; height: 95px; margin: 0 auto 12px; position: relative; }
-        .avatar-wrap img {
-            width: 100%; height: 100%; border-radius: 50%;
-            border: 4px solid #fff; object-fit: cover;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+
+        .profile {
+            text-align: center;
+            width: 45%;
         }
-        .name { font-weight: 700; color: var(--text); font-size: 15px; margin-bottom: 4px; }
-        .role { font-size: 9px; font-weight: 700; color: var(--p-main); text-transform: uppercase; letter-spacing: 1px; }
+
+        .avatar-wrap {
+            width: 95px;
+            height: 95px;
+            margin: 0 auto 12px;
+            position: relative;
+        }
+
+        .avatar-wrap img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            object-fit: cover;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .name {
+            font-weight: 700;
+            color: var(--text);
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .role {
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--p-main);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
         .connect-heart {
-            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-            width: 40px; height: 40px; background: white; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            z-index: 5; box-shadow: 0 4px 10px rgba(255, 143, 171, 0.2);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            box-shadow: 0 4px 10px rgba(255, 143, 171, 0.2);
         }
-        .connect-heart i { color: var(--p-main); font-size: 18px; animation: beat 1s infinite; }
-        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+
+        .connect-heart i {
+            color: var(--p-main);
+            font-size: 18px;
+            animation: beat 1s infinite;
+        }
+
+        @keyframes beat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+        }
 
         /* INFO CARDS */
         .glass-card {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(5px);
-            border-radius: 30px; border: 1.5px solid #fff;
-            padding: 20px; margin-top: 20px;
+            border-radius: 30px;
+            border: 1.5px solid #fff;
+            padding: 20px;
+            margin-top: 20px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
         }
+
         .card-title {
-            font-size: 14px; font-weight: 700; color: var(--text);
-            display: flex; align-items: center; gap: 10px; margin-bottom: 15px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
         }
-        .card-title i { color: var(--p-main); }
+
+        .card-title i {
+            color: var(--p-main);
+        }
 
         /* Anniversary Section */
-        .days-box { text-align: center; padding: 5px 0; }
-        .days-num { font-size: 45px; font-weight: 800; color: var(--p-main); display: block; }
-        .days-text { font-size: 11px; font-weight: 700; color: var(--text); opacity: 0.6; }
+        .days-box {
+            text-align: center;
+            padding: 5px 0;
+        }
+
+        .days-num {
+            font-size: 45px;
+            font-weight: 800;
+            color: var(--p-main);
+            display: block;
+        }
+
+        .days-text {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text);
+            opacity: 0.6;
+        }
 
         /* About Us List */
-        .details { list-style: none; }
-        .details li {
-            display: flex; align-items: center; justify-content: space-between;
-            font-size: 13px; color: var(--text); margin-bottom: 10px;
-            background: rgba(255,255,255,0.8); padding: 12px 15px; border-radius: 18px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        .details {
+            list-style: none;
         }
-        .details li span { display: flex; align-items: center; gap: 10px; flex: 1; }
+
+        .details li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text);
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 12px 15px;
+            border-radius: 18px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+        }
+
+        .details li span {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
 
         /* MODAL */
         .overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.4); backdrop-filter: blur(5px);
-            z-index: 1000; display: none; align-items: center; justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
         }
+
         .modal {
-            background: white; width: 85%; max-width: 350px; padding: 25px;
-            border-radius: 30px; text-align: center; animation: slideUp 0.3s ease;
+            background: white;
+            width: 85%;
+            max-width: 350px;
+            padding: 25px;
+            border-radius: 30px;
+            text-align: center;
+            animation: slideUp 0.3s ease;
         }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
         .inp-about {
-            width: 100%; padding: 15px; border: 2px solid #fff0f3; background: #fffafa;
-            border-radius: 15px; outline: none; font-family: 'Quicksand'; margin-top: 15px;
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #fff0f3;
+            background: #fffafa;
+            border-radius: 15px;
+            outline: none;
+            font-family: 'Quicksand';
+            margin-top: 15px;
         }
-        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
-        .btn { flex: 1; padding: 12px; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; }
-        .btn-save { background: var(--p-main); color: white; }
-        .btn-cancel { background: #f5f5f5; color: #888; }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-save {
+            background: var(--p-main);
+            color: white;
+        }
+
+        .btn-cancel {
+            background: #f5f5f5;
+            color: #888;
+        }
     </style>
 </head>
 
@@ -150,8 +323,8 @@
     position: relative;
     z-index: 10;
 ">
-    <!-- Nút quay lại -->
-    <div class="back-btn" onclick="history.back()" style="
+            <!-- Nút quay lại -->
+            <div class="back-btn" onclick="history.back()" style="
         width: 40px; 
         height: 40px; 
         background: rgba(255, 255, 255, 0.8); 
@@ -163,11 +336,11 @@
         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         cursor: pointer;
     ">
-        <i class="fa-solid fa-chevron-left"></i>
-    </div>
+                <i class="fa-solid fa-chevron-left"></i>
+            </div>
 
-    <!-- Tiêu đề ở giữa -->
-    <div style="
+            <!-- Tiêu đề ở giữa -->
+            <div style="
         font-family: 'Quicksand', sans-serif;
         font-weight: 800; 
         color: #fff; 
@@ -175,17 +348,17 @@
         text-shadow: 0 2px 10px rgba(0,0,0,0.2);
         letter-spacing: 1px;
     ">
-        Chúng mình ❤️
-    </div>
+                Chúng mình ❤️
+            </div>
 
-    <!-- Ảnh Love bên phải -->
-    <img src="img/love.png" style="
+            <!-- Ảnh Love bên phải -->
+            <img src="img/love.png" style="
         width: 45px; 
         height: auto; 
         filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
         animation: heartbeat 1.5s ease-in-out infinite;
     ">
-</div>
+        </div>
 
         <div class="main-content">
             <!-- PROFILE BOX -->
@@ -216,17 +389,21 @@
             <div class="glass-card">
                 <div class="card-title" style="justify-content: space-between;">
                     <span><i class="fa-solid fa-star"></i> Một chút về chúng mình</span>
-                    <i class="fa-solid fa-circle-plus" onclick="openAddAbout()" style="cursor:pointer; font-size: 22px; color: var(--p-main);"></i>
+                    <i class="fa-solid fa-circle-plus" onclick="openAddAbout()"
+                        style="cursor:pointer; font-size: 22px; color: var(--p-main);"></i>
                 </div>
                 <ul class="details" id="aboutList">
                     <!-- Default Items -->
-                    <li><span><i class="fa-solid fa-wand-sparkles" style="color:#ffd166"></i> Thích skinship nà</span></li>
-                    <li><span><i class="fa-solid fa-mug-hot" style="color:#a58e7c"></i> Thích cafe và nhạc chill 🎧</span></li>
+                    <li><span><i class="fa-solid fa-wand-sparkles" style="color:#ffd166"></i> Thích skinship nà</span>
+                    </li>
+                    <li><span><i class="fa-solid fa-mug-hot" style="color:#a58e7c"></i> Thích cafe và nhạc chill
+                            🎧</span></li>
                     <!-- Firebase items will load here -->
                 </ul>
             </div>
-            
-            <img src="https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-NrxqD2DZLRKbPEZFzkPKCvkmqkfR5V.png&w=1000&q=75" alt="mascot" style="width:100px; display:block; margin:20px auto 0;">
+
+            <img src="https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-NrxqD2DZLRKbPEZFzkPKCvkmqkfR5V.png&w=1000&q=75"
+                alt="mascot" style="width:100px; display:block; margin:20px auto 0;">
         </div>
     </div>
 
@@ -241,12 +418,22 @@
             </div>
         </div>
     </div>
-        <script src="bgm.js"></script>
+    <script src="bgm.js"></script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
-
+import {
+    getFirestore,
+    doc,
+    collection,
+    getDoc,
+    getDocs,      // thêm dòng này
+    setDoc,
+    updateDoc,
+    deleteDoc,
+    arrayUnion,
+    arrayRemove
+} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
         // 1. CẤU HÌNH FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyB-Zj-83s3GW09RkAhMS4H8xWmLdi7loSI",
@@ -259,106 +446,158 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const docRef = doc(db, "us_metadata", "about_us");
+        const docRef = doc(db, "us_sothich", "about_us");
 
         // 2. ĐẾM NGÀY YÊU NHAU
-       function calculateLoveDays() {
-    const dateStartStr = "2025-04-25"; // Ngày bắt đầu của bạn
-    const parts = dateStartStr.split('-');
-    
-    // Đảm bảo phần tử này tồn tại trong HTML của bạn
-    const startDateTextElement = document.getElementById('startDateText');
-    if (startDateTextElement) {
-        startDateTextElement.innerText = `${parts[2]}/${parts[1]}/${parts[0]}`;
-    }
+        function calculateLoveDays() {
+            const dateStartStr = "2025-04-25"; // Ngày bắt đầu của bạn
+            const parts = dateStartStr.split('-');
 
-    const startDate = new Date(dateStartStr);
-    startDate.setHours(0, 0, 0, 0); // Đặt thời gian bắt đầu về 00:00:00
+            // Đảm bảo phần tử này tồn tại trong HTML của bạn
+            const startDateTextElement = document.getElementById('startDateText');
+            if (startDateTextElement) {
+                startDateTextElement.innerText = `${parts[2]}/${parts[1]}/${parts[0]}`;
+            }
 
-    const currentDate = new Date();
-    // Để tính cả ngày hiện tại là ngày thứ N, chúng ta sẽ đặt thời gian hiện tại
-    // về cuối ngày (hoặc chỉ cần đảm bảo nó sau thời điểm 00:00 của ngày hiện tại).
-    // Tuy nhiên, cách đơn giản nhất để đảm bảo kết quả luôn tròn lên là sử dụng Math.ceil
-    // hoặc điều chỉnh currentDate về 00:00 và sau đó cộng 1 nếu muốn tính ngày hiện tại.
+            const startDate = new Date(dateStartStr);
+            startDate.setHours(0, 0, 0, 0); // Đặt thời gian bắt đầu về 00:00:00
 
-    // Cách 1: Sử dụng Math.ceil để tính toán, nó sẽ làm tròn lên nếu có dù chỉ 1 phần của ngày mới bắt đầu.
-    // Điều này sẽ cho ra 425 nếu ngày hiện tại đã bắt đầu.
-    let daysDiff = Math.ceil((currentDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
-    
-    // Hoặc Cách 2: Đặt currentDate về 00:00 và sau đó cộng 1 để tính ngày hiện tại là ngày thứ N.
-    // currentDate.setHours(0, 0, 0, 0);
-    // let daysDiff = Math.round((currentDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
-    // if (daysDiff >= 0) { // Đảm bảo chỉ cộng 1 nếu startDate không ở tương lai
-    //    daysDiff++;
-    // }
+            const currentDate = new Date();
+            // Để tính cả ngày hiện tại là ngày thứ N, chúng ta sẽ đặt thời gian hiện tại
+            // về cuối ngày (hoặc chỉ cần đảm bảo nó sau thời điểm 00:00 của ngày hiện tại).
+            // Tuy nhiên, cách đơn giản nhất để đảm bảo kết quả luôn tròn lên là sử dụng Math.ceil
+            // hoặc điều chỉnh currentDate về 00:00 và sau đó cộng 1 nếu muốn tính ngày hiện tại.
 
-    // Đảm bảo phần tử này tồn tại trong HTML của bạn
-    const daysCountElement = document.getElementById('daysCount');
-    if (!daysCountElement) {
-        console.error("Element with id 'daysCount' not found.");
-        return;
-    }
+            // Cách 1: Sử dụng Math.ceil để tính toán, nó sẽ làm tròn lên nếu có dù chỉ 1 phần của ngày mới bắt đầu.
+            // Điều này sẽ cho ra 425 nếu ngày hiện tại đã bắt đầu.
+            let daysDiff = Math.ceil((currentDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
 
-    let current = 0;
-    // Điều chỉnh bước nhảy để hiệu ứng mượt mà hơn và nhanh hơn nếu số ngày lớn
-    const step = Math.max(1, Math.floor(daysDiff / 100)); // Ít nhất là 1, tối đa 1/100 tổng số ngày
+            // Hoặc Cách 2: Đặt currentDate về 00:00 và sau đó cộng 1 để tính ngày hiện tại là ngày thứ N.
+            // currentDate.setHours(0, 0, 0, 0);
+            // let daysDiff = Math.round((currentDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+            // if (daysDiff >= 0) { // Đảm bảo chỉ cộng 1 nếu startDate không ở tương lai
+            //    daysDiff++;
+            // }
 
-    const timer = setInterval(() => {
-        current += step;
-        if (current >= daysDiff) {
-            current = daysDiff;
-            clearInterval(timer);
+            // Đảm bảo phần tử này tồn tại trong HTML của bạn
+            const daysCountElement = document.getElementById('daysCount');
+            if (!daysCountElement) {
+                console.error("Element with id 'daysCount' not found.");
+                return;
+            }
+
+            let current = 0;
+            // Điều chỉnh bước nhảy để hiệu ứng mượt mà hơn và nhanh hơn nếu số ngày lớn
+            const step = Math.max(1, Math.floor(daysDiff / 100)); // Ít nhất là 1, tối đa 1/100 tổng số ngày
+
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= daysDiff) {
+                    current = daysDiff;
+                    clearInterval(timer);
+                }
+                daysCountElement.innerText = current;
+            }, 15); // Tăng tốc độ đếm để mượt mà hơn
         }
-        daysCountElement.innerText = current;
-    }, 15); // Tăng tốc độ đếm để mượt mà hơn
-}
 
         // 3. XỬ LÝ ABOUT US (Firebase)
         async function loadAbout() {
-            const snap = await getDoc(docRef);
             const listEl = document.getElementById('aboutList');
-            const defaultItems = `
-                <li><span><i class="fa-solid fa-wand-sparkles" style="color:#ffd166"></i> Thích skinship nà</span></li>
-                <li><span><i class="fa-solid fa-mug-hot" style="color:#a58e7c"></i> Thích cafe và nhạc chill 🎧</span></li>
-            `;
 
-            if (snap.exists() && snap.data().items) {
-                const dynamicItems = snap.data().items.map(text => `
-                    <li>
-                        <span><i class="fa-solid fa-heart" style="color:var(--p-main); font-size:10px;"></i> ${text}</span>
-                        <i class="fa-solid fa-xmark" onclick="deleteAbout('${text}')" style="color:#ddd; cursor:pointer;"></i>
-                    </li>
-                `).join('');
-                listEl.innerHTML = defaultItems + dynamicItems;
-            } else {
-                listEl.innerHTML = defaultItems;
-            }
+            let html = `
+        <li>
+            <span>
+                <i class="fa-solid fa-wand-sparkles" style="color:#ffd166"></i>
+                Thích skinship nà
+            </span>
+        </li>
+
+        <li>
+            <span>
+                <i class="fa-solid fa-mug-hot" style="color:#a58e7c"></i>
+                Thích cafe và nhạc chill 🎧
+            </span>
+        </li>
+    `;
+
+            const snapshot = await getDocs(collection(db, "us_sothich"));
+
+            snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+
+                html += `
+            <li>
+                <span>
+                    <i class="fa-solid fa-heart"
+                       style="color:var(--p-main); font-size:10px;"></i>
+                    ${data.content}
+                </span>
+
+                <i class="fa-solid fa-xmark"
+                   onclick="deleteAbout('${docSnap.id}')"
+                   style="color:#ddd; cursor:pointer;"></i>
+            </li>
+        `;
+            });
+
+            listEl.innerHTML = html;
         }
 
         window.openAddAbout = () => document.getElementById('aboutOverlay').style.display = 'flex';
         window.closeAddAbout = () => document.getElementById('aboutOverlay').style.display = 'none';
 
         window.saveAbout = async () => {
-            const val = document.getElementById('newAboutInp').value;
-            if (!val.trim()) return;
+            const val = document.getElementById('newAboutInp').value.trim(); // Dùng .trim()
+            if (!val) return; // Kiểm tra giá trị đã trim
+
             try {
-                const snap = await getDoc(docRef);
-                if (snap.exists()) {
-                    await updateDoc(docRef, { items: arrayUnion(val) });
-                } else {
-                    await setDoc(docRef, { items: [val] });
-                }
+                // 1. Tạo timestamp và định dạng chuỗi
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0
+                const day = now.getDate().toString().padStart(2, '0');
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                const seconds = now.getSeconds().toString().padStart(2, '0');
+
+                // 2. Tạo tên document theo cấu trúc yêu cầu
+                const docName = `${val}_${day}${month}${year}_${hours}${minutes}${seconds}`;
+
+                // 3. Tạo reference đến collection us_sothich và document mới
+                const usSothichCollectionRef = collection(db, "us_sothich");
+                const newSothichDocRef = doc(usSothichCollectionRef, docName); // Chỉ định tên document
+
+                // 4. Lưu dữ liệu vào document mới trong collection us_sothich
+                await setDoc(newSothichDocRef, {
+                    content: val,          // Nội dung sở thích
+                    created_at: now.toISOString() // Lưu thời gian tạo dạng ISO string
+                });
+
+                // Sau khi lưu xong, reset input và đóng modal
+
                 document.getElementById('newAboutInp').value = "";
                 window.closeAddAbout();
                 loadAbout();
-            } catch (e) { console.error(e); }
+                // Bạn có thể không cần loadAbout() ở đây nữa nếu us_metadata không thay đổi
+                // Nếu bạn muốn hiển thị các sở thích mới từ us_sothich, bạn sẽ cần một hàm loadSothich() riêng
+                // loadAbout(); // Giữ nguyên nếu bạn vẫn muốn cập nhật list từ us_metadata
+            } catch (e) {
+                console.error("Lỗi khi lưu sở thích:", e);
+                // Xử lý lỗi, ví dụ: hiển thị thông báo cho người dùng
+            }
+
+
+
         };
 
-        window.deleteAbout = async (text) => {
-            if (confirm("Xóa sở thích này nhé?")) {
-                await updateDoc(docRef, { items: arrayRemove(text) });
-                loadAbout();
-            }
+        window.deleteAbout = async (docId) => {
+            if (!confirm("Xóa sở thích này nhé?")) return;
+
+            await deleteDoc(
+                doc(db, "us_sothich", docId)
+            );
+
+            loadAbout();
         };
 
         // Khởi chạy
@@ -369,4 +608,5 @@
     </script>
 
 </body>
+
 </html>
